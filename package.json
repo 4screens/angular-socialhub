@@ -1,0 +1,36 @@
+{
+  "name": "4screens-socialhub",
+  "description": "4screens angular client for socialhub",
+  "version": "0.0.1",
+  "scripts": {
+    "test": "karma start"
+  },
+  "homepage": "https://github.com/4screens/angular-socialhub",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/4screens/angular-socialhub.git"
+  },
+  "author": "Marcin Operacz <marcin.operacz@gmail.com>",
+  "devDependencies": {
+    "gulp": "^3.8.7",
+    "gulp-complexity": "^0.2.1",
+    "gulp-ng-annotate": "^0.3.0",
+    "gulp-plumber": "^0.6.4",
+    "gulp-rename": "^1.2.0",
+    "gulp-uglify": "^0.3.1",
+    "karma": "^0.12.21",
+    "karma-chrome-launcher": "^0.1.5",
+    "karma-coverage": "^0.2.6",
+    "karma-jasmine": "^0.1.5",
+    "karma-phantomjs-launcher": "^0.1.4"
+  },
+  "bugs": {
+    "url": "https://github.com/4screens/angular-socialhub/issues"
+  },
+  "licenses": [
+    {
+      "type": "proprietary",
+      "url": "https://nopattern.net/"
+    }
+  ]
+}

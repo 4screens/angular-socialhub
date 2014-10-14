@@ -1,0 +1,23 @@
+{
+  "name": "4screens-socialhub",
+  "version": "0.0.1",
+  "main": "socialhub.js",
+  "homepage": "https://github.com/4screens/angular-socialhub",
+  "ignore": [
+    ".gitignore",
+    ".travis.yml",
+    "node_modules",
+    "bower_components",
+    "test",
+    "LICENSE",
+    "package.json",
+    "gulpfile.js",
+    "karma.conf.js",
+    "examples",
+    "coverage"
+  ],
+  "devDependencies": {
+    "angular": "~1.3.0",
+    "angular-mocks": "~1.3.0"
+  }
+}
