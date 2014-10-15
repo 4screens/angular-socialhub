@@ -1,40 +1,48 @@
 /**
  * This file is subject to the terms and conditions defined in
  * file 'LICENSE' or 'LICENSE.txt', which is part of this source code package.
- *
- * Created by misiek on 14.10.2014.
  */
+var gulp = require('gulp')
+, plugins = require('gulp-load-plugins')()
+, pkg = require('./package.json')
+, fs = require('fs')
 
-var gulp = require('gulp');
-var rename = require('gulp-rename');
-var plumber = require('gulp-plumber');
-var uglify = require('gulp-uglify');
-var complexity = require('gulp-complexity');
+, FILES = [
+    './src/app.js',
+    './src/services/backend.js'
+  ]
+, BANNER = './src/header.txt'
+, MAIN = 'socialhub.js';
 
-var MAIN = 'socialhub.js',
-    MAIN_MIN = 'socialhub.min.js';
+gulp.task( 'build', function() {
+  return gulp.src( FILES )
+    .pipe( plugins.concat( MAIN ) )
+    .pipe( plugins.ngAnnotate() )
+    .pipe( plugins.header( fs.readFileSync( BANNER, 'utf8' ), { pkg : pkg } ) )
+    .pipe( gulp.dest('.') )
+} );
 
-gulp.task('minify', function() {
-  return gulp.src(MAIN)
-      .pipe(plumber())
-      .pipe(uglify())
-      .pipe(rename(MAIN_MIN))
-      .pipe(gulp.dest('.'))
-});
+gulp.task( 'minify', function() {
+  return gulp.src( MAIN )
+    .pipe( plugins.plumber() )
+    .pipe( plugins.uglify() )
+    .pipe( plugins.rename({ extname: '.min.js' }) )
+    .pipe( plugins.header( fs.readFileSync( BANNER, 'utf8' ), { pkg : pkg } ) )
+    .pipe( gulp.dest('.') )
+} );
 
-gulp.task('copy', function() {
-  return gulp.src([MAIN, MAIN_MIN])
-      .pipe(gulp.dest('examples/client/vendor'));
-});
+gulp.task( 'copy', function() {
+  return gulp.src([ MAIN, MAIN.replace('.js', '.min.js') ])
+    .pipe( gulp.dest('examples/client/vendor') );
+} );
 
-gulp.task('complexity', function() {
-  return gulp.src(MAIN)
-      .pipe(complexity());
-});
+gulp.task( 'complexity', function() {
+  return gulp.src( MAIN )
+    .pipe( plugins.complexity() );
+} );
 
-gulp.task('watch', function() {
-  gulp.watch(MAIN, ['copy', 'minify']);
-});
+gulp.task( 'watch', function() {
+  gulp.watch( FILES, [ 'build', 'complexity', 'minify', 'copy'] );
+} );
 
-
-gulp.task('default', ['copy', 'minify', 'watch']);
+gulp.task( 'default', [ 'build', 'minify', 'copy' ] );
