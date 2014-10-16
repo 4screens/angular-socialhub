@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('4screens.socialhub').factory('SocialhubBackendService',
-  function( CONFIG, socketService, $http, $q ) {
+  function( CONFIG, socketService, $rootScope, $http, $q ) {
     var
       socket = socketService.get( CONFIG.socialhub.namespace + CONFIG.socialhub.id ),
       config = {
@@ -37,9 +37,11 @@ angular.module('4screens.socialhub').factory('SocialhubBackendService',
     socket.on( 'socialhub:newPost', function( postId ) {
       getPost( postId ).then(function( post ) {
         results.posts.unshift( post );
+        $rootScope.$emit('SocialhubIsotopeDirectiveImagesLoaded');
       }).catch(function( err ) {
         if( err.status === 404 ) {
           _.remove( results.posts, { _id: postId } );
+          $rootScope.$emit('SocialhubIsotopeDirectiveImagesLoaded');
         }
       });
     } );
