@@ -9,8 +9,72 @@ angular.module('4screens.socialhub',[]);
 
 'use strict';
 
+angular.module('4screens.socialhub').directive( 'socialhubIsotopeDirective',
+  ["$rootScope", "$timeout", function( $rootScope, $timeout ) {
+    var _link = function( scope, element, attrs ) {
+      $rootScope.$on( 'SocialhubIsotopeDirectiveInitialize', function() {
+        $timeout(function() {
+          scope.iso = new Isotope( element[0], {
+            // options
+            itemSelector: '.socialhub-isotope-tile-directive'
+          } );
+          $rootScope.$emit('SocialhubIsotopeDirectiveImagesLoaded');
+        });
+      } );
+      $rootScope.$on( 'SocialhubIsotopeDirectiveImagesLoaded', function() {
+        $timeout(function() {
+          var imgLoad = imagesLoaded( element );
+
+          imgLoad.on( 'always', function() {
+            $rootScope.$emit('SocialhubIsotopeDirectiveArrange');
+          } );
+        });
+      } );
+      $rootScope.$on( 'SocialhubIsotopeDirectiveArrange', function() {
+        $timeout(function() {
+          scope.iso.reloadItems();
+          scope.iso.arrange();
+        });
+      } );
+    };
+
+    return {
+      restrict: 'C',
+      link: _link
+    }
+  }]
+);
+
+'use strict';
+
+angular.module('4screens.socialhub').directive( 'socialhubIsotopeTileDirective',
+  ["$rootScope", "$timeout", function( $rootScope, $timeout ) {
+    var _link = function( scope, element, attrs ) {
+      scope.$watch( '$last', function( v ) {
+        if( v ) {
+          $timeout(function() {
+            // This code will run after template has been loaded
+            // and transformed by directives
+            $timeout(function() {
+              // and properly rendered by the browser
+              $rootScope.$emit('SocialhubIsotopeDirectiveInitialize');
+            });
+          });
+        }
+      });
+    };
+
+    return {
+      restrict: 'C',
+      link: _link
+    }
+  }]
+);
+
+'use strict';
+
 angular.module('4screens.socialhub').factory('SocialhubBackendService',
-  ["CONFIG", "socketService", "$http", "$q", function( CONFIG, socketService, $http, $q ) {
+  ["CONFIG", "socketService", "$rootScope", "$http", "$q", function( CONFIG, socketService, $rootScope, $http, $q ) {
     var
       socket = socketService.get( CONFIG.socialhub.namespace + CONFIG.socialhub.id ),
       config = {
@@ -46,9 +110,11 @@ angular.module('4screens.socialhub').factory('SocialhubBackendService',
     socket.on( 'socialhub:newPost', function( postId ) {
       getPost( postId ).then(function( post ) {
         results.posts.unshift( post );
+        $rootScope.$emit('SocialhubIsotopeDirectiveImagesLoaded');
       }).catch(function( err ) {
         if( err.status === 404 ) {
           _.remove( results.posts, { _id: postId } );
+          $rootScope.$emit('SocialhubIsotopeDirectiveImagesLoaded');
         }
       });
     } );
