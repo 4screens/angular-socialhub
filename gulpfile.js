@@ -9,6 +9,8 @@ var gulp = require('gulp')
 
 , FILES = [
     './src/app.js',
+    './src/directives/isotope.js',
+    './src/directives/isotope-tile.js',
     './src/services/backend.js'
   ]
 , BANNER = './src/header.txt'
