@@ -8,6 +8,7 @@
     ".travis.yml",
     "node_modules",
     "bower_components",
+    "src",
     "test",
     "LICENSE",
     "package.json",
