@@ -93,7 +93,7 @@ angular.module('4screens.socialhub').factory('SocialhubBackendService',
     function getPosts( params ) {
       params = params || {};
 
-      return $http.get( config.posts, params ).then(function( res ) {
+      return $http.get( config.posts, { params: params } ).then(function( res ) {
         if ( res.status === 200 ) {
           return res.data;
         }
