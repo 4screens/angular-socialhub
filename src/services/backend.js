@@ -12,6 +12,14 @@ angular.module('4screens.socialhub').factory('SocialhubBackendService',
           classNameTile: '.socialhub-isotope-tile-directive'
         }
       },
+      infinity = {
+        enabled: true,
+        method: {},
+        settings: {
+          offset: 200,
+          step: 10
+        }
+      },
       config = {
          post: CONFIG.backend.domain + CONFIG.socialhub.post.replace( ':id', CONFIG.socialhub.id ),
          posts: CONFIG.backend.domain + CONFIG.socialhub.posts.replace( ':id', CONFIG.socialhub.id )
@@ -39,6 +47,7 @@ angular.module('4screens.socialhub').factory('SocialhubBackendService',
       isotope.instance.arrange();
       isotope.method.loadImage(function() {
         isotope.instance.arrange();
+        infinity.enabled = true;
       });
     }, 100 );
 
@@ -49,6 +58,25 @@ angular.module('4screens.socialhub').factory('SocialhubBackendService',
         callback();
       } );
     };
+
+    infinity.method.step = function() {
+      if( !!infinity.enabled ) {
+        archived.visibled += infinity.settings.step;
+        infinity.enabled = false;
+        getResults();
+      }
+    };
+
+    infinity.method.scrollHandler = _.throttle( function( s, e, w ) {
+      return function() {
+        if( w.innerHeight - e.offset().top + w.scrollY + infinity.settings.offset >= e.height() ) {
+          $timeout(function() {
+            infinity.method.step();
+          });
+        }
+      }
+    }, 500 );
+
     function getPost( postId ) {
       if( !postId ) {
         throw 'PostId has not been set!';
@@ -74,6 +102,9 @@ angular.module('4screens.socialhub').factory('SocialhubBackendService',
     }
 
     function getResults() {
+      if( infinity.visibled === 0 ) {
+        return;
+      }
 
       if( archived.visibled > _.size( archived.posts ) ) {
         getPosts({ page: Math.floor( _.size( archived.posts ) / archived.pack ) }).then(function( posts ) {
@@ -120,6 +151,9 @@ angular.module('4screens.socialhub').factory('SocialhubBackendService',
       isotope: {
         init: isotope.method.init,
         arrange: isotope.method.arrange
+      },
+      infinity: {
+        scrollHandler: infinity.method.scrollHandler
       },
       results: results,
       getResults: getResults
