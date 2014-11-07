@@ -7,6 +7,7 @@ angular.module('4screens.socialhub').factory('SocialhubBackendService',
       isotope = {
         instance: null,
         container: null,
+        items: [],
         method: {},
         settings: {
           classNameTile: '.socialhub-isotope-tile-directive'
@@ -17,7 +18,7 @@ angular.module('4screens.socialhub').factory('SocialhubBackendService',
         method: {},
         settings: {
           offset: 200,
-          step: 10
+          step: 1
         }
       },
       config = {
@@ -42,11 +43,18 @@ angular.module('4screens.socialhub').factory('SocialhubBackendService',
       } );
     };
 
+    isotope.method.addItem = function( element ) {
+      isotope.items.push( element[0] );
+    };
+
+    isotope.method.clearItems = function() {
+      isotope.items = [];
+    };
+
     isotope.method.arrange = _.debounce( function() {
-      isotope.instance.reloadItems();
-      isotope.instance.arrange();
+      isotope.instance.insert( isotope.items );
+      isotope.method.clearItems();
       isotope.method.loadImage(function() {
-        isotope.instance.arrange();
         infinity.enabled = true;
         $document.triggerHandler('scroll');
       });
@@ -151,6 +159,7 @@ angular.module('4screens.socialhub').factory('SocialhubBackendService',
     return {
       isotope: {
         init: isotope.method.init,
+        addItem: isotope.method.addItem,
         arrange: isotope.method.arrange
       },
       infinity: {

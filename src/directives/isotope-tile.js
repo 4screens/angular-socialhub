@@ -2,7 +2,8 @@
 
 angular.module('4screens.socialhub').directive( 'socialhubIsotopeTileDirective',
   function( SocialhubBackendService ) {
-    var _link = function() {
+    var _link = function( scope, element ) {
+      SocialhubBackendService.isotope.addItem( element );
       SocialhubBackendService.isotope.arrange();
     };
 
