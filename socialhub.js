@@ -13,13 +13,6 @@ angular.module('4screens.socialhub').directive( 'socialhubIsotopeDirective',
   ["$window", "$document", "SocialhubBackendService", function( $window, $document, SocialhubBackendService ) {
     var _link = function( scope, element ) {
       SocialhubBackendService.isotope.init( element );
-
-      scope.$watch(function() {
-        return element.height();
-      }, function() {
-        SocialhubBackendService.infinity.scrollHandler( scope, element, $window )();
-      });
-
       $document.bind( 'scroll', SocialhubBackendService.infinity.scrollHandler( scope, element, $window ) );
     };
 
@@ -34,7 +27,8 @@ angular.module('4screens.socialhub').directive( 'socialhubIsotopeDirective',
 
 angular.module('4screens.socialhub').directive( 'socialhubIsotopeTileDirective',
   ["SocialhubBackendService", function( SocialhubBackendService ) {
-    var _link = function() {
+    var _link = function( scope, element ) {
+      SocialhubBackendService.isotope.addItem( element );
       SocialhubBackendService.isotope.arrange();
     };
 
@@ -48,12 +42,13 @@ angular.module('4screens.socialhub').directive( 'socialhubIsotopeTileDirective',
 'use strict';
 
 angular.module('4screens.socialhub').factory('SocialhubBackendService',
-  ["CONFIG", "socketService", "$timeout", "$http", "$q", function( CONFIG, socketService, $timeout, $http, $q ) {
+  ["CONFIG", "socketService", "$document", "$timeout", "$http", "$q", function( CONFIG, socketService, $document, $timeout, $http, $q ) {
     var
       socket = socketService.get( CONFIG.socialhub.namespace + CONFIG.socialhub.id ),
       isotope = {
         instance: null,
         container: null,
+        items: [],
         method: {},
         settings: {
           classNameTile: '.socialhub-isotope-tile-directive'
@@ -64,7 +59,7 @@ angular.module('4screens.socialhub').factory('SocialhubBackendService',
         method: {},
         settings: {
           offset: 200,
-          step: 10
+          step: 1
         }
       },
       config = {
@@ -89,12 +84,20 @@ angular.module('4screens.socialhub').factory('SocialhubBackendService',
       } );
     };
 
+    isotope.method.addItem = function( element ) {
+      isotope.items.push( element[0] );
+    };
+
+    isotope.method.clearItems = function() {
+      isotope.items = [];
+    };
+
     isotope.method.arrange = _.debounce( function() {
-      isotope.instance.reloadItems();
-      isotope.instance.arrange();
+      isotope.instance.insert( isotope.items );
+      isotope.method.clearItems();
       isotope.method.loadImage(function() {
-        isotope.instance.arrange();
         infinity.enabled = true;
+        $document.triggerHandler('scroll');
       });
     }, 100 );
 
@@ -197,6 +200,7 @@ angular.module('4screens.socialhub').factory('SocialhubBackendService',
     return {
       isotope: {
         init: isotope.method.init,
+        addItem: isotope.method.addItem,
         arrange: isotope.method.arrange
       },
       infinity: {
