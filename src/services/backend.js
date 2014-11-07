@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('4screens.socialhub').factory('SocialhubBackendService',
-  function( CONFIG, socketService, $timeout, $http, $q ) {
+  function( CONFIG, socketService, $document, $timeout, $http, $q ) {
     var
       socket = socketService.get( CONFIG.socialhub.namespace + CONFIG.socialhub.id ),
       isotope = {
@@ -48,6 +48,7 @@ angular.module('4screens.socialhub').factory('SocialhubBackendService',
       isotope.method.loadImage(function() {
         isotope.instance.arrange();
         infinity.enabled = true;
+        $document.triggerHandler('scroll');
       });
     }, 100 );
 
