@@ -41,6 +41,8 @@ angular.module('4screens.socialhub').factory('SocialhubBackendService',
         // options
         itemSelector: isotope.settings.classNameTile
       } );
+      archived.visibled = 0;
+      results.posts = [];
     };
 
     isotope.method.addItem = function( element ) {
