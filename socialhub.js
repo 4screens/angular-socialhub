@@ -13,6 +13,7 @@ angular.module('4screens.socialhub').directive( 'socialhubIsotopeDirective',
   ["$window", "$document", "SocialhubBackendService", function( $window, $document, SocialhubBackendService ) {
     var _link = function( scope, element ) {
       SocialhubBackendService.isotope.init( element );
+      $document.unbind('scroll');
       $document.bind( 'scroll', SocialhubBackendService.infinity.scrollHandler( scope, element, $window ) );
     };
 
@@ -58,7 +59,7 @@ angular.module('4screens.socialhub').factory('SocialhubBackendService',
         enabled: true,
         method: {},
         settings: {
-          offset: 200,
+          offset: 800,
           step: 1
         }
       },
@@ -80,8 +81,11 @@ angular.module('4screens.socialhub').factory('SocialhubBackendService',
       isotope.container = element;
       isotope.instance = new Isotope( element[0], {
         // options
-        itemSelector: isotope.settings.classNameTile
+        itemSelector: isotope.settings.classNameTile,
+        transitionDuration: '0.2s'
       } );
+      archived.visibled = 0;
+      results.posts = [];
     };
 
     isotope.method.addItem = function( element ) {
@@ -162,7 +166,9 @@ angular.module('4screens.socialhub').factory('SocialhubBackendService',
             archived.posts[ post._id ] = post;
             archived.priority.push( post._id );
           } );
-          getResults();
+          if( posts.length > 0 ) {
+            getResults();
+          }
         });
       } else {
         _.each( archived.priority.slice( 0, archived.visibled ), function( postId, postIndex ) {
