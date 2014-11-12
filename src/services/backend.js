@@ -17,7 +17,7 @@ angular.module('4screens.socialhub').factory('SocialhubBackendService',
         enabled: true,
         method: {},
         settings: {
-          offset: 200,
+          offset: 800,
           step: 1
         }
       },
@@ -39,7 +39,8 @@ angular.module('4screens.socialhub').factory('SocialhubBackendService',
       isotope.container = element;
       isotope.instance = new Isotope( element[0], {
         // options
-        itemSelector: isotope.settings.classNameTile
+        itemSelector: isotope.settings.classNameTile,
+        transitionDuration: '0.2s'
       } );
       archived.visibled = 0;
       results.posts = [];
