@@ -123,7 +123,9 @@ angular.module('4screens.socialhub').factory('SocialhubBackendService',
             archived.posts[ post._id ] = post;
             archived.priority.push( post._id );
           } );
-          getResults();
+          if( posts.length > 0 ) {
+            getResults();
+          }
         });
       } else {
         _.each( archived.priority.slice( 0, archived.visibled ), function( postId, postIndex ) {
