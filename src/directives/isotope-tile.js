@@ -1,10 +1,9 @@
 'use strict';
 
 angular.module('4screens.socialhub').directive( 'socialhubIsotopeTileDirective',
-  function( SocialhubBackendService ) {
+  function( SocialhubIsotopeService ) {
     var _link = function( scope, element ) {
-      SocialhubBackendService.isotope.addItem( element );
-      SocialhubBackendService.isotope.arrange();
+      SocialhubIsotopeService.addItem( element, scope.$index );
     };
 
     return {

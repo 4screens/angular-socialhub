@@ -1,11 +1,11 @@
 'use strict';
 
 angular.module('4screens.socialhub').directive( 'socialhubIsotopeDirective',
-  function( $window, $document, SocialhubBackendService ) {
+  function( SocialhubIsotopeService, SocialhubInfinityService, $window, $document ) {
     var _link = function( scope, element ) {
-      SocialhubBackendService.isotope.init( element );
+      SocialhubIsotopeService.init( element );
       $document.unbind('scroll');
-      $document.bind( 'scroll', SocialhubBackendService.infinity.scrollHandler( scope, element, $window ) );
+      $document.bind( 'scroll', SocialhubInfinityService.scrollHandler( scope, element, $window ) );
     };
 
     return {
