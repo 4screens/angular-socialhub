@@ -10,11 +10,11 @@ angular.module('4screens.socialhub',[]);
 'use strict';
 
 angular.module('4screens.socialhub').directive( 'socialhubIsotopeDirective',
-  ["$window", "$document", "SocialhubBackendService", function( $window, $document, SocialhubBackendService ) {
+  ["SocialhubIsotopeService", "SocialhubInfinityService", "$window", "$document", function( SocialhubIsotopeService, SocialhubInfinityService, $window, $document ) {
     var _link = function( scope, element ) {
-      SocialhubBackendService.isotope.init( element );
+      SocialhubIsotopeService.init( element );
       $document.unbind('scroll');
-      $document.bind( 'scroll', SocialhubBackendService.infinity.scrollHandler( scope, element, $window ) );
+      $document.bind( 'scroll', SocialhubInfinityService.scrollHandler( scope, element, $window ) );
     };
 
     return {
@@ -27,10 +27,9 @@ angular.module('4screens.socialhub').directive( 'socialhubIsotopeDirective',
 'use strict';
 
 angular.module('4screens.socialhub').directive( 'socialhubIsotopeTileDirective',
-  ["SocialhubBackendService", function( SocialhubBackendService ) {
+  ["SocialhubIsotopeService", function( SocialhubIsotopeService ) {
     var _link = function( scope, element ) {
-      SocialhubBackendService.isotope.addItem( element );
-      SocialhubBackendService.isotope.arrange();
+      SocialhubIsotopeService.addItem( element, scope.$index );
     };
 
     return {
@@ -42,101 +41,122 @@ angular.module('4screens.socialhub').directive( 'socialhubIsotopeTileDirective',
 
 'use strict';
 
-angular.module('4screens.socialhub').factory('SocialhubBackendService',
-  ["CONFIG", "socketService", "$document", "$timeout", "$http", "$q", function( CONFIG, socketService, $document, $timeout, $http, $q ) {
-    var
-      socket = socketService.get( CONFIG.socialhub.namespace + CONFIG.socialhub.id ),
-      isotope = {
-        instance: null,
-        container: null,
-        items: [],
-        method: {},
-        settings: {
-          classNameTile: '.socialhub-isotope-tile-directive'
-        }
-      },
-      infinity = {
-        enabled: true,
-        method: {},
-        settings: {
-          offset: 800,
-          step: 1
-        }
-      },
-      config = {
-         post: CONFIG.backend.domain + CONFIG.socialhub.post.replace( ':id', CONFIG.socialhub.id ),
-         posts: CONFIG.backend.domain + CONFIG.socialhub.posts.replace( ':id', CONFIG.socialhub.id )
-      },
-      archived = {
-        pack: 50,
-        visibled: 0,
-        priority: [],
-        posts: {}
-      },
-      results = {
-        posts: []
-      };
+angular.module('4screens.socialhub').factory('SocialhubInfinityService',
+  ["SocialhubBackendService", function( SocialhubBackendService ) {
+    var scrollHandler
+      , available = true
+      , offset = 800
+      , step = 1;
 
-    isotope.method.init = function( element ) {
-      isotope.container = element;
-      isotope.instance = new Isotope( element[0], {
-        // options
-        itemSelector: isotope.settings.classNameTile,
-        transitionDuration: '0.2s'
-      } );
-      archived.visibled = 0;
-      results.posts = [];
-    };
+    function enable() {
+      available = true;
+    }
 
-    isotope.method.addItem = function( element ) {
-      isotope.items.push( element[0] );
-    };
-
-    isotope.method.clearItems = function() {
-      isotope.items = [];
-    };
-
-    isotope.method.arrange = _.debounce( function() {
-      isotope.instance.insert( isotope.items );
-      isotope.method.clearItems();
-      isotope.method.loadImage(function() {
-        infinity.enabled = true;
-        $document.triggerHandler('scroll');
-      });
-    }, 100 );
-
-    isotope.method.loadImage = function( callback ) {
-      var loadImages = imagesLoaded( isotope.container );
-
-      loadImages.on( 'always', function() {
-        callback();
-      } );
-    };
-
-    infinity.method.step = function() {
-      if( !!infinity.enabled ) {
-        archived.visibled += infinity.settings.step;
-        infinity.enabled = false;
-        getResults();
-      }
-    };
-
-    infinity.method.scrollHandler = _.throttle( function( s, e, w ) {
+    scrollHandler = _.throttle( function( s, e, w ) {
       return function() {
-        if( w.innerHeight - e.offset().top + w.scrollY + infinity.settings.offset >= e.height() ) {
-          $timeout(function() {
-            infinity.method.step();
-          });
+        if( w.innerHeight - e.offset().top + w.scrollY + offset >= e.height() ) {
+          if( !!available ) {
+            available = false;
+            SocialhubBackendService.renderVisibled( step );
+          }
         }
       }
     }, 500 );
+
+    // public API
+    return {
+      scrollHandler: scrollHandler,
+      enable: enable
+    }
+  }]
+);
+
+'use strict';
+
+angular.module('4screens.socialhub').factory('SocialhubIsotopeService',
+  ["SocialhubInfinityService", "$document", "$timeout", function( SocialhubInfinityService, $document, $timeout ) {
+    var instance = null
+      , container = null
+      , options = {
+        itemSelector: '.socialhub-isotope-tile-directive',
+        transitionDuration: '0.2s'
+      };
+
+    $document.bind('isotopeArrange', function() {
+      $timeout(function() {
+        arrange();
+      });
+    });
+    $document.bind('isotopeRemove', function() {
+      $timeout(function() {
+        isotope.reloadItems();
+        isotope.arrange();
+      });
+    });
+
+    function init( element ) {
+      container = element;
+      instance = new Isotope( element[0], options );
+      window.isotope = instance;
+    }
+
+    function addItem( element, index ) {
+      $timeout(function() {
+        if( index === 0 ) {
+          instance.prepended( element[0] );
+        } else {
+          instance.appended( element[0] );
+        }
+      });
+    }
+
+    var arrange = _.debounce(function() {
+      loadImage(function() {
+        SocialhubInfinityService.enable();
+        $document.triggerHandler('scroll');
+      });
+    });
+
+    function loadImage( callback ) {
+      var loadImages = imagesLoaded( container );
+
+      $timeout(function() {
+        instance.arrange();
+      });
+
+      loadImages.on( 'always', function() {
+        $timeout(function() {
+          instance.arrange();
+          callback.apply( this, arguments );
+        });
+      } );
+    }
+
+    // public API
+    return {
+      init: init,
+      addItem: addItem,
+      arrange: arrange
+    }
+  }]
+);
+
+'use strict';
+
+angular.module('4screens.socialhub').factory('SocialhubBackendService',
+  ["CONFIG", "socketService", "$http", "$document", function( CONFIG, socketService, $http, $document ) {
+    var visibled = 1
+      , pack = 50
+      , queue = []
+      , archived = {}
+      , results = [];
 
     function getPost( postId ) {
       if( !postId ) {
         throw 'PostId has not been set!';
       }
 
-      return $http.get( config.post.replace( ':postid', postId ) ).then(function( res ) {
+      return $http.get( CONFIG.backend.domain + CONFIG.socialhub.post.replace( ':id', CONFIG.socialhub.id ).replace( ':postid', postId ) ).then(function( res ) {
         if ( res.status === 200 ) {
           return res.data;
         }
@@ -147,7 +167,7 @@ angular.module('4screens.socialhub').factory('SocialhubBackendService',
     function getPosts( params ) {
       params = params || {};
 
-      return $http.get( config.posts, { params: params } ).then(function( res ) {
+      return $http.get( CONFIG.backend.domain + CONFIG.socialhub.posts.replace( ':id', CONFIG.socialhub.id ), { params: params } ).then(function( res ) {
         if ( res.status === 200 ) {
           return res.data;
         }
@@ -155,65 +175,58 @@ angular.module('4screens.socialhub').factory('SocialhubBackendService',
       });
     }
 
-    function getResults() {
-      if( infinity.visibled === 0 ) {
-        return;
-      }
+    function renderVisibled( step ) {
+      visibled += step || 0;
 
-      if( archived.visibled > _.size( archived.posts ) ) {
-        getPosts({ page: Math.floor( _.size( archived.posts ) / archived.pack ) }).then(function( posts ) {
+      if( visibled > _.size( archived ) ) {
+        getPosts({ page: Math.floor( _.size( archived ) / pack ) }).then(function( posts ) {
           _.forEach( posts, function( post ) {
-            archived.posts[ post._id ] = post;
-            archived.priority.push( post._id );
+            archived[ post._id ] = post;
+            queue.push( post._id );
           } );
-          if( posts.length > 0 ) {
-            getResults();
+          if( queue.length > visibled ) {
+            renderVisibled();
           }
         });
       } else {
-        _.each( archived.priority.slice( 0, archived.visibled ), function( postId, postIndex ) {
-          if( _.findIndex( results.posts, { _id: postId } ) === -1 ) {
-            results.posts.splice( postIndex, 0, archived.posts[ postId ] );
+        _.each( queue.slice( 0, visibled ), function( postId, postIndex ) {
+          if( _.findIndex( results, { _id: postId } ) === -1 ) {
+            results.splice( postIndex, 0, archived[ postId ] );
           }
         } );
-        _.remove( results.posts, function( postId, postIndex ) {
-          return postIndex >= archived.visibled;
+        _.remove( results, function( postId, postIndex ) {
+          return postIndex >= visibled;
         });
-        isotope.method.arrange();
+        $document.triggerHandler('isotopeArrange');
       }
     }
 
-    socket.on( 'socialhub:newPost', function( postId ) {
+    socketService.get( CONFIG.socialhub.namespace + CONFIG.socialhub.id ).on( 'socialhub:newPost', function( postId ) {
       getPost( postId ).then(function( post ) {
-        if( _.findIndex( archived.priority, postId ) === -1 ) {
-          archived.posts[ post._id ] = post;
-          archived.priority.unshift( post._id );
-          getResults();
+        if( _.findIndex( queue, postId ) === -1 ) {
+          archived[ post._id ] = post;
+          queue.unshift( post._id );
+          queue.pop();
+          renderVisibled();
         }
-      }).catch(function( err ) {
-        if( err.status === 404 ) {
-          _.remove( archived.priority, function( v ) {
-            return v == postId;
+      }).catch(function( err, b, c, d ) {
+        if( err.status === 404 || err.status === 500 ) {
+          _.remove( queue, function( v ) {
+            return v === postId;
           } );
-          _.remove( results.posts, function( v ) {
-            return v._id == postId;
+          _.remove( results, function( v ) {
+            return v._id === postId;
           } );
-          getResults();
+          $document.triggerHandler('isotopeRemove');
         }
       });
     } );
 
     return {
-      isotope: {
-        init: isotope.method.init,
-        addItem: isotope.method.addItem,
-        arrange: isotope.method.arrange
-      },
-      infinity: {
-        scrollHandler: infinity.method.scrollHandler
-      },
-      results: results,
-      getResults: getResults
+      renderVisibled: renderVisibled,
+      results: {
+        posts: results
+      }
     };
   }]
 );
