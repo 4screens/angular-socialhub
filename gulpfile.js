@@ -11,6 +11,8 @@ var gulp = require('gulp')
     './src/app.js',
     './src/directives/isotope.js',
     './src/directives/isotope-tile.js',
+    './src/services/infinity.js',
+    './src/services/isotope.js',
     './src/services/backend.js'
   ]
 , BANNER = './src/header.txt'
