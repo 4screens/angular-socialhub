@@ -1,10 +1,11 @@
 'use strict';
 
 angular.module('4screens.socialhub').factory('SocialhubBackendService',
-  function( CONFIG, socketService, $http, $document ) {
+  function( CONFIG, socketService, $http, $document, $window ) {
     var visibled = 1
       , pack = 50
       , queue = []
+      , newest = []
       , archived = {}
       , results = [];
 
@@ -32,15 +33,19 @@ angular.module('4screens.socialhub').factory('SocialhubBackendService',
       });
     }
 
-    function renderVisibled( step ) {
+    function renderVisibled( step, reload ) {
       visibled += step || 0;
+      reload = reload || false;
 
       if( visibled > _.size( archived ) ) {
         getPosts({ page: Math.floor( _.size( archived ) / pack ) }).then(function( posts ) {
           _.forEach( posts, function( post ) {
-            archived[ post._id ] = post;
-            queue.push( post._id );
+            if( _.findIndex( queue, post._id ) === -1 ) {
+              archived[ post._id ] = post;
+              queue.push( post._id );
+            }
           } );
+
           if( queue.length > visibled ) {
             renderVisibled();
           }
@@ -54,17 +59,40 @@ angular.module('4screens.socialhub').factory('SocialhubBackendService',
         _.remove( results, function( postId, postIndex ) {
           return postIndex >= visibled;
         });
-        $document.triggerHandler('isotopeArrange');
+
+        if( reload === false ) {
+          $document.triggerHandler('isotopeArrange');
+        } else {
+          $document.triggerHandler('isotopeReload');
+        }
       }
+    }
+
+    function renderNewest() {
+      queue = newest.concat( queue );
+      queue = queue.slice( 0, visibled );
+
+      // Najszybszy znany mi sposób wyczyszczenia tablicy
+      // nie usuwając samej tablicy.
+      // newest = [] 'ubija' watch angulara
+      while (newest.length > 0) {
+        newest.pop();
+      }
+
+      renderVisibled( 0, true );
     }
 
     socketService.get( CONFIG.socialhub.namespace + CONFIG.socialhub.id ).on( 'socialhub:newPost', function( postId ) {
       getPost( postId ).then(function( post ) {
         if( _.findIndex( queue, postId ) === -1 ) {
           archived[ post._id ] = post;
-          queue.unshift( post._id );
-          queue.pop();
-          renderVisibled();
+          if( $window.scrollY === 0 && newest.length === 0 ) {
+            queue.unshift( post._id );
+            visibled++;
+            renderVisibled();
+          } else {
+            newest.unshift( post._id );
+          }
         }
       }).catch(function( err, b, c, d ) {
         if( err.status === 404 || err.status === 500 ) {
@@ -74,13 +102,18 @@ angular.module('4screens.socialhub').factory('SocialhubBackendService',
           _.remove( results, function( v ) {
             return v._id === postId;
           } );
-          $document.triggerHandler('isotopeRemove');
+          $document.triggerHandler('isotopeReload');
         }
       });
     } );
 
+    // public API
     return {
       renderVisibled: renderVisibled,
+      renderNewest: renderNewest,
+      newest: {
+        posts: newest
+      },
       results: {
         posts: results
       }

@@ -14,11 +14,12 @@ angular.module('4screens.socialhub').factory('SocialhubIsotopeService',
         arrange();
       });
     });
-    $document.bind('isotopeRemove', function() {
+
+    $document.bind('isotopeReload', function() {
       $timeout(function() {
         isotope.reloadItems();
         isotope.arrange();
-      });
+      }, 100 );
     });
 
     function init( element ) {
