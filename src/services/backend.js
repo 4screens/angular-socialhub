@@ -4,6 +4,7 @@ angular.module('4screens.socialhub').factory('SocialhubBackendService',
   function( CONFIG, socketService, $http, $document, $window ) {
     var visibled = 1
       , pack = 50
+      , complete = { value: false }
       , queue = []
       , newest = []
       , archived = {}
@@ -37,8 +38,12 @@ angular.module('4screens.socialhub').factory('SocialhubBackendService',
       visibled += step || 0;
       reload = reload || false;
 
-      if( visibled > _.size( archived ) ) {
+      if( visibled > _.size( archived ) && complete.value === false ) {
         getPosts({ page: Math.floor( _.size( archived ) / pack ) }).then(function( posts ) {
+          if( posts.length < 50 ) {
+            complete.value = true;
+          }
+
           _.forEach( posts, function( post ) {
             if( _.findIndex( queue, post._id ) === -1 ) {
               archived[ post._id ] = post;
@@ -64,6 +69,10 @@ angular.module('4screens.socialhub').factory('SocialhubBackendService',
           $document.triggerHandler('isotopeArrange');
         } else {
           $document.triggerHandler('isotopeReload');
+        }
+
+        if( complete.value === true && queue.length === visibled ) {
+          $document.unbind('scroll');
         }
       }
     }
@@ -114,6 +123,7 @@ angular.module('4screens.socialhub').factory('SocialhubBackendService',
       newest: {
         posts: newest
       },
+      complete: complete,
       results: {
         posts: results
       }
