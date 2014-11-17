@@ -25,7 +25,6 @@ angular.module('4screens.socialhub').factory('SocialhubIsotopeService',
     function init( element ) {
       container = element;
       instance = new Isotope( element[0], options );
-      window.isotope = instance;
     }
 
     function addItem( element, index ) {
