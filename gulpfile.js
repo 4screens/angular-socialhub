@@ -8,7 +8,10 @@ var gulp = require('gulp')
 , fs = require('fs')
 
 , VIEWS = [
-    './src/views/example.html'
+    './src/views/main.html',
+    './src/views/tile-facebook.html',
+    './src/views/tile-instagram.html',
+    './src/views/tile-twitter.html'
   ]
 , FILES = [
     './src/app.js',
