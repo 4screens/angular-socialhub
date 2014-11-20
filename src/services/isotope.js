@@ -6,7 +6,7 @@ angular.module('4screens.socialhub').factory('SocialhubIsotopeService',
       , container = null
       , options = {
         itemSelector: '.socialhub-isotope-tile-directive',
-        transitionDuration: '0.2s'
+        transitionDuration: '50ms'
       };
 
     $document.bind('isotopeArrange', function() {

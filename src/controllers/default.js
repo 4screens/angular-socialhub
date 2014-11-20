@@ -64,7 +64,7 @@ angular.module('4screens.socialhub').controller( 'socialhubDefaultCtrl',
         $scope.detail.message = post.caption;
       }
 
-      $analytics.eventTrack('Open item', {  category: 'Social Hub', label: socialId });
+      $analytics.eventTrack('Open item', {  category: 'Social Hub', label: post._id });
     };
 
     $scope.closeSocial = function() {
