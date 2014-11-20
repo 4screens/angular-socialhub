@@ -1,0 +1,24 @@
+<div class="masonry__iframe" data-ng-if="showSocial">
+  <div class="masonry__iframe--navigation">
+    <a href="" data-ng-click="closeSocial()" class="masonry__iframe--close">
+      <span class="fa-stack fa-lg fa-stack-2x">
+        <i class="fa fa-circle fa-stack-2x fa-inverse"></i>
+        <i class="fa fa-times fa-stack-1x"></i>
+      </span>
+    </a>
+  </div>
+  <iframe width="100%" height="100%" data-ng-src="{{ datasrc }}" frameborder="0"></iframe>
+  <div class="masonry__iframe--background"></div>
+</div>
+<div>
+<div class="masonry__newest" data-ng-if="!!sh.newest.posts.length" data-ng-click="sh.renderNewest()">
+  Dodano nowych posów: {{ sh.newest.posts.length }}
+</div>
+</div>
+<div class="masonry socialhub-isotope-directive">
+  <article class="masonry__tile socialhub-isotope-tile-directive" data-ng-include="'views/socialhub/tile-' + post.source + '.html'" data-ng-repeat="post in sh.results.posts track by post._id">
+  </article>
+</div>
+<div class="masonry__preloader" data-ng-if="!sh.complete.value">
+  Wczytywanie postów...
+</div>
