@@ -16,6 +16,7 @@ var gulp = require('gulp')
 , FILES = [
     './src/app.js',
     './src/views.js',
+    './src/controllers/default.js',
     './src/directives/isotope.js',
     './src/directives/isotope-tile.js',
     './src/services/infinity.js',
