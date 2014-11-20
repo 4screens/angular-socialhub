@@ -9,23 +9,99 @@ angular.module('4screens.socialhub',[]);
 
 angular.module('4screens.socialhub').run(['$templateCache', function($templateCache) {
   $templateCache.put('views/socialhub/main.html',
-    '<div class="masonry__iframe" data-ng-if="showSocial"><div class="masonry__iframe--navigation"><a href data-ng-click="closeSocial()" class="masonry__iframe--close"><span class="fa-stack fa-lg fa-stack-2x"><i class="fa fa-circle fa-stack-2x fa-inverse"></i> <i class="fa fa-times fa-stack-1x"></i></span></a></div><iframe width="100%" height="100%" data-ng-src="{{ datasrc }}" frameborder="0"></iframe><div class="masonry__iframe--background"></div></div><div><div class="masonry__newest" data-ng-if="!!sh.newest.posts.length" data-ng-click="sh.renderNewest()">Dodano nowych posów: {{ sh.newest.posts.length }}</div></div><div class="masonry socialhub-isotope-directive"><article class="masonry__tile socialhub-isotope-tile-directive" data-ng-include="\'views/socialhub/tile-\' + post.source + \'.html\'" data-ng-repeat="post in sh.results.posts track by post._id"></article></div><div class="masonry__preloader" data-ng-if="!sh.complete.value">Wczytywanie postów...</div>');
+    '<div class="masonry__iframe" data-ng-if="!!detail"><div class="masonry__iframe--navigation"><a href data-ng-click="closeSocial()" class="masonry__iframe--close"><span class="fa-stack fa-lg fa-stack-2x"><i class="fa fa-circle fa-stack-2x fa-inverse"></i> <i class="fa fa-times fa-stack-1x"></i></span></a></div><div class="masonry__iframe--wrapper"><div class="masonry__iframe--content"><div class="masonry__tile--image" data-ng-if="detail.image"><img data-ng-src="{{ detail.image }}" alt> <span class="fa-stack fa-lg" data-ng-if="!!detail.video"><i class="fa fa-circle fa-stack-2x"></i> <i class="fa fa-play fa-stack-1x fa-inverse"></i></span></div><figcaption class="masonry__tile--signature"><div class="masonry__tile--signature-avatar"><img data-ng-src="{{ detail.user.avatar }}" alt> <span class="name" ng-bind-html="detail.user.name"></span> <span class="time" am-time-ago="detail.publish"></span></div><p class="masonry__tile--signature-caption" ng-bind-html="detail.message | emoji"></p></figcaption></div></div><div class="masonry__iframe--background"></div></div><div><div class="masonry__newest" data-ng-if="!!sh.newest.posts.length" data-ng-click="sh.renderNewest()">Dodano nowych posów: {{ sh.newest.posts.length }}</div></div><div class="masonry socialhub-isotope-directive"><article class="masonry__tile socialhub-isotope-tile-directive" data-ng-include="\'views/socialhub/tile-\' + post.source + \'.html\'" data-ng-repeat="post in sh.results.posts track by post._id"></article></div><div class="masonry__preloader" data-ng-if="!sh.complete.value">Wczytywanie postów...</div>');
 }]);
 
 angular.module('4screens.socialhub').run(['$templateCache', function($templateCache) {
   $templateCache.put('views/socialhub/tile-facebook.html',
-    '<figure data-ng-click="openSocial(post._id)"><div class="masonry__tile--social" data-ng-class="\'masonry__tile--social-\'+ post.source"><i class="fa" data-ng-class="\'fa-\'+ post.source"></i></div><div class="masonry__tile--image" data-ng-show="post.type==\'photo\' || post.type ==\'video\'"><img ng-src="{{post.photo.source}}" alt data-ng-if="post.type==\'photo\'"> <img ng-src="{{post.video.image}}" alt data-ng-if="post.type==\'video\'"> <span class="fa-stack fa-lg" data-ng-if="post.type==\'video\'"><i class="fa fa-circle fa-stack-2x"></i> <i class="fa fa-play fa-stack-1x fa-inverse"></i></span></div><figcaption class="masonry__tile--signature"><div class="masonry__tile--signature-avatar"><img data-ng-src="{{post.from.image}}" alt> <span class="name" ng-bind-html="post.from.name"></span> <span class="time" am-time-ago="post.created_time"></span></div><p class="masonry__tile--signature-caption" ng-bind-html="post.message | emoji"></p></figcaption></figure>');
+    '<figure data-ng-click="openSocial(post)"><div class="masonry__tile--social" data-ng-class="\'masonry__tile--social-\'+ post.source"><i class="fa" data-ng-class="\'fa-\'+ post.source"></i></div><div class="masonry__tile--image" data-ng-show="post.type==\'photo\' || post.type ==\'video\'"><img ng-src="{{post.photo.source}}" alt data-ng-if="post.type==\'photo\'"> <img ng-src="{{post.video.image}}" alt data-ng-if="post.type==\'video\'"> <span class="fa-stack fa-lg" data-ng-if="post.type==\'video\'"><i class="fa fa-circle fa-stack-2x"></i> <i class="fa fa-play fa-stack-1x fa-inverse"></i></span></div><figcaption class="masonry__tile--signature"><div class="masonry__tile--signature-avatar"><img data-ng-src="{{post.from.image}}" alt> <span class="name" ng-bind-html="post.from.name"></span> <span class="time" am-time-ago="post.created_time"></span></div><p class="masonry__tile--signature-caption">{{ post.message || post.description || post.caption || post.story }}</p></figcaption></figure>');
 }]);
 
 angular.module('4screens.socialhub').run(['$templateCache', function($templateCache) {
   $templateCache.put('views/socialhub/tile-instagram.html',
-    '<figure data-ng-click="openSocial(post._id)"><div class="masonry__tile--social" data-ng-class="\'masonry__tile--social-\'+ post.source"><i class="fa" data-ng-class="\'fa-\'+ post.source"></i></div><div class="masonry__tile--image" data-ng-show="post.images"><img ng-src="{{post.images.standard_resolution.url}}" alt> <span class="fa-stack fa-lg" data-ng-if="post.type==\'video\'"><i class="fa fa-circle fa-stack-2x"></i> <i class="fa fa-play fa-stack-1x fa-inverse"></i></span></div><figcaption class="masonry__tile--signature"><div class="masonry__tile--signature-avatar"><img data-ng-src="{{post.user.profile_picture}}" alt> <span class="name" ng-bind-html="post.user.full_name | emoji"></span> <span class="time" am-time-ago="post.created_time"></span></div><p class="masonry__tile--signature-caption" ng-bind-html="post.caption | emoji"></p></figcaption></figure>');
+    '<figure data-ng-click="openSocial(post)"><div class="masonry__tile--social" data-ng-class="\'masonry__tile--social-\'+ post.source"><i class="fa" data-ng-class="\'fa-\'+ post.source"></i></div><div class="masonry__tile--image" data-ng-show="post.images"><img ng-src="{{post.images.standard_resolution.url}}" alt> <span class="fa-stack fa-lg" data-ng-if="post.type==\'video\'"><i class="fa fa-circle fa-stack-2x"></i> <i class="fa fa-play fa-stack-1x fa-inverse"></i></span></div><figcaption class="masonry__tile--signature"><div class="masonry__tile--signature-avatar"><img data-ng-src="{{post.user.profile_picture}}" alt> <span class="name" ng-bind-html="post.user.full_name | emoji"></span> <span class="time" am-time-ago="post.created_time"></span></div><p class="masonry__tile--signature-caption" ng-bind-html="post.caption | emoji"></p></figcaption></figure>');
 }]);
 
 angular.module('4screens.socialhub').run(['$templateCache', function($templateCache) {
   $templateCache.put('views/socialhub/tile-twitter.html',
-    '<figure data-ng-click="openSocial(post._id)"><div class="masonry__tile--social" data-ng-class="\'masonry__tile--social-\'+ post.source"><i class="fa" data-ng-class="\'fa-\'+ post.source"></i></div><div class="masonry__tile--image" data-ng-show="post.images"><img ng-src="{{post.images.media_url}}" alt> <span class="fa-stack fa-lg" data-ng-if="post.type==\'video\'"><i class="fa fa-circle fa-stack-2x"></i> <i class="fa fa-play fa-stack-1x fa-inverse"></i></span></div><figcaption class="masonry__tile--signature"><div class="masonry__tile--signature-avatar"><img data-ng-src="{{post.user_image_url}}" alt> <span class="name" ng-bind-html="post.user"></span> <span class="time" am-time-ago="post.created_time"></span></div><p class="masonry__tile--signature-caption" ng-bind-html="post.caption | emoji"></p></figcaption></figure>');
+    '<figure data-ng-click="openSocial(post)"><div class="masonry__tile--social" data-ng-class="\'masonry__tile--social-\'+ post.source"><i class="fa" data-ng-class="\'fa-\'+ post.source"></i></div><div class="masonry__tile--image" data-ng-show="post.images"><img ng-src="{{post.images.media_url}}" alt> <span class="fa-stack fa-lg" data-ng-if="post.type==\'video\'"><i class="fa fa-circle fa-stack-2x"></i> <i class="fa fa-play fa-stack-1x fa-inverse"></i></span></div><figcaption class="masonry__tile--signature"><div class="masonry__tile--signature-avatar"><img data-ng-src="{{post.user_image_url}}" alt> <span class="name" ng-bind-html="post.user"></span> <span class="time" am-time-ago="post.created_time"></span></div><p class="masonry__tile--signature-caption" ng-bind-html="post.caption | emoji"></p></figcaption></figure>');
 }]);
+
+'use strict';
+
+angular.module('4screens.socialhub').controller( 'socialhubDefaultCtrl',
+  ["SocialhubBackendService", "$scope", "$sce", "$analytics", function( SocialhubBackendService, $scope, $sce, $analytics ) {
+    $scope.sh = SocialhubBackendService;
+    $scope.sh.renderVisibled();
+    $scope.detail = null;
+
+    $scope.openSocial = function( post ) {
+      $scope.detail = {};
+      if( post.source === 'instagram' ) {
+        // image
+        if( !!post.images ) {
+          $scope.detail.image = post.images.standard_resolution.url;
+        }
+        // video
+        if( post.type === 'video' ) {
+         $scope.detail.video = true;
+        }
+        // user
+        $scope.detail.user = {
+          name: post.user.username,
+          avatar: post.user.profile_picture
+        };
+        // time
+        $scope.detail.publish = post.created_time;
+        // message
+        $scope.detail.message = post.caption;
+      } else if( post.source === 'facebook' ) {
+        // image
+        if( !!post.photo ) {
+          $scope.detail.image = post.photo.source;
+        }
+        // video
+        if( post.type === 'video' ) {
+         $scope.detail.video = true;
+        }
+        // user
+        $scope.detail.user = {
+          name: post.from.name,
+          avatar: post.from.image
+        };
+        // time
+        $scope.detail.publish = post.created_time;
+        // message
+        $scope.detail.message = post.message || post.description || post.caption || post.story;
+      } else if( post.source === 'twitter' ) {
+        // image
+        if( !!post.images ) {
+          $scope.detail.image = post.images.media_url;
+        }
+        // video
+        if( post.type === 'video' ) {
+         $scope.detail.video = true;
+        }
+        // user
+        $scope.detail.user = {
+          name: post.user,
+          avatar: post.user_image_url
+        };
+        // time
+        $scope.detail.publish = post.created_time;
+        // message
+        $scope.detail.message = post.caption;
+      }
+
+      $analytics.eventTrack('Open item', {  category: 'Social Hub', label: socialId });
+    };
+
+    $scope.closeSocial = function() {
+      $scope.detail = null;
+      $analytics.eventTrack('Close item', {  category: 'Social Hub', label: 'Close item' });
+    };
+  }]
+);
 
 'use strict';
 
