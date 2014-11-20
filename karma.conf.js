@@ -10,8 +10,10 @@ module.exports = function(config) {
     files: [
       'bower_components/angular/angular.js',
       'bower_components/angular-mocks/angular-mocks.js',
+      'bower_components/lodash/dist/lodash.js',
+      'bower_components/isotope/dist/isotope.pkgd.js',
       'socialhub.js',
-      'test/*.spec.js'
+      'test/**/*.spec.js'
     ],
 
     autoWatch: true,
