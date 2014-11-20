@@ -93,7 +93,7 @@ angular.module('4screens.socialhub').controller( 'socialhubDefaultCtrl',
         $scope.detail.message = post.caption;
       }
 
-      $analytics.eventTrack('Open item', {  category: 'Social Hub', label: socialId });
+      $analytics.eventTrack('Open item', {  category: 'Social Hub', label: post._id });
     };
 
     $scope.closeSocial = function() {
@@ -141,7 +141,7 @@ angular.module('4screens.socialhub').factory('SocialhubInfinityService',
   ["SocialhubBackendService", function( SocialhubBackendService ) {
     var scrollHandler
       , available = true
-      , offset = 800
+      , offset = 1500
       , step = 1;
 
     function enable() {
@@ -175,7 +175,7 @@ angular.module('4screens.socialhub').factory('SocialhubIsotopeService',
       , container = null
       , options = {
         itemSelector: '.socialhub-isotope-tile-directive',
-        transitionDuration: '0.2s'
+        transitionDuration: '50ms'
       };
 
     $document.bind('isotopeArrange', function() {
