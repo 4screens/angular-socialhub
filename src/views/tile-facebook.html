@@ -1,4 +1,4 @@
-<figure data-ng-click="openSocial(post._id)">
+<figure data-ng-click="openSocial(post)">
   <div class="masonry__tile--social" data-ng-class="'masonry__tile--social-'+ post.source">
     <i class="fa" data-ng-class="'fa-'+ post.source"></i>
   </div>
@@ -16,6 +16,6 @@
       <span class="name" ng-bind-html="post.from.name"></span>
       <span class="time" am-time-ago="post.created_time"></span>
     </div>
-    <p class="masonry__tile--signature-caption" ng-bind-html="post.message | emoji"></p>
+    <p class="masonry__tile--signature-caption">{{ post.message || post.description || post.caption || post.story }}</p>
   </figcaption>
 </figure>

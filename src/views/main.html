@@ -1,4 +1,4 @@
-<div class="masonry__iframe" data-ng-if="showSocial">
+<div class="masonry__iframe" data-ng-if="!!detail">
   <div class="masonry__iframe--navigation">
     <a href="" data-ng-click="closeSocial()" class="masonry__iframe--close">
       <span class="fa-stack fa-lg fa-stack-2x">
@@ -7,7 +7,25 @@
       </span>
     </a>
   </div>
-  <iframe width="100%" height="100%" data-ng-src="{{ datasrc }}" frameborder="0"></iframe>
+  <div class="masonry__iframe--wrapper">
+    <div class="masonry__iframe--content">
+      <div class="masonry__tile--image" data-ng-if="detail.image">
+        <img data-ng-src="{{ detail.image }}" alt="" />
+        <span class="fa-stack fa-lg" data-ng-if="!!detail.video">
+          <i class="fa fa-circle fa-stack-2x"></i>
+          <i class="fa fa-play fa-stack-1x fa-inverse"></i>
+        </span>
+      </div>
+      <figcaption class="masonry__tile--signature">
+        <div class="masonry__tile--signature-avatar">
+          <img data-ng-src="{{ detail.user.avatar }}" alt="" />
+          <span class="name" ng-bind-html="detail.user.name"></span>
+          <span class="time" am-time-ago="detail.publish"></span>
+        </div>
+        <p class="masonry__tile--signature-caption" ng-bind-html="detail.message | emoji"></p>
+      </figcaption>
+    </div>
+  </div>
   <div class="masonry__iframe--background"></div>
 </div>
 <div>
