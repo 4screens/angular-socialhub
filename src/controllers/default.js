@@ -1,13 +1,15 @@
 'use strict';
 
 angular.module('4screens.socialhub').controller( 'socialhubDefaultCtrl',
-  function( SocialhubBackendService, $scope, $sce, $analytics ) {
+  function( SocialhubBackendService, $rootScope, $scope, $sce, $analytics ) {
     $scope.sh = SocialhubBackendService;
     $scope.sh.renderVisibled();
     $scope.detail = null;
 
     $scope.openSocial = function( post ) {
       $scope.detail = {};
+      $rootScope.noscroll = true;
+
       if( post.source === 'instagram' ) {
         // image
         if( !!post.images ) {
@@ -69,6 +71,8 @@ angular.module('4screens.socialhub').controller( 'socialhubDefaultCtrl',
 
     $scope.closeSocial = function() {
       $scope.detail = null;
+      $rootScope.noscroll = false;
+
       $analytics.eventTrack('Close item', {  category: 'Social Hub', label: 'Close item' });
     };
   }
