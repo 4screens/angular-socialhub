@@ -5,7 +5,7 @@ angular.module('4screens.socialhub').factory('SocialhubInfinityService',
     var scrollHandler
       , available = true
       , offset = 1500
-      , step = 1;
+      , step = 10;
 
     function enable() {
       available = true;
