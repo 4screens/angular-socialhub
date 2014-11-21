@@ -6,6 +6,18 @@ angular.module('4screens.socialhub').controller( 'socialhubDefaultCtrl',
     $scope.sh.renderVisibled();
     $scope.detail = null;
 
+    $scope.ratio = function( w, h, force ) {
+      if( !!force ) {
+        return force;
+      }
+      if( w > h ) {
+        return 'verticale';
+      }
+      if( w < h ) {
+        return 'horizontal';
+      }
+    };
+
     $scope.openSocial = function( post ) {
       $scope.detail = {};
       $rootScope.noscroll = true;

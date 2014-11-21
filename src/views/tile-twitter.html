@@ -3,7 +3,7 @@
     <i class="fa" data-ng-class="'fa-'+ post.source"></i>
   </div>
   <div class="masonry__tile--image" data-ng-show="post.images">
-    <img ng-src="{{post.images.media_url}}" alt="" />
+    <img data-ng-src="{{post.images.media_url}}" data-ng-class="ratio( post.images.sizes.small.w, post.images.sizes.small.h )" alt="" />
     <span class="fa-stack fa-lg" data-ng-if="post.type=='video'">
       <i class="fa fa-circle fa-stack-2x"></i>
       <i class="fa fa-play fa-stack-1x fa-inverse"></i>

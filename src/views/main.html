@@ -1,15 +1,15 @@
 <div class="masonry__iframe" data-ng-if="!!detail">
-  <div class="masonry__iframe--navigation">
-    <a href="" data-ng-click="closeSocial()" class="masonry__iframe--close">
-      <span class="fa-stack fa-lg fa-stack-2x">
-        <i class="fa fa-circle fa-stack-2x fa-inverse"></i>
-        <i class="fa fa-times fa-stack-1x"></i>
-      </span>
-    </a>
-  </div>
   <div class="masonry__iframe--wrapper">
+    <div class="masonry__iframe--navigation">
+      <a href="" data-ng-click="closeSocial()" class="masonry__iframe--close">
+        <span class="fa-stack fa-lg fa-stack-2x">
+          <i class="fa fa-circle fa-stack-2x fa-inverse"></i>
+          <i class="fa fa-times fa-stack-1x"></i>
+        </span>
+      </a>
+    </div>
     <div class="masonry__iframe--content">
-      <div class="masonry__tile--image" data-ng-if="detail.image">
+      <div class="masonry__tile--fullimage" data-ng-if="detail.image">
         <img data-ng-src="{{ detail.image }}" alt="" />
         <span class="fa-stack fa-lg" data-ng-if="!!detail.video">
           <i class="fa fa-circle fa-stack-2x"></i>
