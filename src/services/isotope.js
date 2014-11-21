@@ -11,15 +11,19 @@ angular.module('4screens.socialhub').factory('SocialhubIsotopeService',
 
     $document.bind('isotopeArrange', function() {
       $timeout(function() {
-        arrange();
+        instance.arrange();
+        SocialhubInfinityService.enable();
+        $document.triggerHandler('scroll');
       });
     });
 
     $document.bind('isotopeReload', function() {
       $timeout(function() {
-        isotope.reloadItems();
-        isotope.arrange();
-      }, 100 );
+        instance.reloadItems();
+        instance.arrange();
+        SocialhubInfinityService.enable();
+        $document.triggerHandler('scroll');
+      });
     });
 
     function init( element ) {
@@ -37,33 +41,10 @@ angular.module('4screens.socialhub').factory('SocialhubIsotopeService',
       });
     }
 
-    var arrange = _.debounce(function() {
-      loadImage(function() {
-        SocialhubInfinityService.enable();
-        $document.triggerHandler('scroll');
-      });
-    });
-
-    function loadImage( callback ) {
-      var loadImages = imagesLoaded( container );
-
-      $timeout(function() {
-        instance.arrange();
-      });
-
-      loadImages.on( 'always', function() {
-        $timeout(function() {
-          instance.arrange();
-          callback.apply( this, arguments );
-        });
-      } );
-    }
-
     // public API
     return {
       init: init,
-      addItem: addItem,
-      arrange: arrange
+      addItem: addItem
     }
   }
 );
