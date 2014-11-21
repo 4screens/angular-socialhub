@@ -2,7 +2,7 @@
 
 angular.module('4screens.socialhub').factory('SocialhubBackendService',
   function( CONFIG, socketService, $http, $document, $window ) {
-    var visibled = 1
+    var visibled = 0
       , pack = 50
       , complete = { value: false }
       , queue = []
