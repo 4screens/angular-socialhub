@@ -29,7 +29,7 @@ angular.module('4screens.socialhub').controller( 'socialhubDefaultCtrl',
         }
         // video
         if( post.type === 'video' ) {
-         $scope.detail.video = true;
+         $scope.detail.video = $sce.trustAsResourceUrl( post.videos.standard_resolution.url );
         }
         // user
         $scope.detail.user = {
@@ -47,7 +47,7 @@ angular.module('4screens.socialhub').controller( 'socialhubDefaultCtrl',
         }
         // video
         if( post.type === 'video' ) {
-         $scope.detail.video = true;
+          $scope.detail.video = $sce.trustAsResourceUrl( post.video.source );;
         }
         // user
         $scope.detail.user = {
@@ -64,9 +64,9 @@ angular.module('4screens.socialhub').controller( 'socialhubDefaultCtrl',
           $scope.detail.image = post.images.media_url;
         }
         // video
-        if( post.type === 'video' ) {
-         $scope.detail.video = true;
-        }
+        // if( post.type === 'video' ) {
+        //   $scope.detail.video = '';
+        // }
         // user
         $scope.detail.user = {
           name: post.user,

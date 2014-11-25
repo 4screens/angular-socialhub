@@ -16,12 +16,9 @@
           <span class="time" am-time-ago="detail.publish"></span>
         </div>
       </figcaption>
-      <div class="masonry__tile--fullimage" data-ng-if="detail.image">
-        <img data-ng-src="{{ detail.image }}" alt="" />
-        <span class="fa-stack fa-lg" data-ng-if="!!detail.video">
-          <i class="fa fa-circle fa-stack-2x"></i>
-          <i class="fa fa-play fa-stack-1x fa-inverse"></i>
-        </span>
+      <div class="masonry__tile--fullimage" data-ng-if="detail.image || detail.video">
+        <img data-ng-src="{{ detail.image }}" alt="" data-ng-if="!detail.video"/>
+        <video data-ng-src="{{ detail.video }}" width="100%" controls="controls" data-ng-if="!!detail.video"></video>
       </div>
       <figcaption class="masonry__tile--signature">
         <p class="masonry__tile--signature-caption" ng-bind-html="detail.message | emoji"></p>
