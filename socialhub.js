@@ -9,7 +9,7 @@ angular.module('4screens.socialhub',[]);
 
 angular.module('4screens.socialhub').run(['$templateCache', function($templateCache) {
   $templateCache.put('views/socialhub/main.html',
-    '<div class="masonry__iframe" data-ng-if="!!detail"><div class="masonry__iframe--wrapper"><div class="masonry__iframe--navigation"><a href data-ng-click="closeSocial()" class="masonry__iframe--close"><span class="fa-stack fa-lg fa-stack-2x"><i class="fa fa-circle fa-stack-2x fa-inverse"></i> <i class="fa fa-times fa-stack-1x"></i></span></a></div><div class="masonry__iframe--content"><figcaption class="masonry__tile--signature"><div class="masonry__tile--signature-avatar"><img data-ng-src="{{ detail.user.avatar }}" alt> <span class="name" ng-bind-html="detail.user.name"></span> <span class="time" am-time-ago="detail.publish"></span></div></figcaption><div class="masonry__tile--fullimage" data-ng-if="detail.image"><img data-ng-src="{{ detail.image }}" alt> <span class="fa-stack fa-lg" data-ng-if="!!detail.video"><i class="fa fa-circle fa-stack-2x"></i> <i class="fa fa-play fa-stack-1x fa-inverse"></i></span></div><figcaption class="masonry__tile--signature"><p class="masonry__tile--signature-caption" ng-bind-html="detail.message | emoji"></p></figcaption></div></div><div class="masonry__iframe--background"></div></div><div><div class="masonry__newest" data-ng-if="!!sh.newest.posts.length" data-ng-click="sh.renderNewest()">New: {{ sh.newest.posts.length }}</div></div><div class="masonry socialhub-isotope-directive"><article class="masonry__tile socialhub-isotope-tile-directive" data-ng-include="\'views/socialhub/tile-\' + post.source + \'.html\'" data-ng-repeat="post in sh.results.posts track by post._id"></article></div><div class="masonry__preloader" data-ng-if="!sh.complete.value"><i class="fa fa-spinner fa-spin"></i></div>');
+    '<div class="masonry__iframe" data-ng-if="!!detail"><div class="masonry__iframe--wrapper"><div class="masonry__iframe--navigation"><a href data-ng-click="closeSocial()" class="masonry__iframe--close"><span class="fa-stack fa-lg fa-stack-2x"><i class="fa fa-circle fa-stack-2x fa-inverse"></i> <i class="fa fa-times fa-stack-1x"></i></span></a></div><div class="masonry__iframe--content"><figcaption class="masonry__tile--signature"><div class="masonry__tile--signature-avatar"><img data-ng-src="{{ detail.user.avatar }}" alt> <span class="name" ng-bind-html="detail.user.name"></span> <span class="time" am-time-ago="detail.publish"></span></div></figcaption><div class="masonry__tile--fullimage" data-ng-if="detail.image || detail.video"><img data-ng-src="{{ detail.image }}" alt data-ng-if="!detail.video"><video data-ng-src="{{ detail.video }}" width="100%" controls data-ng-if="!!detail.video"></video></div><figcaption class="masonry__tile--signature"><p class="masonry__tile--signature-caption" ng-bind-html="detail.message | emoji"></p></figcaption></div></div><div class="masonry__iframe--background"></div></div><div><div class="masonry__newest" data-ng-if="!!sh.newest.posts.length" data-ng-click="sh.renderNewest()">New: {{ sh.newest.posts.length }}</div></div><div class="masonry socialhub-isotope-directive"><article class="masonry__tile socialhub-isotope-tile-directive" data-ng-include="\'views/socialhub/tile-\' + post.source + \'.html\'" data-ng-repeat="post in sh.results.posts track by post._id"></article></div><div class="masonry__preloader" data-ng-if="!sh.complete.value"><i class="fa fa-spinner fa-spin"></i></div>');
 }]);
 
 angular.module('4screens.socialhub').run(['$templateCache', function($templateCache) {
@@ -58,7 +58,7 @@ angular.module('4screens.socialhub').controller( 'socialhubDefaultCtrl',
         }
         // video
         if( post.type === 'video' ) {
-         $scope.detail.video = true;
+         $scope.detail.video = $sce.trustAsResourceUrl( post.videos.standard_resolution.url );
         }
         // user
         $scope.detail.user = {
@@ -76,7 +76,7 @@ angular.module('4screens.socialhub').controller( 'socialhubDefaultCtrl',
         }
         // video
         if( post.type === 'video' ) {
-         $scope.detail.video = true;
+          $scope.detail.video = $sce.trustAsResourceUrl( post.video.source );;
         }
         // user
         $scope.detail.user = {
@@ -93,9 +93,9 @@ angular.module('4screens.socialhub').controller( 'socialhubDefaultCtrl',
           $scope.detail.image = post.images.media_url;
         }
         // video
-        if( post.type === 'video' ) {
-         $scope.detail.video = true;
-        }
+        // if( post.type === 'video' ) {
+        //   $scope.detail.video = '';
+        // }
         // user
         $scope.detail.user = {
           name: post.user,
@@ -218,11 +218,9 @@ angular.module('4screens.socialhub').factory('SocialhubIsotopeService',
     function init( element ) {
       container = element;
       instance = new Isotope( element[0], options );
-      window.isotope = instance;
     }
 
     function addItem( element, index ) {
-      console.log( 'addItem', element, index );
       $timeout(function() {
         if( index === 0 ) {
           instance.prepended( element[0] );
@@ -300,7 +298,6 @@ angular.module('4screens.socialhub').factory('SocialhubBackendService',
       } else {
         _.each( queue.slice( 0, visibled ), function( postId, postIndex ) {
           if( _.findIndex( results, { _id: postId } ) === -1 ) {
-            console.log( postIndex, 0, archived[ postId ] );
             results.splice( postIndex, 0, archived[ postId ] );
           }
         } );
