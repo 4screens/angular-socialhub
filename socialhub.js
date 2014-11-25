@@ -30,7 +30,7 @@ angular.module('4screens.socialhub').run(['$templateCache', function($templateCa
 'use strict';
 
 angular.module('4screens.socialhub').controller( 'socialhubDefaultCtrl',
-  ["SocialhubBackendService", "$rootScope", "$scope", "$sce", "$analytics", function( SocialhubBackendService, $rootScope, $scope, $sce, $analytics ) {
+  ["SocialhubBackendService", "$rootScope", "$scope", "$timeout", "$sce", "$analytics", function( SocialhubBackendService, $rootScope, $scope, $timeout, $sce, $analytics ) {
     $scope.sh = SocialhubBackendService;
     $scope.sh.renderVisibled();
     $scope.detail = null;
@@ -58,7 +58,10 @@ angular.module('4screens.socialhub').controller( 'socialhubDefaultCtrl',
         }
         // video
         if( post.type === 'video' ) {
-         $scope.detail.video = $sce.trustAsResourceUrl( post.videos.standard_resolution.url );
+          $scope.detail.video = $sce.trustAsResourceUrl( post.videos.standard_resolution.url );
+          $timeout(function() {
+            angular.element('video').mediaelementplayer();
+          });
         }
         // user
         $scope.detail.user = {
@@ -76,7 +79,10 @@ angular.module('4screens.socialhub').controller( 'socialhubDefaultCtrl',
         }
         // video
         if( post.type === 'video' ) {
-          $scope.detail.video = $sce.trustAsResourceUrl( post.video.source );;
+          $scope.detail.video = $sce.trustAsResourceUrl( post.video.source );
+          $timeout(function() {
+            angular.element('video').mediaelementplayer();
+          });
         }
         // user
         $scope.detail.user = {
