@@ -31,7 +31,13 @@ angular.module('4screens.socialhub').controller( 'socialhubDefaultCtrl',
         if( post.type === 'video' ) {
           $scope.detail.video = $sce.trustAsResourceUrl( post.videos.standard_resolution.url );
           $timeout(function() {
-            angular.element('video').mediaelementplayer();
+            videojs( angular.element('video')[0], {
+              'controls': true,
+              'autoplay': false,
+              'preload': 'auto',
+              'width': '100%',
+              'height': '100%'
+            } );
           });
         }
         // user
@@ -52,7 +58,13 @@ angular.module('4screens.socialhub').controller( 'socialhubDefaultCtrl',
         if( post.type === 'video' ) {
           $scope.detail.video = $sce.trustAsResourceUrl( post.video.source );
           $timeout(function() {
-            angular.element('video').mediaelementplayer();
+            videojs( angular.element('video')[0], {
+              'controls': true,
+              'autoplay': false,
+              'preload': 'auto',
+              'width': '100%',
+              'height': '100%'
+            } );
           });
         }
         // user
