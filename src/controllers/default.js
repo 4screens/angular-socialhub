@@ -29,16 +29,10 @@ angular.module('4screens.socialhub').controller( 'socialhubDefaultCtrl',
         }
         // video
         if( post.type === 'video' ) {
-          $scope.detail.video = $sce.trustAsResourceUrl( post.videos.standard_resolution.url );
-          $timeout(function() {
-            videojs( angular.element('video')[0], {
-              'controls': true,
-              'autoplay': false,
-              'preload': 'auto',
-              'width': '100%',
-              'height': '100%'
-            } );
-          });
+          $scope.detail.video = [{
+            src: $sce.trustAsResourceUrl( post.videos.standard_resolution.url ),
+            type: 'video/mp4'
+          }];
         }
         // user
         $scope.detail.user = {
@@ -56,16 +50,10 @@ angular.module('4screens.socialhub').controller( 'socialhubDefaultCtrl',
         }
         // video
         if( post.type === 'video' ) {
-          $scope.detail.video = $sce.trustAsResourceUrl( post.video.source );
-          $timeout(function() {
-            videojs( angular.element('video')[0], {
-              'controls': true,
-              'autoplay': false,
-              'preload': 'auto',
-              'width': '100%',
-              'height': '100%'
-            } );
-          });
+          $scope.detail.video = [{
+            src: $sce.trustAsResourceUrl( post.video.source ),
+            type: 'video/mp4'
+          }];
         }
         // user
         $scope.detail.user = {
