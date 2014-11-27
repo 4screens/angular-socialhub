@@ -12,9 +12,11 @@ angular.module('4screens.socialhub').factory('SocialhubIsotopeService',
     $document.bind('isotopeArrange', function() {
       $timeout(function() {
         $timeout(function() {
-          instance.arrange();
-          SocialhubInfinityService.enable();
-          $document.triggerHandler('scroll');
+          $timeout(function() {
+            instance.arrange();
+            SocialhubInfinityService.enable();
+            $document.triggerHandler('scroll');
+          });
         });
       });
     });
@@ -22,10 +24,12 @@ angular.module('4screens.socialhub').factory('SocialhubIsotopeService',
     $document.bind('isotopeReload', function() {
       $timeout(function() {
         $timeout(function() {
-          instance.reloadItems();
-          instance.arrange();
-          SocialhubInfinityService.enable();
-          $document.triggerHandler('scroll');
+          $timeout(function() {
+            instance.reloadItems();
+            instance.arrange();
+            SocialhubInfinityService.enable();
+            $document.triggerHandler('scroll');
+          });
         });
       });
     });
