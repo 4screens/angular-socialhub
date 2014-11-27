@@ -4,6 +4,7 @@
   "main": "socialhub.js",
   "homepage": "https://github.com/4screens/angular-socialhub",
   "ignore": [
+    ".editorconfig",
     ".gitignore",
     ".travis.yml",
     "node_modules",
