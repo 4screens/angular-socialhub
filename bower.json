@@ -24,6 +24,5 @@
   "dependencies": {
     "isotope": "~2.0.1",
     "lodash": "~2.4.1",
-    "video.js": "~4.10.2"
   }
 }
