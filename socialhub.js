@@ -178,7 +178,7 @@ angular.module('4screens.socialhub').factory('SocialhubInfinityService',
 
     scrollHandler = _.throttle( function( s, e, w ) {
       return function() {
-        if( w.innerHeight - e.offset().top + w.scrollY + offset >= e.height() ) {
+        if( w.innerHeight - e.prop('offsetTop') + w.scrollY + offset >= parseInt( e.css('height'), 10 ) ) {
           if( !!available ) {
             available = false;
             SocialhubBackendService.renderVisibled( step );
@@ -271,7 +271,7 @@ angular.module('4screens.socialhub').factory('SocialhubBackendService',
         throw 'PostId has not been set!';
       }
 
-      return $http.get( CONFIG.backend.domain + CONFIG.frontend.socialhub.post.replace( ':id', CONFIG.frontend.socialhub.id ).replace( ':postid', postId ) ).then(function( res ) {
+      return $http.get( CONFIG.backend.domain.replace( ':subdomain', '' ) + CONFIG.frontend.socialhub.post.replace( ':id', CONFIG.frontend.socialhub.id ).replace( ':postid', postId ) ).then(function( res ) {
         if ( res.status === 200 ) {
           return res.data;
         }
@@ -281,8 +281,7 @@ angular.module('4screens.socialhub').factory('SocialhubBackendService',
 
     function getPosts( params ) {
       params = params || {};
-
-      return $http.get( CONFIG.backend.domain + CONFIG.frontend.socialhub.posts.replace( ':id', CONFIG.frontend.socialhub.id ), { params: params } ).then(function( res ) {
+      return $http.get( CONFIG.backend.domain.replace( ':subdomain', '' ) + CONFIG.frontend.socialhub.posts.replace( ':id', CONFIG.frontend.socialhub.id ), { params: params } ).then(function( res ) {
         if ( res.status === 200 ) {
           return res.data;
         }
