@@ -15,7 +15,7 @@ angular.module('4screens.socialhub').factory('SocialhubBackendService',
         throw 'PostId has not been set!';
       }
 
-      return $http.get( CONFIG.backend.domain + CONFIG.socialhub.post.replace( ':id', CONFIG.socialhub.id ).replace( ':postid', postId ) ).then(function( res ) {
+      return $http.get( CONFIG.backend.domain + CONFIG.frontend.socialhub.post.replace( ':id', CONFIG.frontend.socialhub.id ).replace( ':postid', postId ) ).then(function( res ) {
         if ( res.status === 200 ) {
           return res.data;
         }
@@ -26,7 +26,7 @@ angular.module('4screens.socialhub').factory('SocialhubBackendService',
     function getPosts( params ) {
       params = params || {};
 
-      return $http.get( CONFIG.backend.domain + CONFIG.socialhub.posts.replace( ':id', CONFIG.socialhub.id ), { params: params } ).then(function( res ) {
+      return $http.get( CONFIG.backend.domain + CONFIG.frontend.socialhub.posts.replace( ':id', CONFIG.frontend.socialhub.id ), { params: params } ).then(function( res ) {
         if ( res.status === 200 ) {
           return res.data;
         }
@@ -91,7 +91,7 @@ angular.module('4screens.socialhub').factory('SocialhubBackendService',
       renderVisibled( 0, true );
     }
 
-    socketService.get( CONFIG.socialhub.namespace + CONFIG.socialhub.id ).on( 'socialhub:newPost', function( postId ) {
+    socketService.get( CONFIG.frontend.socialhub.namespace + CONFIG.frontend.socialhub.id ).on( 'socialhub:newPost', function( postId ) {
       getPost( postId ).then(function( post ) {
         if( _.findIndex( queue, postId ) === -1 ) {
           archived[ post._id ] = post;
