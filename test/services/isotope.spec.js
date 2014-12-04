@@ -90,8 +90,4 @@ describe('isotope service', function() {
     expect( IsotopeProperty.appended ).toBe('2');
   });
 
-  it( 'should have arrange method', function() {
-    expect( SocialhubIsotopeService.arrange ).not.toBeUndefined();
-  });
-
 });

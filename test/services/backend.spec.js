@@ -12,8 +12,10 @@ describe('backend service', function() {
   // Here we create a dummy/mock service, to determine if they were caused.
   beforeEach( function() {
     CONFIGMock = {
-      'socialhub': {
-        'namespace': '/4screens/socialhub/'
+      'frontend': {
+        'socialhub': {
+          'namespace': '/4screens/socialhub/'
+        }
       }
     };
     socketServiceMock = {

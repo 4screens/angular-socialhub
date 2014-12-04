@@ -10,8 +10,16 @@ module.exports = function(config) {
     files: [
       'bower_components/angular/angular.js',
       'bower_components/angular-mocks/angular-mocks.js',
+      'bower_components/angular-sanitize/angular-sanitize.js',
+      'bower_components/angulartics/dist/angulartics.min.js',
+      'bower_components/angulartics/dist/angulartics-ga.min.js',
       'bower_components/lodash/dist/lodash.js',
       'bower_components/isotope/dist/isotope.pkgd.js',
+      'bower_components/videogular/videogular.js',
+      'bower_components/videogular-buffering/buffering.js',
+      'bower_components/videogular-controls/controls.js',
+      'bower_components/videogular-overlay-play/overlay-play.js',
+      'bower_components/videogular-poster/poster.js',
       'socialhub.js',
       'test/**/*.spec.js'
     ],
