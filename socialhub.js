@@ -1,5 +1,5 @@
 /*
- 4screens-socialhub v0.0.1
+ 4screens-socialhub v0.1.0
  (c) 2014 Nopattern sp. z o.o.
  License: proprietary
 */
@@ -10,7 +10,9 @@ angular.module('4screens.socialhub',[
   'com.2fdevs.videogular.plugins.buffering',
   'com.2fdevs.videogular.plugins.controls',
   'com.2fdevs.videogular.plugins.overlayplay',
-  'com.2fdevs.videogular.plugins.poster'
+  'com.2fdevs.videogular.plugins.poster',
+  'angulartics',
+  'angulartics.google.analytics',
 ]);
 
 angular.module('4screens.socialhub').run(['$templateCache', function($templateCache) {
