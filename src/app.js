@@ -1,6 +1,7 @@
 'use strict';
 
 angular.module('4screens.socialhub',[
+  '4screens.settings',
   'com.2fdevs.videogular',
   'com.2fdevs.videogular.plugins.buffering',
   'com.2fdevs.videogular.plugins.controls',

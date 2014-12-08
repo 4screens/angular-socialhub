@@ -1,10 +1,17 @@
 'use strict';
 
 angular.module('4screens.socialhub').controller( 'socialhubDefaultCtrl',
-  function( SocialhubBackendService, $rootScope, $scope, $timeout, $sce, $analytics ) {
+  function( CONFIG, SocialhubBackendService, SettingsService, $rootScope, $scope, $sce, $analytics ) {
     $scope.sh = SocialhubBackendService;
-    $scope.sh.renderVisibled();
     $scope.detail = null;
+    
+    SettingsService.socialhubWidget.get( CONFIG.frontend.socialhubWidget.id ).then(function( widget ) {
+      CONFIG.frontend.socialhub.id = widget.socialHubId;
+      if( !!widget.theme.customThemeCssFile ) {
+        $scope.staticThemeCssFile = CONFIG.backend.domain.replace( ':subdomain', '' ) + '/uploads/' + widget.theme.customThemeCssFile;
+      }
+      SocialhubBackendService.renderVisibled();
+    });
 
     $scope.ratio = function( w, h, force ) {
       if( !!force ) {
