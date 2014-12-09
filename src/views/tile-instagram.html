@@ -12,7 +12,7 @@
   <figcaption class="masonry__tile--signature">
     <div class="masonry__tile--signature-avatar">
       <img data-ng-src="{{post.user.profile_picture}}" alt="" />
-      <span class="name" ng-bind-html="post.user.full_name | emoji"></span>
+      <span class="name" data-ng-bind="post.user.username"></span>
       <span class="time" am-time-ago="post.created_time"></span>
     </div>
     <p class="masonry__tile--signature-caption" ng-bind-html="post.caption | emoji"></p>

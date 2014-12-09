@@ -19,6 +19,7 @@ var gulp = require('gulp')
     './src/controllers/default.js',
     './src/directives/isotope.js',
     './src/directives/isotope-tile.js',
+    './src/filters/emoji.js',
     './src/services/infinity.js',
     './src/services/isotope.js',
     './src/services/backend.js'
