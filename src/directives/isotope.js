@@ -11,6 +11,6 @@ angular.module('4screens.socialhub').directive( 'socialhubIsotopeDirective',
     return {
       restrict: 'C',
       link: _link
-    }
+    };
   }
 );

@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('4screens.socialhub').factory('SocialhubInfinityService',
+angular.module('4screens.socialhub').factory( 'SocialhubInfinityService',
   function( SocialhubBackendService ) {
     var scrollHandler
       , available = true
@@ -19,13 +19,13 @@ angular.module('4screens.socialhub').factory('SocialhubInfinityService',
             SocialhubBackendService.renderVisibled( step );
           }
         }
-      }
+      };
     }, 500 );
 
     // public API
     return {
       scrollHandler: scrollHandler,
       enable: enable
-    }
+    };
   }
 );

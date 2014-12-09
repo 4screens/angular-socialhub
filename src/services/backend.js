@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('4screens.socialhub').factory('SocialhubBackendService',
-  function( CONFIG, socketService, $http, $document, $window ) {
+angular.module('4screens.socialhub').factory( 'SocialhubBackendService',
+  function( CONFIG, socketService, $http, $q, $document, $window ) {
     var visibled = 0
       , pack = 50
       , complete = { value: false }
@@ -102,7 +102,7 @@ angular.module('4screens.socialhub').factory('SocialhubBackendService',
             newest.unshift( post._id );
           }
         }
-      }).catch(function( err, b, c, d ) {
+      }).catch(function( err ) {
         if( err.status === 404 || err.status === 500 ) {
           _.remove( queue, function( v ) {
             return v === postId;

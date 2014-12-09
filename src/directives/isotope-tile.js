@@ -9,6 +9,6 @@ angular.module('4screens.socialhub').directive( 'socialhubIsotopeTileDirective',
     return {
       restrict: 'C',
       link: _link
-    }
+    };
   }
 );

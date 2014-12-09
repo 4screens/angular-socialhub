@@ -36,10 +36,10 @@ angular.module('4screens.socialhub').controller( 'socialhubDefaultCtrl',
         }
         // video
         if( post.type === 'video' ) {
-          $scope.detail.video = [{
+          $scope.detail.video = [ {
             src: $sce.trustAsResourceUrl( post.videos.standard_resolution.url ),
             type: 'video/mp4'
-          }];
+          } ];
         }
         // user
         $scope.detail.user = {
@@ -57,10 +57,10 @@ angular.module('4screens.socialhub').controller( 'socialhubDefaultCtrl',
         }
         // video
         if( post.type === 'video' ) {
-          $scope.detail.video = [{
+          $scope.detail.video = [ {
             src: $sce.trustAsResourceUrl( post.video.source ),
             type: 'video/mp4'
-          }];
+          } ];
         }
         // user
         $scope.detail.user = {
@@ -91,14 +91,14 @@ angular.module('4screens.socialhub').controller( 'socialhubDefaultCtrl',
         $scope.detail.message = post.caption;
       }
 
-      $analytics.eventTrack('Open item', {  category: 'Social Hub', label: post._id });
+      $analytics.eventTrack( 'Open item', { category: 'Social Hub', label: post._id });
     };
 
     $scope.closeSocial = function() {
       $scope.detail = null;
       $rootScope.noscroll = false;
 
-      $analytics.eventTrack('Close item', {  category: 'Social Hub', label: 'Close item' });
+      $analytics.eventTrack( 'Close item', { category: 'Social Hub', label: 'Close item' });
     };
   }
 );
