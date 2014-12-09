@@ -10,4 +10,5 @@ angular.module( '4screens.socialhub',[
   'com.2fdevs.videogular.plugins.poster',
   'angulartics',
   'angulartics.google.analytics',
+  'angularMoment'
 ]);
