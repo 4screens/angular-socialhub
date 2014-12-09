@@ -1,11 +1,11 @@
 'use strict';
 
 angular.module('4screens.socialhub').controller( 'socialhubDefaultCtrl',
-  function( CONFIG, SocialhubBackendService, SettingsService, $rootScope, $scope, $sce, $analytics ) {
+  function( CONFIG, SocialhubBackendService, SettingsSocialhubService, $rootScope, $scope, $routeParams, $sce, $analytics ) {
     $scope.sh = SocialhubBackendService;
     $scope.detail = null;
-    
-    SettingsService.socialhubWidget.get( CONFIG.frontend.socialhubWidget.id ).then(function( widget ) {
+
+    SettingsSocialhubService.get( $routeParams.shWidgetId || CONFIG.frontend.socialhubWidget.id ).then(function( widget ) {
       CONFIG.frontend.socialhub.id = widget.socialHubId;
       if( !!widget.theme.customThemeCssFile ) {
         $scope.staticThemeCssFile = CONFIG.backend.domain.replace( ':subdomain', '' ) + '/uploads/' + widget.theme.customThemeCssFile;

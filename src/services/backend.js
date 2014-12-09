@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('4screens.socialhub').factory( 'SocialhubBackendService',
-  function( CONFIG, socketService, $http, $q, $document, $window ) {
+  function( CONFIG, CommonSocketService, $http, $q, $document, $window ) {
     var visibled = 0
       , pack = 50
       , complete = { value: false }
@@ -90,7 +90,7 @@ angular.module('4screens.socialhub').factory( 'SocialhubBackendService',
       renderVisibled( 0, true );
     }
 
-    socketService.get( CONFIG.frontend.socialhub.namespace + CONFIG.frontend.socialhub.id ).on( 'socialhub:newPost', function( postId ) {
+    CommonSocketService.get( CONFIG.frontend.socialhub.namespace + CONFIG.frontend.socialhub.id ).on( 'socialhub:newPost', function( postId ) {
       getPost( postId ).then(function( post ) {
         if( _.findIndex( queue, postId ) === -1 ) {
           archived[ post._id ] = post;
