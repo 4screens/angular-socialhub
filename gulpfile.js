@@ -88,8 +88,14 @@ gulp.task( 'complexity', function() {
     .pipe( plugins.complexity() );
 } );
 
-gulp.task( 'watch', function() {
-  gulp.watch( FILES, [ 'complexity', 'clean:views' ] );
+gulp.task( 'lint', function() {
+  return gulp.src( FILES )
+    .pipe( plugins.jshint() )
+    .pipe( plugins.jshint.reporter('jshint-stylish') );
 } );
 
-gulp.task( 'default', ['clean:views'] );
+gulp.task( 'watch', function() {
+  gulp.watch( FILES, [ 'complexity', 'clean:views', 'lint' ] );
+} );
+
+gulp.task( 'default', [ 'clean:views', 'lint' ] );
