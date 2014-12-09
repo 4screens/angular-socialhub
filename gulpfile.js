@@ -26,6 +26,19 @@ var gulp = require('gulp')
 , BANNER = './src/header.txt'
 , MAIN = 'socialhub.js';
 
+gulp.task( 'jscodesnifer', function() {
+  return gulp.src( FILES )
+    .pipe( plugins.jscodesniffer(
+      { standard: 'Idiomatic', reporters: [ 'default', 'failer' ] }
+    ) );
+});
+
+gulp.task( 'lint', ['jscodesnifer'], function() {
+  return gulp.src( FILES )
+    .pipe( plugins.jshint() )
+    .pipe( plugins.jshint.reporter('jshint-stylish') );
+} );
+
 gulp.task( 'clean:tmp', function() {
   return gulp.src( '.tmp', { read: false } )
     .pipe( plugins.clean() );
@@ -36,7 +49,7 @@ gulp.task( 'clean:views', ['copy'], function() {
     .pipe( plugins.clean() );
 } );
 
-gulp.task( 'minify:html', ['clean:tmp'], function() {
+gulp.task( 'minify:html', [ 'clean:tmp', 'lint' ], function() {
   return gulp.src( VIEWS )
     .pipe( plugins.minifyHtml({
       empty: true,
@@ -88,14 +101,8 @@ gulp.task( 'complexity', function() {
     .pipe( plugins.complexity() );
 } );
 
-gulp.task( 'lint', function() {
-  return gulp.src( FILES )
-    .pipe( plugins.jshint() )
-    .pipe( plugins.jshint.reporter('jshint-stylish') );
-} );
-
 gulp.task( 'watch', function() {
-  gulp.watch( FILES, [ 'complexity', 'clean:views', 'lint' ] );
+  gulp.watch( FILES, [ 'complexity', 'clean:views' ] );
 } );
 
-gulp.task( 'default', [ 'clean:views', 'lint' ] );
+gulp.task( 'default', ['clean:views'] );
