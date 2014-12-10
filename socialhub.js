@@ -47,6 +47,7 @@ angular.module('4screens.socialhub').controller( 'socialhubDefaultCtrl',
 
     SettingsSocialhubService.get( $routeParams.shWidgetId || CONFIG.frontend.socialhubWidget.id ).then(function( widget ) {
       CONFIG.frontend.socialhub.id = widget.socialHubId;
+      widget.theme = widget.theme || {};
       if( !!widget.theme.customThemeCssFile ) {
         $scope.staticThemeCssFile = CONFIG.backend.domain.replace( ':subdomain', '' ) + '/uploads/' + widget.theme.customThemeCssFile;
       }
