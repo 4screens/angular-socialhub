@@ -11,7 +11,9 @@ angular.module('4screens.socialhub').controller( 'socialhubDefaultCtrl',
       if( !!widget.theme.customThemeCssFile ) {
         $scope.staticThemeCssFile = CONFIG.backend.domain.replace( ':subdomain', '' ) + '/uploads/' + widget.theme.customThemeCssFile;
       }
-      SocialhubBackendService.renderVisibled();
+      SocialhubBackendService.widgetId = widget._id;
+      SocialhubBackendService.complete.infiniteScroll = !!widget.config.infiniteScroll;
+      SocialhubBackendService.renderVisibled( SocialhubBackendService.complete.infiniteScroll ? 0 : 10 );
     });
 
     $scope.ratio = function( w, h, force ) {
@@ -100,6 +102,10 @@ angular.module('4screens.socialhub').controller( 'socialhubDefaultCtrl',
       $rootScope.noscroll = false;
 
       $analytics.eventTrack( 'Close item', { category: 'Social Hub', label: 'Close item' });
+    };
+
+    $scope.renderMore = function() {
+      SocialhubBackendService.renderVisibled( 10 );
     };
   }
 );

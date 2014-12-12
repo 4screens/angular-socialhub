@@ -12,14 +12,17 @@ angular.module('4screens.socialhub').factory( 'SocialhubInfinityService',
     }
 
     scrollHandler = _.throttle( function( s, e, w ) {
-      return function() {
-        if( w.innerHeight - e.prop('offsetTop') + w.scrollY + offset >= parseInt( e.css('height'), 10 ) ) {
-          if( !!available ) {
-            available = false;
-            SocialhubBackendService.renderVisibled( step );
+      if( !!SocialhubBackendService.complete.infiniteScroll ) {
+        return function() {
+          if( w.innerHeight - e.prop('offsetTop') + w.scrollY + offset >= parseInt( e.css('height'), 10 ) ) {
+            if( !!available ) {
+              available = false;
+              SocialhubBackendService.renderVisibled( step );
+            }
           }
-        }
-      };
+        };
+      }
+      return function() {};
     }, 500 );
 
     // public API

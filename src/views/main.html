@@ -52,10 +52,13 @@
   New: {{ sh.newest.posts.length }}
 </div>
 </div>
-<div class="masonry socialhub-isotope-directive">
+<div class="masonry socialhub-isotope-directive" data-ng-if="sh.widgetId">
   <article class="masonry__tile socialhub-isotope-tile-directive" data-ng-include="'views/socialhub/tile-' + post.source + '.html'" data-ng-repeat="post in sh.results.posts track by post._id">
   </article>
 </div>
-<div class="masonry__preloader" data-ng-if="!sh.complete.value">
+<div class="masonry__preloader" data-ng-if="sh.complete.infiniteScroll || !sh.results.posts.length">
   <i class="fa fa-spinner fa-spin"></i>
+</div>
+<div class="masonry__preloader" data-ng-if="!sh.complete.infiniteScroll && sh.results.posts.length">
+  <button data-ng-click="renderMore()">show more</button>
 </div>
