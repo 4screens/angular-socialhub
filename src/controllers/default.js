@@ -12,7 +12,7 @@ angular.module('4screens.socialhub').controller( 'socialhubDefaultCtrl',
         $scope.staticThemeCssFile = CONFIG.backend.domain.replace( ':subdomain', '' ) + '/uploads/' + widget.theme.customThemeCssFile;
       }
       SocialhubBackendService.widgetId = widget._id;
-      SocialhubBackendService.complete.infiniteScroll = !!widget.config.infiniteScroll;
+      SocialhubBackendService.complete.infiniteScroll = !!(widget.config || {}).infiniteScroll;
       SocialhubBackendService.renderVisibled( SocialhubBackendService.complete.infiniteScroll ? 0 : 10 );
     });
 
