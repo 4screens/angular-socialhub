@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('4screens.socialhub').factory( 'SocialhubIsotopeService',
-  function( SocialhubInfinityService, $document, $timeout ) {
+  function( SocialhubInfinityService, $rootScope, $document, $timeout ) {
     var instance = null
       , container = null
       , options = {
@@ -9,7 +9,7 @@ angular.module('4screens.socialhub').factory( 'SocialhubIsotopeService',
         transitionDuration: '0.1s'
       };
 
-    $document.bind( 'isotopeArrange', function() {
+    $rootScope.$on( 'isotopeArrange', function() {
       $timeout(function() {
         $timeout(function() {
           $timeout(function() {
@@ -21,7 +21,7 @@ angular.module('4screens.socialhub').factory( 'SocialhubIsotopeService',
       });
     });
 
-    $document.bind( 'isotopeReload', function() {
+    $rootScope.$on( 'isotopeReload', function() {
       $timeout(function() {
         $timeout(function() {
           $timeout(function() {

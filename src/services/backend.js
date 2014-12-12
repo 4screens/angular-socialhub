@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('4screens.socialhub').factory( 'SocialhubBackendService',
-  function( CONFIG, CommonSocketService, $http, $q, $document, $window ) {
+  function( CONFIG, CommonSocketService, $rootScope, $http, $q, $document, $window ) {
     var visibled = 0
       , pack = 50
       , complete = { value: false }
@@ -65,9 +65,9 @@ angular.module('4screens.socialhub').factory( 'SocialhubBackendService',
         });
 
         if( reload === false ) {
-          $document.triggerHandler('isotopeArrange');
+          $rootScope.$emit('isotopeArrange');
         } else {
-          $document.triggerHandler('isotopeReload');
+          $rootScope.$emit('isotopeReload');
         }
 
         if( complete.value === true && queue.length === visibled ) {
@@ -110,7 +110,7 @@ angular.module('4screens.socialhub').factory( 'SocialhubBackendService',
           _.remove( results, function( v ) {
             return v._id === postId;
           } );
-          $document.triggerHandler('isotopeReload');
+          $rootScope.$emit('isotopeReload');
         }
       });
     } );
