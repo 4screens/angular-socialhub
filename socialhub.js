@@ -1,5 +1,5 @@
 /*
- 4screens-socialhub v0.1.4
+ 4screens-socialhub v0.1.5
  (c) 2014 Nopattern sp. z o.o.
  License: proprietary
 */
