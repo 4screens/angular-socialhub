@@ -55,9 +55,9 @@
   <article class="masonry__tile socialhub-isotope-tile-directive" data-ng-include="'views/socialhub/tile-' + post.source + '.html'" data-ng-repeat="post in sh.results.posts track by post._id">
   </article>
 </div>
-<div class="masonry__preloader" data-ng-if="sh.complete.infiniteScroll || !sh.results.posts.length">
+<div class="masonry__preloader masonry__button" data-ng-if="sh.complete.infiniteScroll || !sh.results.posts.length">
   <i class="fa fa-spinner fa-spin"></i>
 </div>
 <div class="masonry__preloader" data-ng-if="!sh.complete.infiniteScroll && sh.results.posts.length">
-  <button data-ng-click="renderMore()">show more</button>
+  <button data-ng-click="renderMore()" class="masonry__button">show more</button>
 </div>
