@@ -52,7 +52,7 @@
 </div>
 </div>
 <div class="masonry socialhub-isotope-directive" data-ng-if="sh.widgetId">
-  <article class="masonry__tile socialhub-isotope-tile-directive" data-ng-include="'views/socialhub/tile-' + post.source + '.html'" data-ng-repeat="post in sh.results.posts track by post._id">
+  <article class="masonry__tile socialhub-isotope-tile-directive masonary__type" ng-class="'masonary__type--' + post.source" data-ng-include="'views/socialhub/tile-' + post.source + '.html'" data-ng-repeat="post in sh.results.posts track by post._id">
   </article>
 </div>
 <div class="masonry__preloader masonry__button" data-ng-if="sh.complete.infiniteScroll || !sh.results.posts.length">
