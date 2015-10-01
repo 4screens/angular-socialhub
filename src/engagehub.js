@@ -1,5 +1,5 @@
 angular
-  .module('4screenEngageHub.engagehub', [])
+  .module('4screen.engagehub.service', [])
   .factory('engagehub',
     function(CONFIG, $rootScope, $http, $q, CommonSocketService, auth, AccountService, growl, $document, $window) {
       'use strict';

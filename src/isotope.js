@@ -1,5 +1,5 @@
 angular
-  .module('4screenEngageHub.isotope', [])
+  .module('4screen.engagehub.isotope', [])
   .directive('engagehubIsotope', function(EngagehubIsotopeService, EngagehubInfinityService, $window, $document) {
       'use strict';
       var _link = function(scope, element) {

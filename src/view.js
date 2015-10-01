@@ -1,6 +1,6 @@
 angular
-  .module('4screenEngageHub.main', ['4screenEngageHub.engagehub', '4screenEngageHub.isotope', '4screenEngageHub.infinity'])
-  .controller('EngagehubEditCtrl',
+  .module('4screen.engagehub.view', ['4screen.engagehub.service', '4screen.engagehub.isotope', '4screen.engagehub.infinity'])
+  .controller('EngagehubVievController',
     function($rootScope, $scope, $sce, ModalService, engagehub, auth, growl, $location, $stateParams, $state, fonts, $timeout, CONFIG) {
       'use strict';
 

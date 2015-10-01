@@ -1,5 +1,5 @@
 angular
-  .module('4screenEngageHub.infinity', [])
+  .module('4screen.engagehub.infinity', [])
   .factory('EngagehubInfinityService', function(engagehub) {
       'use strict';
 
