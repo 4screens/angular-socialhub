@@ -1,0 +1,33 @@
+<div class="headline">
+  <h4>Publish</h4>
+</div>
+
+<div class="aside__content aside__submenu">
+   <button class="btn btn-primary"
+    data-ng-class="{ 'active': subContent === 'url' || subContent === 'default_publish' }"
+    ui-sref="my.engagehub.edit.content.subcontent({ content: 'publish', subContent: 'url' })"
+  >
+    <span class="pull-left">Url</span>
+    <i class="icon-link pull-right"></i>
+  </button>
+</div>
+
+<div class="aside__content aside__submenu">
+   <button class="btn btn-primary"
+    data-ng-class="{ 'active': subContent === 'embed' }"
+    ui-sref="my.engagehub.edit.content.subcontent({ content: 'publish', subContent:'embed' })"
+  >
+    <span class="pull-left">Embed</span>
+    <i class="icon-embed pull-right"></i>
+  </button>
+</div>
+
+<div class="aside__content aside__submenu">
+   <button class="btn btn-primary"
+    data-ng-class="{ 'active': subContent === 'qr' }"
+    ui-sref="my.engagehub.edit.content.subcontent({ content: 'publish', subContent:'qr' })"
+  >
+    <span class="pull-left">QR Code</span>
+    <i class="icon-qr-code pull-right"></i>
+  </button>
+</div>

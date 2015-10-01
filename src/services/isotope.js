@@ -1,58 +1,80 @@
 'use strict';
 
-angular.module('4screens.socialhub').factory( 'SocialhubIsotopeService',
-  function( SocialhubInfinityService, $rootScope, $document, $timeout ) {
-    var instance = null
-      , container = null
-      , options = {
-        itemSelector: '.socialhub-isotope-tile-directive',
+angular.module('4screensAdminApp').factory('EngagehubIsotopeService',
+  function(EngagehubInfinityService, $rootScope, $document, $timeout) {
+    var instance = null, container = null, options = {
+        itemSelector: '.engagehub-isotope-tile',
         transitionDuration: '0.1s'
       };
 
-    $rootScope.$on( 'isotopeArrange', function() {
+    var unsubscribeIsotopeArrange = $rootScope.$on('isotopeArrange', function() {
+      console.debug('[ Isotope ] Arrange');
       $timeout(function() {
         $timeout(function() {
           $timeout(function() {
-            instance.arrange();
-            SocialhubInfinityService.enable();
+            if (instance) {
+              instance.arrange();
+            }
+
+            EngagehubInfinityService.enable();
             $document.triggerHandler('scroll');
           });
         });
       });
     });
 
-    $rootScope.$on( 'isotopeReload', function() {
+    var unsubscribeIsotopeReload = $rootScope.$on('isotopeReload', function() {
+      console.debug('[ Isotope ] Reloaded');
       $timeout(function() {
         $timeout(function() {
           $timeout(function() {
-            instance.reloadItems();
-            instance.arrange();
-            SocialhubInfinityService.enable();
+            if (instance) {
+              instance.reloadItems();
+              instance.arrange();
+            }
+
+            EngagehubInfinityService.enable();
             $document.triggerHandler('scroll');
           });
         });
       });
     });
 
-    function init( element ) {
-      container = element;
-      instance = new Isotope( element[0], options );
+    function initialized(callback) {
+      console.debug('[ Isotope ] Initialized');
+      return callback();
     }
 
-    function addItem( element, index ) {
+    function init(element) {
+      console.debug('[ Isotope ] Init');
+      container = element;
+      instance = new Isotope(element[0], options);
+      window.isotope = instance;
+    }
+
+    function addItem(element, index) {
+      console.debug('[ Isotope ] Add item');
       $timeout(function() {
-        if( index === 0 ) {
-          instance.prepended( element[0] );
+        if (index === 0) {
+          instance.prepended(element[0]);
         } else {
-          instance.appended( element[0] );
+          instance.appended(element[0]);
         }
       });
     }
 
+    // Destroy events
+    // $scope.$on('$destroy', function(){
+    //   unsubscribeIsotopeReload();
+    //   unsubscribeIsotopeArrange();
+    // });
+
     // public API
     return {
+      initialized: initialized,
       init: init,
       addItem: addItem
     };
   }
+
 );

@@ -1,0 +1,77 @@
+<div class="headline">
+  <h4>Design</h4>
+</div>
+
+<div class="headline">
+  <h5>Author font</h5>
+</div>
+<div class="aside__content">
+  <div class="input-group btn-group" data-dropdown="">
+    <button ng-style="{ 'font-family': getFont(sh.config.theme.authorFont) }" type="button" class="btn btn-default btn-block dropdown-toggle">{{ sh.config.theme.authorFont || 'Default' }} <b class="caret"></b></button>
+    <ul class="dropdown-menu">
+      <li data-ng-repeat="font in availableFonts track by $index" data-ng-style="{'font-family': getFont(font.value)}">
+        <a href="javascript:void(0);" data-ng-click="setFont('authorFont', font.value)">{{ font.value }}</a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div class="headline">
+  <h5>Description font</h5>
+</div>
+<div class="aside__content">
+  <div class="input-group btn-group" data-dropdown="">
+    <button ng-style="{ 'font-family': getFont(sh.config.theme.descriptionFont) }" type="button" class="btn btn-default btn-block dropdown-toggle">{{ sh.config.theme.descriptionFont || 'Default' }} <b class="caret"></b></button>
+    <ul class="dropdown-menu">
+      <li data-ng-repeat="font in availableFonts track by $index" data-ng-style="{'font-family': getFont(font.value)}">
+        <a href="javascript:void(0);" data-ng-click="setFont('descriptionFont', font.value)">{{ font.value }}</a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div class="headline">
+  <h5>Colors</h5>
+</div>
+<div class="aside__content clearfix" ng-if="sh.config.theme">
+  <div class="input-group input-append color" data-colorpicker="rgba" colorpicker-with-input="true"
+    always-visible-text-dark-color="#333333" always-visible-text-light-color="#eeeeee"
+    data-ng-model="sh.config.theme.backgroundColor"
+    data-ng-style="{ 'background-color': sh.config.theme.backgroundColor }"
+    always-visible-text="sh.config.theme.backgroundColor"
+    ng-model-options="{debounce: 500}"
+    data-ng-change="updateSh(sh)"
+  >
+    <span>Background color</span>
+  </div>
+  <div class="input-group input-append color" data-colorpicker="rgba" colorpicker-with-input="true"
+    always-visible-text-dark-color="#333333" always-visible-text-light-color="#eeeeee"
+    data-ng-model="sh.config.theme.authorColor"
+    data-ng-style="{ 'background-color': sh.config.theme.authorColor }"
+    always-visible-text="sh.config.theme.authorColor"
+    ng-model-options="{debounce: 500}"
+    data-ng-change="updateSh(sh)"
+  >
+    <span>Author color</span>
+  </div>
+  <div class="input-group input-append color" data-colorpicker="rgba" colorpicker-with-input="true"
+    always-visible-text-dark-color="#333333" always-visible-text-light-color="#eeeeee"
+    data-ng-model="sh.config.theme.descriptionColor"
+    data-ng-style="{ 'background-color': sh.config.theme.descriptionColor }"
+    always-visible-text="sh.config.theme.descriptionColor"
+    ng-model-options="{debounce: 500}"
+    data-ng-change="updateSh(sh)"
+  >
+    <span>Description color</span>
+  </div>
+  <div class="input-group input-append color" data-colorpicker="rgba" colorpicker-with-input="true"
+    always-visible-text-dark-color="#333333" always-visible-text-light-color="#eeeeee"
+    data-ng-model="sh.config.theme.cardBackgroundColor"
+    data-ng-style="{ 'background-color': sh.config.theme.cardBackgroundColor }"
+    always-visible-text="sh.config.theme.cardBackgroundColor"
+    ng-model-options="{debounce: 500}"
+    data-ng-change="updateSh(sh)"
+  >
+    <span>Card background color</span>
+  </div>
+</div>

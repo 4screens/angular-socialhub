@@ -1,28 +1,24 @@
 'use strict';
 
-angular.module('4screens.socialhub').factory( 'SocialhubInfinityService',
-  function( SocialhubBackendService ) {
-    var scrollHandler
-      , available = true
-      , offset = 1500
-      , step = 10;
+angular.module('4screensAdminApp').factory('EngagehubInfinityService',
+  function(engagehub) {
+    var scrollHandler, available = true, offset = 0, step = 10;
 
     function enable() {
       available = true;
     }
 
-    scrollHandler = _.throttle( function( s, e, w ) {
+    scrollHandler = _.throttle(function(s, e, w) {
+      console.debug('[ InfinityService ] Scroll handler');
       return function() {
-        if( !!SocialhubBackendService.complete.infiniteScroll ) {
-          if( w.innerHeight - e.prop('offsetTop') + w.scrollY + offset >= parseInt( e.css('height'), 10 ) ) {
-            if( !!available ) {
-              available = false;
-              SocialhubBackendService.renderVisibled( step );
-            }
+        if (w.innerHeight - e.prop('offsetTop') + w.scrollY + offset >= parseInt(e.css('height'), 10)) {
+          if (available) {
+            available = false;
+            engagehub.renderVisibled(step);
           }
         }
       };
-    }, 500 );
+    }, 500);
 
     // public API
     return {
@@ -30,4 +26,5 @@ angular.module('4screens.socialhub').factory( 'SocialhubInfinityService',
       enable: enable
     };
   }
+
 );

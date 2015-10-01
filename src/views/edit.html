@@ -1,0 +1,84 @@
+<!-- No keywords -->
+<section ng-if="!sh.keywords.length && ( showContent === 'moderate' || showContent === 'design' )" class="noContentPlaceholder main-content--fixed-navigation main-content--with-aside main-content--transparent main-content--without-margin">
+  <div>
+    Your stream is empty,<br><button class="btn-success" data-ng-click="createNewTag(sh)">add a keyword</button>
+  </div>
+</section>
+<!--/No keywords -->
+
+
+<!-- aside -->
+<div class="aside aside--lower">
+  <div class="aside__flip--wrapper clearfix" flip-menu flip-menu-content="showContent" flip-sub-content="subContent">
+    <div class="aside__flip--element moderate">
+      <div data-ng-include="'/scripts/engagehub/views/shViewTabAside-moderate.html'"></div>
+    </div>
+    <div class="aside__flip--element design">
+      <div data-ng-include="'/scripts/engagehub/views/shViewTabAside-design.html'"></div>
+    </div>
+    <div class="aside__flip--element settings">
+      <div data-ng-include="'/scripts/engagehub/views/shViewTabAside-settings.html'"></div>
+    </div>
+    <div class="aside__flip--element publish">
+      <div data-ng-include="'/scripts/engagehub/views/shViewTabAside-publish.html'"></div>
+    </div>
+  </div>
+</div>
+<!--/aside -->
+
+
+<!-- main navigation -->
+<div class="main-navigation main-navigation--with-aside" animated-menu-underscore>
+  <ul>
+    <li class="head">
+      <div ng-if="!sh._id" class="loader-spinner"><i class="fa fa-spinner fa-spin"></i></div>
+      <input type="text" ng-model="sh.name" ng-model-options="{debounce: 500}" data-ng-change="updateSh(sh)"/>
+    </li>
+    <li>
+      <a href="#" ui-sref="my.engagehub.edit.content({content: 'moderate'})" class="moderate" data-ng-class="{'active': showContent === 'moderate'}">Moderate</a>
+      <i class="fa fa-angle-right"></i>
+    </li>
+    <li>
+      <a href="#" ui-sref="my.engagehub.edit.content({content: 'design'})" class="design" data-ng-class="{'active': showContent === 'design'}">Design</a>
+      <i class="fa fa-angle-right"></i>
+    </li>
+    <li>
+      <a href="#" ui-sref="my.engagehub.edit.content({content: 'settings'})" class="settings" data-ng-class="{'active': showContent === 'settings'}">Settings</a>
+      <i class="fa fa-angle-right"></i>
+    </li>
+    <li>
+      <a href="#" ui-sref="my.engagehub.edit.content({content: 'publish'})" class="publish" data-ng-class="{'active': showContent === 'publish'}">Publish</a>
+    </li>
+  </ul>
+</div>
+<!-- main navigation -->
+
+
+<!-- content: sh View -> feed -->
+<div class="ng-animate-disabled main-content main-content--no-background main-content--without-margin moderate"
+  data-ng-show="showContent === 'moderate' || showContent === 'design'"
+  data-ng-if="sh.keywords.length"
+  data-ng-include="'/scripts/engagehub/views/shViewTabContent-moderate.html'"
+></div>
+<!--/content: sh View -> feed -->
+
+<!-- content: design
+<div  class="ng-animate-disabled main-content main-content--no-background main-content--without-margin design"
+  data-ng-show="showContent === 'design'"
+  data-ng-include="'/scripts/engagehub/views/shViewTabContent-design.html'"
+></div> -->
+<!--/content: design -->
+
+<!-- content: settings -->
+<div  class="ng-animate-disabled main-content main-content--no-background main-content--without-margin settings"
+  data-ng-show="showContent === 'settings'"
+  data-ng-include="'/scripts/engagehub/views/shViewTabContent-settings.html'"
+></div>
+<!--/content: settings -->
+
+<!-- content: publish -->
+<div  class="ng-animate-disabled main-content main-content--no-background main-content--without-margin publish"
+  data-ng-show="showContent === 'publish'"
+  data-ng-include="'/scripts/engagehub/views/shViewTabContent-publish.html'"
+></div>
+<!--/content: publish -->
