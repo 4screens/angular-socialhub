@@ -1,7 +1,7 @@
 angular
   .module('4screen.engagehub.service', [])
   .factory('engagehub',
-    function(CONFIG, $rootScope, $http, $q, CommonSocketService, auth, AccountService, growl, $document, $window) {
+    function(CONFIG, $rootScope, $http, $q, CommonSocketService, AccountService, growl, $document, $window) {
       'use strict';
 
       var _data = {}, streamId = null, visibled = 0, pack = 50, complete = {value: false}, queue = [], newest = [], archived = {}, results = [], currentSocket;
@@ -186,13 +186,6 @@ angular
             type: type,
             name: keyword,
             config: {},
-            /* Is optional now config: {
-             access_token: auth.currentUser.access_tokens[type],
-             refresh: {
-             time: 30000,
-             count: 100
-             }
-             },*/
 
             // New stuff
             value: keyword,
