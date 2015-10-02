@@ -104,6 +104,15 @@ angular
           });
       }
 
+      function changePinned(shId, postId, pinnedStatus) {
+        console.debug('[ Engagehub Service ] ChangePinned');
+        return $http.post(AccountService.getBackendDomain() + CONFIG.backend.engagehub.postsModeration.replace(':id', shId).replace(':postId', postId),
+          {pinned: pinnedStatus})
+          .then(function(data) {
+            return data.data;
+          });
+      }
+
       function changeFeatured(shId, postId, featuredStatus) {
         console.debug('[ Engagehub Service ] ChangeFeatured');
         return $http.post(AccountService.getBackendDomain() + CONFIG.backend.engagehub.postsModeration.replace(':id', shId).replace(':postId', postId),
@@ -352,6 +361,7 @@ angular
         changeCommerceUrl: changeCommerceUrl,
         changeModeration: changeModeration,
         changeFeatured: changeFeatured,
+        changePinned: changePinned,
         updateAccessToken: updateAccessToken,
         select: selectSocialHub,
         sendSMS: sendSMS,
