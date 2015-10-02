@@ -43,14 +43,14 @@
         </div>
         <div class="engagehub-tile--signature-avatar">
           <img data-ng-src="{{ 'http://graph.facebook.com/' + post.post.author.id + '/picture' }}" alt="{{ post.post.author.name }}" />
-    <span class="name"
-          ng-style="{
-        'font-family': sh.config.theme.authorFont,
-        'color': sh.config.theme.authorColor
-      }"
-          ng-bind-html="post.post.author.name"
-    ></span>
-          <span class="time" am-time-ago="post.created"></span>
+          <span class="name"
+            ng-style="{
+              'font-family': sh.config.theme.authorFont,
+              'color': sh.config.theme.authorColor
+            }"
+            ng-bind-html="post.post.author.name"
+          ></span>
+          <span class="time" am-time-ago="(post.post.created * 1000)"></span>
         </div>
         <p class="engagehub-tile--signature-caption"
            data-ng-show="hasImage(post.post)"
