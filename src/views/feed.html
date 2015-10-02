@@ -1,8 +1,9 @@
 <!-- Stream -->
-<div class="engagehub-isotope engagehub-stream showApproved" ng-style="{ 'background-color': sh.config.theme.backgroundColor }">
+<div class="engagehub-isotope engagehub-stream showApproved engagehub-background-color"
+     ng-style="{ 'background-color': sh.config.theme.backgroundColor }">
   <article class="engagehub-tile engagehub-isotope-tile"
-    ng-repeat="post in results.posts track by post.id"
-    ng-class="{
+           ng-repeat="post in results.posts track by post.id"
+           ng-class="{
       featured: post.featured,
       'not-featured': !post.featured,
       'no-image': !hasImage(post.post),
@@ -13,8 +14,7 @@
     <figure ng-style="{
         'font-family': sh.config.theme.descriptionFont,
         'background-color': sh.config.theme.cardBackgroundColor
-      }"
-    >
+      }" class="engagehub-description-font-family engagehub-description-font-family">
       <!-- FIXME: Make me a directive, get rid off mansory class names since we use isotope .. also @core css generation -->
       <div class="engagehub-tile--image" data-ng-show="hasImage(post.post)">
         <div>
@@ -22,11 +22,6 @@
                data-ng-src="{{ hasImage(post.post, 'large') }}"
                data-ng-class="ratio( post.post.image.medium.width, post.post.image.medium.height )"
           />
-          <!-- <img alt=""
-			data-ng-src="{{ hasImage(post.post, 'large') }}"
-			data-ng-class="ratio( post.post.video.format[0].width, post.post.video.format[0].height )"
-			data-ng-if="post.post.type === 'video' || post.post.type === 'stream'"
-		  /> -->
     <span class="play" data-ng-if="post.post.type === 'video' || post.post.type === 'stream'">
       <i class="fa fa-angle-right fa-5x fa-inverse"></i>
     </span>
@@ -34,7 +29,11 @@
       </div>
 
       <div class="engagehub-tile--text {{ post.source.channel }}" data-ng-show="!hasImage(post.post)">
-        <div><div data-ng-style="{'font-size': getFontSize(post.post.headline || post.post.message)}">{{ post.post.headline || post.post.message | excerpt }}</div></div>
+        <div>
+          <div data-ng-style="{'font-size': getFontSize(post.post.headline || post.post.message)}">{{ post.post.headline
+            || post.post.message | excerpt }}
+          </div>
+        </div>
       </div>
 
       <figcaption class="engagehub-tile--signature">
@@ -42,24 +41,26 @@
           <i class="fa" data-ng-class="'fa-'+ post.source.channel"></i>
         </div>
         <div class="engagehub-tile--signature-avatar">
-          <img data-ng-src="{{ 'http://graph.facebook.com/' + post.post.author.id + '/picture' }}" alt="{{ post.post.author.name }}" />
-          <span class="name"
-            ng-style="{
-              'font-family': sh.config.theme.authorFont,
-              'color': sh.config.theme.authorColor
-            }"
-            ng-bind-html="post.post.author.name"
-          ></span>
+          <img data-ng-src="{{ 'http://graph.facebook.com/' + post.post.author.id + '/picture' }}"
+               alt="{{ post.post.author.name }}"/>
+    <span class="name"
+          ng-style="{
+        'font-family': sh.config.theme.authorFont,
+        'color': sh.config.theme.authorColor
+      }"
+          ng-bind-html="post.post.author.name"
+          class="engagehub-author-font-family engagehub-author-color"
+    ></span>
           <span class="time" am-time-ago="(post.post.created * 1000)"></span>
         </div>
-        <p class="engagehub-tile--signature-caption"
+        <p class="engagehub-tile--signature-caption engagehub-description-color"
            data-ng-show="hasImage(post.post)"
            data-ng-style="{ color: sh.config.theme.descriptionColor }"
         >{{ post.post.headline || post.post.message | excerpt }}</p>
       </figcaption>
     </figure>
     <div class="approvedStatus"
-      data-ng-class="{
+         data-ng-class="{
         'btn-success': post.approved,
         'btn-danger': !post.approved
       }"
@@ -97,7 +98,8 @@
 <!--/Stream -->
 
 <!-- Loader -->
-<div class="engagehub-preloader text-center" data-ng-if="!complete.value" ng-style="{ 'background-color': sh.config.theme.backgroundColor }">
+<div class="engagehub-preloader text-center engagehub-background-color" data-ng-if="!complete.value"
+     ng-style="{ 'background-color': sh.config.theme.backgroundColor }">
   <i class="fa fa-spinner fa-spin"></i>
 </div>
 <!--/Loader -->
