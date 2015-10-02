@@ -2,6 +2,7 @@
   $paddingLg: 42px;
   $paddingMd: 6px;
   $playIconSize: 60px;
+  $actionIconSize: 46px;
 
   .engagehub-tile {
     @include breakpoint($thirdBreakpoint) {
@@ -153,7 +154,7 @@
     }
 
     &--overflow {
-      display: none;
+      //display: none;
       position: absolute;
       left: 2px;
       right: 2px;
@@ -164,11 +165,30 @@
 
       .btn-group {
         position: absolute;
+        display: block;
+        width: 100%;
         top: 50%;
         left: 50%;
-        margin: -20px 0 0 -93px;
+        margin-left: $actionIconSize * -1.5;
+        margin-top: $actionIconSize * -1;
 
-        i { color: #fff; }
+        + .btn-group {margin-top: -1px;}
+
+        .btn {
+          transform-origin: 50% 50%;
+          color: #fff;
+          width: $actionIconSize;
+          height: $actionIconSize;
+
+          &.pinned i {
+            @include transform(rotate(-180deg));
+          }
+
+          i {
+            color: #fff;
+            @include transition(transform .2s ease);
+          }
+        }
       }
 
       &-mask {
@@ -264,7 +284,6 @@
     padding: 140px 0 10px;
     overflow: auto;
     @include breakpoint($mediumBreakpoint) {
-      // padding: 70px 0 10px;
       margin-left: 250px;
     }
   }

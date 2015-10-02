@@ -67,22 +67,28 @@
 
     <div class="engagehub-tile--overflow" data-ng-class="{approved: post.approved, 'not-approved': !post.approved}">
       <div class="engagehub-tile--overflow-mask" data-ng-click="openSocial(post)"></div>
-      <div class="btn-group">
-        <button type="button" class="btn btn-default btn-transparent" data-ng-click="approvePost(post)">
-          <i class="fa" data-ng-class="post.approved ? 'fa-times' : 'fa-check'"></i>
-        </button>
-        <button type="button" class="btn btn-default btn-transparent" data-ng-click="featurePost(post)">
-          <i class="fa" data-ng-class="post.featured ? 'fa-star' : 'fa-star-o'"></i>
-        </button>
-        <button type="button" class="btn btn-default btn-transparent" data-ng-click="openSocial(post)">
-          <i class="fa fa-search"></i>
-        </button>
-        <button type="button" class="btn btn-default btn-transparent" data-ng-click="remove(post)">
-          <i class="fa fa-trash"></i>
-        </button>
-        <button type="button" class="btn btn-default btn-transparent" data-ng-click="addCommerceUrlModal(post)">
-          <i class="fa" data-ng-class="{'fa-tag': !post.commerceUrl, 'fa-tags': post.commerceUrl }"></i>
-        </button>
+        <div class="btn-group">
+          <button type="button" class="btn btn-default btn-transparent" data-ng-click="pinPost(post)">
+            <i class="fa fa-thumb-tack" data-ng-class="{ 'pinned': post.pinned }"></i>
+          </button>
+          <button type="button" class="btn btn-default btn-transparent" data-ng-click="approvePost(post)">
+            <i class="fa" data-ng-class="post.approved ? 'fa-times' : 'fa-check'"></i>
+          </button>
+          <button type="button" class="btn btn-default btn-transparent" data-ng-click="featurePost(post)">
+            <i class="fa" data-ng-class="post.featured ? 'fa-star' : 'fa-star-o'"></i>
+          </button>
+        </div>
+        <div class="btn-group">
+          <button type="button" class="btn btn-default btn-transparent" data-ng-click="openSocial(post)">
+            <i class="fa fa-search"></i>
+          </button>
+          <button type="button" class="btn btn-default btn-transparent" data-ng-click="remove(post)">
+            <i class="fa fa-trash"></i>
+          </button>
+          <button type="button" class="btn btn-default btn-transparent" data-ng-click="addCommerceUrlModal(post)">
+            <i class="fa" data-ng-class="{'fa-tag': !post.commerceUrl, 'fa-tags': post.commerceUrl }"></i>
+          </button>
+        </div>
       </div>
     </div>
 
