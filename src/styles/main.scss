@@ -180,12 +180,14 @@
           width: $actionIconSize;
           height: $actionIconSize;
 
-          &.pinned i {
-            @include transform(rotate(-180deg));
+          .pin-icon { @include transform(rotate(-180deg) translateY($actionIconSize * .2)); }
+          &.pinned .pin-icon {
+            @include transform(rotate(0) translateY(0));
           }
 
           i {
             color: #fff;
+
             @include transition(transform .2s ease);
           }
         }

@@ -43,14 +43,14 @@
         <div class="engagehub-tile--signature-avatar">
           <img data-ng-src="{{ 'http://graph.facebook.com/' + post.post.author.id + '/picture' }}"
                alt="{{ post.post.author.name }}"/>
-    <span class="name"
-          ng-style="{
-        'font-family': sh.config.theme.authorFont,
-        'color': sh.config.theme.authorColor
-      }"
-          ng-bind-html="post.post.author.name"
-          class="engagehub-author-font-family engagehub-author-color"
-    ></span>
+          <span class="name"
+            ng-style="{
+              'font-family': sh.config.theme.authorFont,
+              'color': sh.config.theme.authorColor
+            }"
+              ng-bind-html="post.post.author.name"
+              class="engagehub-author-font-family engagehub-author-color"
+          ></span>
           <span class="time" am-time-ago="(post.post.created * 1000)"></span>
         </div>
         <p class="engagehub-tile--signature-caption engagehub-description-color"
@@ -70,7 +70,7 @@
       <div class="engagehub-tile--overflow-mask" data-ng-click="openSocial(post)"></div>
         <div class="btn-group">
           <button type="button" class="btn btn-default btn-transparent" data-ng-click="pinPost(post)">
-            <i class="fa fa-thumb-tack" data-ng-class="{ 'pinned': post.pinned }"></i>
+            <i class="fa fa-thumb-tack pin-icon" data-ng-class="{ 'pinned': post.pinned }"></i>
           </button>
           <button type="button" class="btn btn-default btn-transparent" data-ng-click="approvePost(post)">
             <i class="fa" data-ng-class="post.approved ? 'fa-times' : 'fa-check'"></i>
