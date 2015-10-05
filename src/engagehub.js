@@ -314,7 +314,7 @@ angular
           currentSocket.disconnect();
         }
 
-        currentSocket = CommonSocketService.get(CONFIG.frontend.engagehub.namespace + streamId);
+        currentSocket = CommonSocketService.get(CONFIG.backend.engagehub.socketio.namespace.replace(':id', streamId));
         currentSocket.on('connect', function(a) {
           console.log('socket connected');
         });
