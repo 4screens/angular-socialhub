@@ -38,7 +38,7 @@ angular
       };
 
       var unsubscribeIsotopeArrange = $rootScope.$on('isotopeArrange', function() {
-        console.debug('[ Isotope ] Arrange');
+        console.debug('[ Isotope ] On Arrange');
         $timeout(function() {
           $timeout(function() {
             $timeout(function() {
@@ -54,7 +54,7 @@ angular
       });
 
       var unsubscribeIsotopeReload = $rootScope.$on('isotopeReload', function() {
-        console.debug('[ Isotope ] Reloaded');
+        console.debug('[ Isotope ] On Reloaded');
         $timeout(function() {
           $timeout(function() {
             $timeout(function() {
@@ -65,6 +65,17 @@ angular
 
               EngagehubInfinityService.enable();
               $document.triggerHandler('scroll');
+            });
+          });
+        });
+      });
+
+      var unsubscribeIsotopeReset = $rootScope.$on('isotopeReset', function() {
+        console.debug('[ Isotope ] On Reset');
+        $timeout(function() {
+          $timeout(function() {
+            $timeout(function() {
+              reset();
             });
           });
         });
@@ -93,9 +104,18 @@ angular
         });
       }
 
+      function reset() {
+        console.debug('[ Isotope ] Reset');
+        if (instance) {
+          instance.destroy();
+          init(instance.element);
+        }
+      }
+
       // Destroy events
       // $scope.$on('$destroy', function(){
       //   unsubscribeIsotopeReload();
+      //   unsubscribeIsotopeReset();
       //   unsubscribeIsotopeArrange();
       // });
 
@@ -103,7 +123,8 @@ angular
       return {
         initialized: initialized,
         init: init,
-        addItem: addItem
+        addItem: addItem,
+        reset: reset
       };
     }
   );
