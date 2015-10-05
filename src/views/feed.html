@@ -3,7 +3,7 @@
      ng-style="{ 'background-color': sh.config.theme.backgroundColor }">
   <article
     class="engagehub-tile engagehub-isotope-tile"
-    ng-repeat="post in results.posts | orderBy: 'pinned' : true"
+    ng-repeat="post in results.posts | orderBy: ['-pinned', '-post.created']"
     ng-class="{
       featured: post.featured,
       'not-featured': !post.featured,
