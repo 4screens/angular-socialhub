@@ -1,22 +1,21 @@
 angular
   .module('4screen.engagehub.service', [])
   .factory('engagehub',
-    function(CONFIG, $rootScope, $http, $q, CommonSocketService, AccountService, growl, $document, $window) {
+    function(CONFIG, $rootScope, $http, $q, CommonSocketService, $document, $window) {
       'use strict';
-
       var _data = {}, streamId = null, visibled = 0, pack = 50, complete = {value: false}, queue = [], newest = [], archived = {}, results = [], currentSocket;
 
-      var unsubscribeCurrentAccountChanged = $rootScope.$on('currentAccountChanged', function() {
-        init();
-      });
-
-      function init() {
+      function getHubs() {
         console.debug('[ Engagehub Service ] Init');
         return $http.get(AccountService.getBackendDomain() + CONFIG.backend.engagehub.base)
           .then(function(data) {
-            _data.socialhubs = data.data;
-            _data.selected = {};
+              _data.socialhubs = data.data;
+              _data.selected = {};
           });
+      }
+
+      function clearData() {
+        _data = {};
       }
 
       function setStreamId(id) {
@@ -150,7 +149,7 @@ angular
         return $http.post(AccountService.getBackendDomain() + CONFIG.backend.engagehub.base, {name: name})
           .then(function(data) {
             if (data.data.ok) {
-              init();
+              getHubs();
               return data.data.ok;
             } else {
               return data.data.err;
@@ -165,7 +164,7 @@ angular
             //console.debug(data.data);
             //return data;
             if (data.data.status && data.data.status === 'removed') {
-              init();
+              getHubs();
               return (true);
             } else {
               return (false);
@@ -196,7 +195,7 @@ angular
             //console.debug(data.data);
             //return data;
             if (data.data.status === 'ok') {
-              init();
+              getHubs();
               return (true);
             } else {
               return (false);
@@ -212,7 +211,7 @@ angular
             //console.debug(data.data);
             //return data;
             if (data.data.status === 'ok') {
-              init();
+              getHubs();
               return (true);
             } else {
               return (false);
@@ -340,15 +339,10 @@ angular
         });
       }
 
-      init();
-
-      // Destroy events
-      // $scope.$on('$destroy', function(){
-      //   unsubscribeCurrentAccountChanged();
-      // });
-
       return {
         data: _data,
+        clearData: clearData,
+        getHubs: getHubs,
         getPosts: getPosts,
         removePost: removePost,
         changeCommerceUrl: changeCommerceUrl,
