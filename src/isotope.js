@@ -70,17 +70,6 @@ angular
         });
       });
 
-      var unsubscribeIsotopeReset = $rootScope.$on('isotopeReset', function() {
-        console.debug('[ Isotope ] On Reset');
-        $timeout(function() {
-          $timeout(function() {
-            $timeout(function() {
-              reset();
-            });
-          });
-        });
-      });
-
       function initialized(callback) {
         console.debug('[ Isotope ] Initialized');
         return callback();
@@ -104,18 +93,9 @@ angular
         });
       }
 
-      function reset() {
-        console.debug('[ Isotope ] Reset');
-        if (instance) {
-          instance.destroy();
-          init(instance.element);
-        }
-      }
-
       // Destroy events
       // $scope.$on('$destroy', function(){
       //   unsubscribeIsotopeReload();
-      //   unsubscribeIsotopeReset();
       //   unsubscribeIsotopeArrange();
       // });
 
@@ -123,8 +103,7 @@ angular
       return {
         initialized: initialized,
         init: init,
-        addItem: addItem,
-        reset: reset
+        addItem: addItem
       };
     }
   );
