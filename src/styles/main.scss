@@ -4,9 +4,9 @@
   $playIconSize: 60px;
   $actionIconSize: 46px;
 
-  $fa-twitter: #55acee !default;
-  $fa-facebook: #3b5998 !default;
-  $fa-instagram: #3f729b !default;
+  $fa-twitter: #55acee !global !default;
+  $fa-facebook: #3b5998 !global !default;
+  $fa-instagram: #3f729b !global !default;
 
   .engagehub-tile {
     @include breakpoint($thirdBreakpoint) {
