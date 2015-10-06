@@ -38,7 +38,7 @@ angular
       };
 
       var unsubscribeIsotopeArrange = $rootScope.$on('isotopeArrange', function() {
-        console.debug('[ Isotope ] Arrange');
+        console.debug('[ Isotope ] On Arrange');
         $timeout(function() {
           $timeout(function() {
             $timeout(function() {
@@ -54,7 +54,7 @@ angular
       });
 
       var unsubscribeIsotopeReload = $rootScope.$on('isotopeReload', function() {
-        console.debug('[ Isotope ] Reloaded');
+        console.debug('[ Isotope ] On Reloaded');
         $timeout(function() {
           $timeout(function() {
             $timeout(function() {

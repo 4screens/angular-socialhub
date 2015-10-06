@@ -1,22 +1,25 @@
 angular
   .module('4screen.engagehub.service', [])
   .factory('engagehub',
-    function(CONFIG, $rootScope, $http, $q, CommonSocketService, AccountService, growl, $document, $window) {
+    function(CONFIG, $rootScope, $http, $q, CommonSocketService, $document, $window) {
       'use strict';
+      var _data = {}, streamId = null, visibled = 0, pack = 50, complete = {value: false}, queue = [], newest = [], archived = {}, results = [], currentSocket, URL = '';
 
-      var _data = {}, streamId = null, visibled = 0, pack = 50, complete = {value: false}, queue = [], newest = [], archived = {}, results = [], currentSocket;
+      function setDomain(domain) {
+        URL = domain;
+      }
 
-      var unsubscribeCurrentAccountChanged = $rootScope.$on('currentAccountChanged', function() {
-        init();
-      });
-
-      function init() {
+      function getHubs() {
         console.debug('[ Engagehub Service ] Init');
-        return $http.get(AccountService.getBackendDomain() + CONFIG.backend.engagehub.base)
+        return $http.get(URL + CONFIG.backend.engagehub.base)
           .then(function(data) {
-            _data.socialhubs = data.data;
-            _data.selected = {};
+              _data.socialhubs = data.data;
+              _data.selected = {};
           });
+      }
+
+      function clearData() {
+        _data = {};
       }
 
       function setStreamId(id) {
@@ -39,7 +42,7 @@ angular
       function getPosts(params) {
         console.debug('[ Engagehub Service ] GetPosts');
         params = params || {};
-        var url = AccountService.getBackendDomain() + CONFIG.backend.engagehub.posts.replace(':id', streamId);
+        var url = URL + CONFIG.backend.engagehub.posts.replace(':id', streamId);
 
         return $http.get(url, {params: params}).then(function(res) {
           if (res.status === 200) {
@@ -52,7 +55,7 @@ angular
 
       function getPost(postId) {
         console.debug('[ Engagehub Service ] GetPost');
-        return $http.get(AccountService.getBackendDomain() + CONFIG.backend.engagehub.post.replace(':id', streamId).replace(':postId', postId))
+        return $http.get(URL + CONFIG.backend.engagehub.post.replace(':id', streamId).replace(':postId', postId))
           .then(function(res) {
             if (res.status === 200) {
               return res.data;
@@ -65,7 +68,7 @@ angular
       function removePost(id, postId) {
         console.debug('[ Socialhub Service ] RemovePost');
         return $http.delete(
-          AccountService.getBackendDomain() +
+          URL +
           CONFIG.backend.engagehub.remove
             .replace(':id', id)
             .replace(':postId', postId)
@@ -88,7 +91,7 @@ angular
 
       function changeCommerceUrl(shId, postId, url) {
         console.debug('[ Engagehub Service ] ChangeCommerceUrl');
-        return $http.post(AccountService.getBackendDomain() + CONFIG.backend.engagehub.postsModeration.replace(':id', shId).replace(':postId', postId),
+        return $http.post(URL + CONFIG.backend.engagehub.postsModeration.replace(':id', shId).replace(':postId', postId),
           {commerceUrl: url})
           .then(function(data) {
             return data.data;
@@ -97,7 +100,7 @@ angular
 
       function changeModeration(shId, postId, moderationStatus) {
         console.debug('[ Engagehub Service ] ChangeModeration');
-        return $http.post(AccountService.getBackendDomain() + CONFIG.backend.engagehub.postsModeration.replace(':id', shId).replace(':postId', postId),
+        return $http.post(URL + CONFIG.backend.engagehub.postsModeration.replace(':id', shId).replace(':postId', postId),
           {approved: moderationStatus})
           .then(function(data) {
             return data.data;
@@ -106,7 +109,7 @@ angular
 
       function changePinned(shId, postId, pinnedStatus) {
         console.debug('[ Engagehub Service ] ChangePinned');
-        return $http.post(AccountService.getBackendDomain() + CONFIG.backend.engagehub.postsModeration.replace(':id', shId).replace(':postId', postId),
+        return $http.post(URL + CONFIG.backend.engagehub.postsModeration.replace(':id', shId).replace(':postId', postId),
           {pinned: pinnedStatus})
           .then(function(data) {
             return data.data;
@@ -115,7 +118,7 @@ angular
 
       function changeFeatured(shId, postId, featuredStatus) {
         console.debug('[ Engagehub Service ] ChangeFeatured');
-        return $http.post(AccountService.getBackendDomain() + CONFIG.backend.engagehub.postsModeration.replace(':id', shId).replace(':postId', postId),
+        return $http.post(URL + CONFIG.backend.engagehub.postsModeration.replace(':id', shId).replace(':postId', postId),
           {featured: featuredStatus})
           .then(function(data) {
             return data.data;
@@ -126,7 +129,7 @@ angular
         console.debug('[ Engagehub ] UpdateAccessToken');
         var at = {channel: provider, tokenValue: accessToken};
 
-        return $http.post(AccountService.getBackendDomain() + CONFIG.backend.engagehub.accessTokens.replace(':id', shId), at)
+        return $http.post(URL + CONFIG.backend.engagehub.accessTokens.replace(':id', shId), at)
           .then(function(data) {
             if (data && data.data && data.data.status) {
               growl.success(data.data.status);
@@ -147,10 +150,10 @@ angular
 
       function createStreamGroup(name) {
         console.debug('[ Engagehub Service ] CreateStreamGroup');
-        return $http.post(AccountService.getBackendDomain() + CONFIG.backend.engagehub.base, {name: name})
+        return $http.post(URL + CONFIG.backend.engagehub.base, {name: name})
           .then(function(data) {
             if (data.data.ok) {
-              init();
+              getHubs();
               return data.data.ok;
             } else {
               return data.data.err;
@@ -160,12 +163,12 @@ angular
 
       function removeStreamGroup(sh) {
         console.debug('[ Engagehub Service ] RemoveStreamGroup');
-        return $http.delete(AccountService.getBackendDomain() + CONFIG.backend.engagehub.base + '/' + sh._id)
+        return $http.delete(URL + CONFIG.backend.engagehub.base + '/' + sh._id)
           .then(function(data) {
             //console.debug(data.data);
             //return data;
             if (data.data.status && data.data.status === 'removed') {
-              init();
+              getHubs();
               return (true);
             } else {
               return (false);
@@ -182,7 +185,7 @@ angular
       function addTagToStream(sh, type, keyword) {
         console.debug('[ Engagehub Service ] AddTagToStream');
 
-        return $http.post(AccountService.getBackendDomain() + CONFIG.backend.engagehub.base + '/' + sh._id + '/keywords', {
+        return $http.post(URL + CONFIG.backend.engagehub.base + '/' + sh._id + '/keywords', {
             type: type,
             name: keyword,
             config: {},
@@ -196,7 +199,7 @@ angular
             //console.debug(data.data);
             //return data;
             if (data.data.status === 'ok') {
-              init();
+              getHubs();
               return (true);
             } else {
               return (false);
@@ -206,13 +209,13 @@ angular
 
       function removeTagFromStream(sh, keyword) {
         console.debug('[ Engagehub Service ] RemoveTagFromStream');
-        return $http.delete(AccountService.getBackendDomain() + CONFIG.backend.engagehub.base +
+        return $http.delete(URL + CONFIG.backend.engagehub.base +
             '/' + sh._id + '/keywords/' + keyword._id)
           .then(function(data) {
             //console.debug(data.data);
             //return data;
             if (data.data.status === 'ok') {
-              init();
+              getHubs();
               return (true);
             } else {
               return (false);
@@ -222,7 +225,7 @@ angular
 
       function getStreams() {
         console.debug('[ Engagehub Service ] GetStreams');
-        return $http.get(AccountService.getBackendDomain() + CONFIG.backend.engagehub.base)
+        return $http.get(URL + CONFIG.backend.engagehub.base)
           .then(function(res) {
             return res.data;
           });
@@ -237,13 +240,13 @@ angular
 
       function sendSMS(widgetId, phoneNumber) {
         console.debug('[ Engagehub Service ] SendSMS');
-        var url = AccountService.getBackendDomain() + CONFIG.backend.engagehub.Widgets.sendSMS.replace(':widgetId', widgetId);
+        var url = URL + CONFIG.backend.engagehub.Widgets.sendSMS.replace(':widgetId', widgetId);
         return $http.post(url, {phoneNumber: phoneNumber});
       }
 
       function update(sh) {
         console.debug('[ Engagehub Service ] Update');
-        return $http.post(AccountService.getBackendDomain() + CONFIG.backend.engagehub.update.replace(':id', sh._id), sh)
+        return $http.post(URL + CONFIG.backend.engagehub.update.replace(':id', sh._id), sh)
           .then(function(res) {
             return res.data;
           });
@@ -314,7 +317,7 @@ angular
           currentSocket.disconnect();
         }
 
-        currentSocket = CommonSocketService.get(CONFIG.frontend.engagehub.namespace + streamId);
+        currentSocket = CommonSocketService.get(CONFIG.backend.engagehub.socketio.namespace.replace(':id', streamId));
         currentSocket.on('connect', function(a) {
           console.log('socket connected');
         });
@@ -340,15 +343,11 @@ angular
         });
       }
 
-      init();
-
-      // Destroy events
-      // $scope.$on('$destroy', function(){
-      //   unsubscribeCurrentAccountChanged();
-      // });
-
       return {
         data: _data,
+        setDomain: setDomain,
+        clearData: clearData,
+        getHubs: getHubs,
         getPosts: getPosts,
         removePost: removePost,
         changeCommerceUrl: changeCommerceUrl,

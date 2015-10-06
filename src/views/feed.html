@@ -1,9 +1,10 @@
 <!-- Stream -->
 <div class="engagehub-isotope engagehub-stream showApproved engagehub-background-color"
      ng-style="{ 'background-color': sh.config.theme.backgroundColor }">
-  <article class="engagehub-tile engagehub-isotope-tile"
-           ng-repeat="post in results.posts track by post.id"
-           ng-class="{
+  <article
+    class="engagehub-tile engagehub-isotope-tile"
+    ng-repeat="post in results.posts | orderBy: ['-pinned', '-post.created']"
+    ng-class="{
       featured: post.featured,
       'not-featured': !post.featured,
       'no-image': !hasImage(post.post),
@@ -61,26 +62,26 @@
     </figure>
     <div class="approvedStatus"
          data-ng-class="{
-        'btn-success': post.approved,
-        'btn-danger': !post.approved
+        'btn-success': post.approved === 2,
+        'btn-danger': post.approved !== 2
       }"
     ></div>
 
     <div class="engagehub-tile--overflow" data-ng-class="{approved: post.approved, 'not-approved': !post.approved}">
-      <div class="engagehub-tile--overflow-mask" data-ng-click="openSocial(post)"></div>
+      <div class="engagehub-tile--overflow-mask" data-ng-click="openModal(post)"></div>
         <div class="btn-group">
-          <button type="button" class="btn btn-default btn-transparent" data-ng-click="pinPost(post)">
-            <i class="fa fa-thumb-tack pin-icon" data-ng-class="{ 'pinned': post.pinned }"></i>
+          <button type="button" class="btn btn-default btn-transparent" data-ng-click="pinPost(post)" data-ng-class="{ 'pinned': post.pinned === 2 }">
+            <i class="fa fa-thumb-tack pin-icon"></i>
           </button>
           <button type="button" class="btn btn-default btn-transparent" data-ng-click="approvePost(post)">
-            <i class="fa" data-ng-class="post.approved ? 'fa-times' : 'fa-check'"></i>
+            <i class="fa" data-ng-class="post.approved === 2 ? 'fa-times' : 'fa-check'"></i>
           </button>
           <button type="button" class="btn btn-default btn-transparent" data-ng-click="featurePost(post)">
             <i class="fa" data-ng-class="post.featured ? 'fa-star' : 'fa-star-o'"></i>
           </button>
         </div>
         <div class="btn-group">
-          <button type="button" class="btn btn-default btn-transparent" data-ng-click="openSocial(post)">
+          <button type="button" class="btn btn-default btn-transparent" data-ng-click="openModal(post)">
             <i class="fa fa-search"></i>
           </button>
           <button type="button" class="btn btn-default btn-transparent" data-ng-click="remove(post)">
