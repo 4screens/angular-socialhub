@@ -206,21 +206,33 @@
       }
     }
 
+    &.commerceUrl:before, &.pinned:after {
+      position: absolute;
+      display: inline-block;
+      right: 10px;
+      top: 5px;
+      font-family: 'FontAwesome';
+      font-size: 18px;
+      color: #fff;
+      text-shadow: 0 1px 2px #000;
+      z-index: 3;
+    }
+
     &.pinned {
       &:after {
-        position: absolute;
-        display: inline-block;
         content: "\f08d";
-        right: 10px;
-        top: 5px;
-        font-family: 'FontAwesome';
-        font-size: 18px;
-        color: #fff;
-        text-shadow: 0 1px 2px #000;
+        right: 11px;
       }
 
       .pin-icon {
         @include transform(rotate(0) translateY(0));
+      }
+    }
+
+    &.commerceUrl {
+      &:before {
+        content: "\f02b";
+        top: 30px;
       }
     }
 
@@ -318,10 +330,11 @@
 
 // Hide optional elements
 .engagehub-tile {
-  .approvedStatus, &:after { display: none!important; }
+  .approvedStatus, &:after, &:before, .engagehub-tile--overflow > .btn-group { display: none!important; }
   &:hover .engagehub-tile--overflow { opacity: 0!important; }
+
 }
 .engagehub-admin .engagehub-tile {
-  .approvedStatus, &:after { display: block!important; }
+  .approvedStatus, &:after, &:before, .engagehub-tile--overflow > .btn-group { display: block!important; }
   &:hover .engagehub-tile--overflow { opacity: 1!important; }
 }

@@ -10,7 +10,8 @@
       'filter-active': keywordFilter.indexOf(post._keyword) !== -1 && keywordFilter.length,
       'filter-inactive': keywordFilter.indexOf(post._keyword) === -1 && keywordFilter.length,
       'no-image': !hasImage(post.post),
-      pinned: post.pinned === 2
+      pinned: post.pinned === 2,
+      commerceUrl: post.commerceUrl
     }"
   >
     <figure ng-style="{
