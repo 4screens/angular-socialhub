@@ -181,9 +181,6 @@
           height: $actionIconSize;
 
           .pin-icon { @include transform(rotate(-180deg) translateY($actionIconSize * .2)); }
-          &.pinned .pin-icon {
-            @include transform(rotate(0) translateY(0));
-          }
 
           i {
             color: #fff;
@@ -201,6 +198,24 @@
         height: 100%;
         display: block;
         z-index: 0;
+      }
+    }
+
+    &.pinned {
+      &:after {
+        position: absolute;
+        display: inline-block;
+        content: "\f08d";
+        right: 10px;
+        top: 5px;
+        font-family: 'FontAwesome';
+        font-size: 18px;
+        color: #fff;
+        text-shadow: 0 1px 2px #000;
+      }
+
+      .pin-icon {
+        @include transform(rotate(0) translateY(0));
       }
     }
 
