@@ -7,9 +7,11 @@
     ng-class="{
       featured: post.featured,
       'not-featured': !post.featured,
-      'no-image': !hasImage(post.post),
       'filter-active': keywordFilter.indexOf(post._keyword) !== -1 && keywordFilter.length,
-      'filter-inactive': keywordFilter.indexOf(post._keyword) === -1 && keywordFilter.length
+      'filter-inactive': keywordFilter.indexOf(post._keyword) === -1 && keywordFilter.length,
+      'no-image': !hasImage(post.post),
+      pinned: post.pinned === 2,
+      commerceUrl: post.commerceUrl
     }"
   >
     <figure ng-style="{
@@ -70,7 +72,7 @@
     <div class="engagehub-tile--overflow" data-ng-class="{approved: post.approved, 'not-approved': !post.approved}">
       <div class="engagehub-tile--overflow-mask" data-ng-click="openModal(post)"></div>
         <div class="btn-group">
-          <button type="button" class="btn btn-default btn-transparent" data-ng-click="pinPost(post)" data-ng-class="{ 'pinned': post.pinned === 2 }">
+          <button type="button" class="btn btn-default btn-transparent" data-ng-click="pinPost(post)">
             <i class="fa fa-thumb-tack pin-icon"></i>
           </button>
           <button type="button" class="btn btn-default btn-transparent" data-ng-click="approvePost(post)">

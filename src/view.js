@@ -104,7 +104,7 @@ angular
         }
 
         imgUrl = imgUrl.source ? imgUrl.source : imgUrl;
-        return imgUrl.replace('$$cloudinary$$', CONFIG.frontend.cloudinary.domain).replace('$$bucket$$', CONFIG.frontend.cloudinary.bucket);
+        return imgUrl.replace('$$cloudinary$$', CONFIG.backend.cloudinary.domain).replace('$$bucket$$', CONFIG.backend.cloudinary.account);
       };
     }
   )

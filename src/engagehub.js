@@ -322,7 +322,7 @@ angular
           console.log('socket connected');
         });
 
-        currentSocket.on('engagehub:newPost', function(postId) {
+        currentSocket.on('socialhub:newPost', function(postId) {
           console.log('[ Socket ] New post');
           getPost(postId).then(function(post) {
             if (_.findIndex(queue, postId) === -1) {
