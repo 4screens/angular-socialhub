@@ -1,3 +1,5 @@
+<link rel="stylesheet" type="text/css" data-ng-href="{{ cssUrl }}" />
+
 <!-- Stream -->
 <div class="engagehub-isotope engagehub-stream showApproved engagehub-background-color"
      ng-style="{ 'background-color': sh.config.theme.backgroundColor }">
@@ -17,8 +19,7 @@
     <figure ng-style="{
         'font-family': sh.config.theme.descriptionFont,
         'background-color': sh.config.theme.cardBackgroundColor
-      }" class="engagehub-description-font-family engagehub-description-font-family">
-      <!-- FIXME: Make me a directive, get rid off mansory class names since we use isotope .. also @core css generation -->
+      }" class="engagehub-description-font-family engagehub-card-background-color">
       <div class="engagehub-tile--image" data-ng-show="hasImage(post.post)">
         <div>
           <img alt=""
@@ -46,13 +47,13 @@
         <div class="engagehub-tile--signature-avatar">
           <img data-ng-src="{{ 'http://graph.facebook.com/' + post.post.author.id + '/picture' }}"
                alt="{{ post.post.author.name }}"/>
-          <span class="name"
+          <span
             ng-style="{
               'font-family': sh.config.theme.authorFont,
               'color': sh.config.theme.authorColor
             }"
               ng-bind-html="post.post.author.name"
-              class="engagehub-author-font-family engagehub-author-color"
+              class="engagehub-author-font-family engagehub-author-color name"
           ></span>
           <span class="time" am-time-ago="(post.post.created * 1000)"></span>
         </div>
