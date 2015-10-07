@@ -309,16 +309,16 @@
     @include opacity(0.8);
   }
   &--wrapper {
-    position: absolute;
+    position: fixed;
     z-index: 110;
     left: 0;
     right: 0;
     height: 100%;
     margin: 0 auto;
-    padding: 140px 0 10px;
+    //padding: 140px 0 10px;
     overflow: auto;
     @include breakpoint($mediumBreakpoint) {
-      margin-left: 250px;
+      //margin-left: 250px;
     }
   }
   &--content {
