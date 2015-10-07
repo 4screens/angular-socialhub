@@ -20,7 +20,7 @@ angular
 
       function getHub(id) {
         console.debug('[ Engagehub Service ] GetHub');
-        return $http.get(URL + CONFIG.backend.engagehub.base + '/' + id)
+        return $http.get(URL + CONFIG.backend.engagehub.info.replace(':id', id))
           .then(function(data) {
             console.log(data);
             // _data.selected = data;
