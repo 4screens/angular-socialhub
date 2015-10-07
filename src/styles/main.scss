@@ -206,7 +206,7 @@
       }
     }
 
-    &.commerceUrl:before, &.pinned:after {
+    &.commerce:before, &.pinned:after {
       position: absolute;
       display: inline-block;
       right: 10px;
@@ -229,7 +229,7 @@
       }
     }
 
-    &.commerceUrl {
+    &.commerce {
       &:before {
         content: "\f02b";
         top: 30px;

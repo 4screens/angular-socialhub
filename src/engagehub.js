@@ -97,10 +97,9 @@ angular
         $rootScope.$emit('isotopeArrange');
       }
 
-      function changeCommerceUrl(shId, postId, url) {
-        console.debug('[ Engagehub Service ] ChangeCommerceUrl');
-        return $http.post(URL + CONFIG.backend.engagehub.postsModeration.replace(':id', shId).replace(':postId', postId),
-          {commerceUrl: url})
+      function changeCommerce(shId, postId, commerce) {
+        console.debug('[ Engagehub Service ] ChangeCommerce');
+        return $http.post(URL + CONFIG.backend.engagehub.postsModeration.replace(':id', shId).replace(':postId', postId), {commerce: commerce})
           .then(function(data) {
             return data.data;
           });
@@ -359,7 +358,7 @@ angular
         getHub: getHub,
         getPosts: getPosts,
         removePost: removePost,
-        changeCommerceUrl: changeCommerceUrl,
+        changeCommerce: changeCommerce,
         changeModeration: changeModeration,
         changeFeatured: changeFeatured,
         changePinned: changePinned,
