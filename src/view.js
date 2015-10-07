@@ -30,7 +30,7 @@ angular
       this.refreshAndSelect = function refreshAndSelect(shId) {
         console.debug('[ EngagehubEdit ] RefreshAndSelect');
         return engagehub.getHub(shId).then(function(data) {
-          $scope.sh = data.data;
+          $scope.sh = data;
 
           engagehub.select($scope.sh);
           $scope.results = engagehub.results;
