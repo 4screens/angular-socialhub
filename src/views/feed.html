@@ -11,7 +11,7 @@
       'filter-inactive': keywordFilter.indexOf(post._keyword) === -1 && keywordFilter.length,
       'no-image': !hasImage(post.post),
       pinned: post.pinned === 2,
-      commerceUrl: post.commerceUrl
+      commerce: (post.commerce && post.commerce.url)
     }"
   >
     <figure ng-style="{
@@ -89,8 +89,8 @@
           <button type="button" class="btn btn-default btn-transparent" data-ng-click="remove(post)">
             <i class="fa fa-trash"></i>
           </button>
-          <button type="button" class="btn btn-default btn-transparent" data-ng-click="addCommerceUrlModal(post)">
-            <i class="fa" data-ng-class="{'fa-tag': !post.commerceUrl, 'fa-tags': post.commerceUrl }"></i>
+          <button type="button" class="btn btn-default btn-transparent" data-ng-click="addCommerceModal(post)">
+            <i class="fa" data-ng-class="{'fa-tag': (post.commerce && post.commerce.url), 'fa-tags': (!post.commerce || !post.commerce.url) }"></i>
           </button>
         </div>
       </div>
