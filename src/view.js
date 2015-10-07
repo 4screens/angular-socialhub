@@ -29,8 +29,8 @@ angular
 
       this.refreshAndSelect = function refreshAndSelect(shId) {
         console.debug('[ EngagehubEdit ] RefreshAndSelect');
-        return engagehub.streams.get().then(function(streams) {
-          $scope.sh = _.find(streams, {_id: shId || $scope.sh._id});
+        return engagehub.getHub(shId).then(function(data) {
+          $scope.sh = data.data;
 
           engagehub.select($scope.sh);
           $scope.results = engagehub.results;

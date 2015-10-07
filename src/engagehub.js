@@ -10,11 +10,21 @@ angular
       }
 
       function getHubs() {
-        console.debug('[ Engagehub Service ] Init');
+        console.debug('[ Engagehub Service ] GetHubs');
         return $http.get(URL + CONFIG.backend.engagehub.base)
           .then(function(data) {
               _data.socialhubs = data.data;
               _data.selected = {};
+          });
+      }
+
+      function getHub(id) {
+        console.debug('[ Engagehub Service ] GetHub');
+        return $http.get(URL + CONFIG.backend.engagehub.base + '/' + id)
+          .then(function(data) {
+            console.log(data);
+            // _data.selected = data;
+            return data;
           });
       }
 
@@ -199,7 +209,7 @@ angular
             //console.debug(data.data);
             //return data;
             if (data.data.status === 'ok') {
-              getHubs();
+              // getHubs();
               return (true);
             } else {
               return (false);
@@ -215,7 +225,7 @@ angular
             //console.debug(data.data);
             //return data;
             if (data.data.status === 'ok') {
-              getHubs();
+              // getHubs();
               return (true);
             } else {
               return (false);
@@ -348,6 +358,7 @@ angular
         setDomain: setDomain,
         clearData: clearData,
         getHubs: getHubs,
+        getHub: getHub,
         getPosts: getPosts,
         removePost: removePost,
         changeCommerceUrl: changeCommerceUrl,
