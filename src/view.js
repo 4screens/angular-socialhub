@@ -62,7 +62,7 @@ angular
         // user
         $scope.detail.user = {
           name: post.post.author.name,
-          avatar: 'http://graph.facebook.com/' + post.post.author.id + '/picture'
+          avatar: post.post.author.picture || 'http://graph.facebook.com/' + post.post.author.id + '/picture'
         };
 
         // time
