@@ -45,7 +45,7 @@
           <i class="fa" data-ng-class="'fa-'+ post.source.channel"></i>
         </div>
         <div class="engagehub-tile--signature-avatar">
-          <img data-ng-src="{{ 'http://graph.facebook.com/' + post.post.author.id + '/picture' }}"
+          <img data-ng-src="{{ post.post.author.picture || 'http://graph.facebook.com/' + post.post.author.id + '/picture' }}"
                alt="{{ post.post.author.name }}"/>
           <span
             ng-style="{
