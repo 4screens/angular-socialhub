@@ -14,19 +14,6 @@
         'background-color': sh.config.theme.cardBackgroundColor
       }"
     >
-      <figcaption class="engagehub-tile--signature">
-        <div class="engagehub-tile--signature-avatar">
-          <img data-ng-src="{{ detail.user.avatar }}" alt="" class="img-responsive" />
-          <span class="name"
-                ng-bind-html="detail.user.name"
-                ng-style="{
-              'font-family': sh.config.theme.authorFont,
-              'color': sh.config.theme.authorColor
-            }"
-          ></span>
-          <span class="time" am-time-ago="detail.publish"></span>
-        </div>
-      </figcaption>
       <div class="engagehub-tile--fullimage" data-ng-if="detail.image || detail.video">
         <img data-ng-src="{{ detail.image }}" alt="" data-ng-if="!detail.video" class="img-responsive"/>
         <videogular data-ng-if="!!detail.video">
@@ -50,6 +37,32 @@
           <vg-poster-image vg-url="detail.image"></vg-poster-image>
         </videogular>
       </div>
+
+      <a ng-if="detail.commerce"
+        ng-href="detail.commerce.url"
+        title="{{ detail.commerce.text }}"
+        ng-style="{
+          'color': sh.config.theme.buttonColor,
+          'background-color': sh.config.theme.buttonBackgroundColor
+        }"
+        target="_blank" rel="nofollow"
+        class="engagehub-commerce engagehub-commerce-iframe engagehub-button-background-color engagehub-button-color">
+        {{ detail.commerce.text }}
+      </a>
+
+      <figcaption class="engagehub-tile--signature">
+        <div class="engagehub-tile--signature-avatar">
+          <img data-ng-src="{{ detail.user.avatar }}" alt="" class="img-responsive" />
+          <span class="name"
+                ng-bind-html="detail.user.name"
+                ng-style="{
+              'font-family': sh.config.theme.authorFont,
+              'color': sh.config.theme.authorColor
+            }"
+          ></span>
+          <span class="time" am-time-ago="detail.publish"></span>
+        </div>
+      </figcaption>
       <figcaption class="engagehub-tile--signature">
         <p class="engagehub-tile--signature-caption" ng-bind-html="detail.message"></p>
       </figcaption>

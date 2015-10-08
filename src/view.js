@@ -71,6 +71,9 @@ angular
         // message
         $scope.detail.message = post.post.message || post.post.description || post.post.caption || post.post.story;
 
+        // commerce
+        $scope.detail.commerce = (post.commerce && post.commerce.url && post.commerce.text) ? post.commerce : null;
+
         $scope.$broadcast('modal-opened', $scope.detail);
       };
 

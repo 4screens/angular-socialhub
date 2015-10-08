@@ -328,6 +328,23 @@
   }
 }
 
+.engagehub-commerce {
+  z-index: 6;
+  display: block;
+  background-color: rgb(220, 220, 220);
+  color: rgb(33, 33, 33);
+  text-align: center;
+  font-weight: 600;
+  padding: .8em .2em;
+  margin: 8px auto;
+  cursor: pointer;
+
+  &.engagehub-commerce-iframe {
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+}
+
 // Hide optional elements
 .engagehub-tile {
   .approvedStatus, &:after, &:before, .engagehub-tile--overflow > .btn-group { display: none!important; }
