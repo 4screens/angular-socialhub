@@ -1,19 +1,19 @@
 <div class="engagehub-iframe" data-ng-if="!!detail">
   <div class="engagehub-iframe--wrapper">
-    <div class="engagehub-iframe--navigation">
-      <a href="" data-ng-click="closeModal()" class="engagehub-iframe--close">
-        <span class="fa-stack fa-lg fa-stack-2x">
-          <i class="fa fa-circle fa-stack-2x fa-inverse"></i>
-          <i class="fa fa-times fa-stack-1x"></i>
-        </span>
-      </a>
-    </div>
     <div class="engagehub-iframe--content"
          ng-style="{
         'font-family': sh.config.theme.descriptionFont,
         'background-color': sh.config.theme.cardBackgroundColor
       }"
     >
+      <div class="engagehub-iframe--navigation">
+        <a href="" data-ng-click="closeModal()" class="engagehub-iframe--close">
+        <span class="fa-stack fa-lg fa-stack-2x">
+          <i class="fa fa-circle fa-stack-2x fa-inverse"></i>
+          <i class="fa fa-times fa-stack-1x"></i>
+        </span>
+        </a>
+      </div>
       <figcaption class="engagehub-tile--signature">
         <div class="engagehub-tile--signature-avatar">
           <img data-ng-src="{{ detail.user.avatar }}" alt="" class="img-responsive" />
