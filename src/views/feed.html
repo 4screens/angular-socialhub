@@ -45,7 +45,7 @@
           <i class="fa" data-ng-class="'fa-'+ post.source.channel"></i>
         </div>
         <div class="engagehub-tile--signature-avatar">
-          <img data-ng-src="{{ 'http://graph.facebook.com/' + post.post.author.id + '/picture' }}"
+          <img data-ng-src="{{ post.post.author.picture || 'http://graph.facebook.com/' + post.post.author.id + '/picture' }}"
                alt="{{ post.post.author.name }}"/>
           <span
             ng-style="{
@@ -57,6 +57,19 @@
           ></span>
           <span class="time" am-time-ago="(post.post.created * 1000)"></span>
         </div>
+
+        <a ng-if="post.commerce && post.commerce.url && post.commerce.text"
+          ng-href="post.commerce.url"
+          title="{{ post.commerce.text }}"
+          ng-style="{
+            'color': sh.config.theme.buttonColor,
+            'background-color': sh.config.theme.buttonBackgroundColor
+          }"
+        target="_blank" rel="nofollow"
+        class="engagehub-commerce engagehub-button-background-color engagehub-button-color">
+          {{ post.commerce.text }}
+        </a>
+
         <p class="engagehub-tile--signature-caption engagehub-description-color"
            data-ng-show="hasImage(post.post)"
            data-ng-style="{ color: sh.config.theme.descriptionColor }"

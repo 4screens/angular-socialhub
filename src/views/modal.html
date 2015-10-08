@@ -1,19 +1,19 @@
 <div class="engagehub-iframe" data-ng-if="!!detail">
   <div class="engagehub-iframe--wrapper">
-    <div class="engagehub-iframe--navigation">
-      <a href="" data-ng-click="closeModal()" class="engagehub-iframe--close">
-        <span class="fa-stack fa-lg fa-stack-2x">
-          <i class="fa fa-circle fa-stack-2x fa-inverse"></i>
-          <i class="fa fa-times fa-stack-1x"></i>
-        </span>
-      </a>
-    </div>
     <div class="engagehub-iframe--content"
          ng-style="{
         'font-family': sh.config.theme.descriptionFont,
         'background-color': sh.config.theme.cardBackgroundColor
       }"
     >
+      <div class="engagehub-iframe--navigation">
+        <a href="" data-ng-click="closeModal()" class="engagehub-iframe--close">
+        <span class="fa-stack fa-lg fa-stack-2x">
+          <i class="fa fa-circle fa-stack-2x fa-inverse"></i>
+          <i class="fa fa-times fa-stack-1x"></i>
+        </span>
+        </a>
+      </div>
       <figcaption class="engagehub-tile--signature">
         <div class="engagehub-tile--signature-avatar">
           <img data-ng-src="{{ detail.user.avatar }}" alt="" class="img-responsive" />
@@ -50,6 +50,32 @@
           <vg-poster-image vg-url="detail.image"></vg-poster-image>
         </videogular>
       </div>
+
+      <a ng-if="detail.commerce"
+        ng-href="detail.commerce.url"
+        title="{{ detail.commerce.text }}"
+        ng-style="{
+          'color': sh.config.theme.buttonColor,
+          'background-color': sh.config.theme.buttonBackgroundColor
+        }"
+        target="_blank" rel="nofollow"
+        class="engagehub-commerce engagehub-commerce-iframe engagehub-button-background-color engagehub-button-color">
+        {{ detail.commerce.text }}
+      </a>
+
+      <figcaption class="engagehub-tile--signature">
+        <div class="engagehub-tile--signature-avatar">
+          <img data-ng-src="{{ detail.user.avatar }}" alt="" class="img-responsive" />
+          <span class="name"
+                ng-bind-html="detail.user.name"
+                ng-style="{
+              'font-family': sh.config.theme.authorFont,
+              'color': sh.config.theme.authorColor
+            }"
+          ></span>
+          <span class="time" am-time-ago="detail.publish"></span>
+        </div>
+      </figcaption>
       <figcaption class="engagehub-tile--signature">
         <p class="engagehub-tile--signature-caption" ng-bind-html="detail.message"></p>
       </figcaption>
