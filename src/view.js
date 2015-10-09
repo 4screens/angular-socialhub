@@ -1,5 +1,5 @@
 angular
-  .module('4screen.engagehub.view', ['4screen.engagehub.service', '4screen.engagehub.isotope', '4screen.engagehub.infinity'])
+  .module('4screen.engagehub.view', ['4screen.engagehub.service', '4screen.engagehub.isotope', '4screen.engagehub.infinity', 'ngLoad'])
   .controller('EngagehubVievController',
     function($rootScope, $scope, $sce, engagehub, $timeout, CONFIG) {
       'use strict';
@@ -38,6 +38,13 @@ angular
 
           return $scope.sh;
         });
+      };
+
+      $scope.imageOnLoad = function() {
+        console.debug('[ Engagehub Service ] ImageLoaded');
+        _.debounce(function() {
+          $rootScope.$emit('isotopeArrange');
+        }, 500);
       };
 
       $scope.openModal = function(post) {

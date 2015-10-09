@@ -22,6 +22,7 @@ angular
         console.debug('[ Engagehub Service ] GetHub');
         return $http.get(URL + CONFIG.backend.engagehub.info.replace(':id', id))
           .then(function(data) {
+            _data.selected = data;
             return data.data || {};
           });
       }
