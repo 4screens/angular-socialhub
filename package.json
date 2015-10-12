@@ -1,7 +1,7 @@
 {
   "name": "4screens-socialhub",
   "description": "4screens angular client for socialhub",
-  "version": "0.1.21",
+  "version": "0.1.22",
   "scripts": {
     "test": "karma start"
   },

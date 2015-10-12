@@ -3,10 +3,15 @@ angular
   .directive('engagehubIsotope', function(EngagehubIsotopeService, EngagehubInfinityService, $window, $document) {
       'use strict';
       var _link = function(scope, element) {
+        //EngagehubIsotopeService.clean();
         EngagehubIsotopeService.init(element);
 
         $document.unbind('scroll');
         $document.bind('scroll', EngagehubInfinityService.scrollHandler(scope, element, $window));
+
+        scope.$on('$destroy', function() {
+          $document.unbind('scroll');
+        });
       };
 
       return {
@@ -70,11 +75,6 @@ angular
         });
       });
 
-      function initialized(callback) {
-        console.debug('[ Isotope ] Initialized');
-        return callback();
-      }
-
       function init(element) {
         console.debug('[ Isotope ] Init');
         container = element;
@@ -93,17 +93,19 @@ angular
         });
       }
 
-      // Destroy events
-      // $scope.$on('$destroy', function(){
-      //   unsubscribeIsotopeReload();
-      //   unsubscribeIsotopeArrange();
-      // });
+      function clean() {
+        console.debug('[ Isotope ] Clean');
+        unsubscribeIsotopeArrange();
+        unsubscribeIsotopeReload();
+
+        instance = null;
+      }
 
       // public API
       return {
-        initialized: initialized,
         init: init,
-        addItem: addItem
+        addItem: addItem,
+        clean: clean
       };
     }
   );
