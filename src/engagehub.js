@@ -3,7 +3,7 @@ angular
   .factory('engagehub',
     function(CONFIG, $rootScope, $http, $q, CommonSocketService, $document, $window) {
       'use strict';
-      var _data = {}, streamId = null, visibled = 0, pack = 50, complete = {value: false}, queue = [], newest = [], archived = {}, results = [], currentSocket, URL = '';
+      var _data = {}, streamId = null, visibled = 0, pack = 50, complete = {value: false}, queue = [], newest = [], archived = {}, results = [], currentSocket, URL = '', mode = 'embed';
 
       function setDomain(domain) {
         URL = domain;
@@ -326,29 +326,59 @@ angular
         }
 
         currentSocket = CommonSocketService.get(CONFIG.backend.engagehub.socketio.namespace.replace(':id', streamId));
+
+        console.log(currentSocket);
         currentSocket.on('connect', function(a) {
           console.log('socket connected');
         });
 
-        currentSocket.on('socialhub:newPost', function(postId) {
+        // New post
+        currentSocket.on('socialhub:newPost', function(data) {
           console.log('[ Socket ] New post');
-          getPost(postId).then(function(post) {
-            if (_.findIndex(queue, postId) === -1) {
-              archived[post.id] = post;
-              if ($window.scrollY === 0 && newest.length === 0) {
-                queue.unshift(post.id);
-                visibled++;
-                renderVisibled();
-              } else {
-                newest.unshift(post.id);
+
+          if (mode === 'admin' || data.approved === 2) {
+            getPost(data.id).then(function(post) {
+              if (_.findIndex(queue, data.id) === -1) {
+                archived[data.id] = post;
+                if ($window.scrollY === 0 && newest.length === 0) {
+                  queue.unshift(data.id);
+                  visibled++;
+                  renderVisibled();
+                } else {
+                  newest.unshift(data.id);
+                }
               }
-            }
-          }).catch(function(err) {
-            if (err.status === 404 || err.status === 500) {
-              removeLocalPost(postId);
-            }
-          });
+            }).catch(function(err) {
+              if (err.status === 404 || err.status === 500) {
+                removeLocalPost(data.id);
+              }
+            });
+          }
         });
+
+        // Post update
+        currentSocket.on('socialhub:updatePost', function(data) {
+          console.log('[ Socket ] Update post');
+          if (_.findIndex(queue, data.id) !== -1) {
+
+            // Update
+            queue[data.id].featured = data.featured;
+            queue[data.id].pinned = data.pinned;
+            queue[data.id].approved = data.approved;
+
+            // Need DOM change ?
+            if (data.approved !== 2 && mode === 'embed') {
+              queue.splice(_.findIndex(queue, data.id), 1);
+              $rootScope.$emit('IsotopeReload');
+            } else {
+              $rootScope.$emit('IsotopeArrange');
+            }
+          }
+        });
+      }
+
+      function setMode(m) {
+        mode = m;
       }
 
       return {
@@ -387,7 +417,9 @@ angular
         complete: complete,
         results: {
           posts: results
-        }
+        },
+        setMode: setMode,
+        mode: mode
       };
     }
   );
