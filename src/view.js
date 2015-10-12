@@ -11,25 +11,28 @@ angular
 
       $scope.engagehub = engagehub;
 
-      $scope.$watch(function() {
-          if (_.has(engagehub, 'data.selected.data._id')) {
-            return engagehub.data.selected.data._id;
-          }
-        },
+      // $scope.$watch(function() {
+      //     if (_.has(engagehub, 'data.selected.data._id')) {
+      //       return engagehub.data.selected.data._id;
+      //     }
+      //   },
 
-        function(value) {
-          if (value) {
-            console.debug('[ Watcher ] SH Changed');
-            $timeout(function() {
-              engagehub.setStreamId(value);
-              engagehub.renderVisibled();
-            }, 500);
-          }
-        });
+      //   function(value) {
+      //     if (value) {
+      //       console.debug('[ Watcher ] SH Changed');
+      //       $timeout(function() {
+      //         engagehub.setStreamId(value);
+      //         engagehub.renderVisibled();
+      //       }, 500);
+      //     }
+      //   });
 
       this.refreshAndSelect = function refreshAndSelect(shId) {
-        console.debug('[ EngagehubEdit ] RefreshAndSelect');
+        console.debug('[ EngagehubView ] RefreshAndSelect');
+        engagehub.setStreamId(shId);
+
         return engagehub.getHub(shId).then(function(data) {
+          engagehub.renderNewest();
           $scope.sh = data;
 
           engagehub.select($scope.sh);
@@ -42,7 +45,7 @@ angular
 
       $scope.imageOnLoad = function() {
         _.throttle(function() {
-          console.debug('[ Engagehub Service ] ImageLoaded');
+          console.debug('[ EngagehubView ] ImageLoaded');
           $rootScope.$emit('isotopeArrange');
         }, 1000)();
       };
