@@ -3,7 +3,7 @@ angular
   .directive('engagehubIsotope', function(EngagehubIsotopeService, EngagehubInfinityService, $window, $document) {
       'use strict';
       var _link = function(scope, element) {
-        EngagehubIsotopeService.clean();
+        //EngagehubIsotopeService.clean();
         EngagehubIsotopeService.init(element);
 
         $document.unbind('scroll');
