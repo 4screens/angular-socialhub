@@ -3,6 +3,7 @@ angular
   .directive('engagehubIsotope', function(EngagehubIsotopeService, EngagehubInfinityService, $window, $document) {
       'use strict';
       var _link = function(scope, element) {
+        EngagehubIsotopeService.clean();
         EngagehubIsotopeService.init(element);
 
         $document.unbind('scroll');
@@ -10,8 +11,6 @@ angular
 
         scope.$on('$destroy', function() {
           $document.unbind('scroll');
-
-          EngagehubIsotopeService.clean();
         });
       };
 
@@ -95,6 +94,7 @@ angular
       }
 
       function clean() {
+        console.debug('[ Isotope ] Clean');
         unsubscribeIsotopeArrange();
         unsubscribeIsotopeReload();
 
