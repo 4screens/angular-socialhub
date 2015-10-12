@@ -7,6 +7,10 @@ angular
 
         $document.unbind('scroll');
         $document.bind('scroll', EngagehubInfinityService.scrollHandler(scope, element, $window));
+
+        scope.$on('$destroy', function() {
+          $document.unbind('scroll');
+        });
       };
 
       return {
