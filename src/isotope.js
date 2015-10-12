@@ -10,6 +10,8 @@ angular
 
         scope.$on('$destroy', function() {
           $document.unbind('scroll');
+
+          EngagehubIsotopeService.clean();
         });
       };
 
@@ -74,11 +76,6 @@ angular
         });
       });
 
-      function initialized(callback) {
-        console.debug('[ Isotope ] Initialized');
-        return callback();
-      }
-
       function init(element) {
         console.debug('[ Isotope ] Init');
         container = element;
@@ -97,17 +94,18 @@ angular
         });
       }
 
-      // Destroy events
-      // $scope.$on('$destroy', function(){
-      //   unsubscribeIsotopeReload();
-      //   unsubscribeIsotopeArrange();
-      // });
+      function clean() {
+        unsubscribeIsotopeArrange();
+        unsubscribeIsotopeReload();
+
+        instance = null;
+      }
 
       // public API
       return {
-        initialized: initialized,
         init: init,
-        addItem: addItem
+        addItem: addItem,
+        clean: clean
       };
     }
   );
