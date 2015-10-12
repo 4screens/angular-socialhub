@@ -41,10 +41,10 @@ angular
       };
 
       $scope.imageOnLoad = function() {
-        console.debug('[ Engagehub Service ] ImageLoaded');
-        _.debounce(function() {
+        _.throttle(function() {
+          console.debug('[ Engagehub Service ] ImageLoaded');
           $rootScope.$emit('isotopeArrange');
-        }, 500);
+        }, 1000)();
       };
 
       $scope.openModal = function(post) {
