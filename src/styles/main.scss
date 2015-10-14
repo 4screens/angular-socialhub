@@ -339,6 +339,13 @@
   }
 }
 
+.engagehub-load-posts {
+  margin: 1em auto;
+  text-align: center;
+  padding: .5em;
+  border: none;
+}
+
 // Hide optional elements
 .engagehub-tile {
   .approvedStatus, &:after, &:before, .engagehub-tile--overflow > .btn-group { display: none!important; }
