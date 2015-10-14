@@ -14,6 +14,7 @@ angular
       // FIXME: Normalization - change it to array ?
       var archived = {}; // Contains posts objects, after render are copied to results
       var results = []; // Collection of posts
+      var filtered = []; // Collections of filtered (hidden) posts
       var currentSocket, URL = '', mode = 'embed';
 
       function setDomain(domain) {
@@ -296,7 +297,8 @@ angular
 
             //console.log(visibled, newest, queue, archived, results);
 
-            if (queue.length > visibled) {
+            console.log(posts.length);
+            if (queue.length > visibled && posts.length) {
               renderVisibled(step);
             }
           });
@@ -393,6 +395,29 @@ angular
         mode = m;
       }
 
+      // Passing no @id will resets filters, otherwhise @id will toggle filter for connection / keyword
+      // FIXME: FINISH IT
+      function filterKeyword(id) {
+        console.debug('[ Engagehub Service ] Filter connection');
+        if (!id) results = results.concat(filtered);
+
+        // Check if there is a filter on that keyword
+        if (_.find(filtered, {_keyword: id})) {
+          // Toggle on
+          results = results.concat(_.filter({filtered, _keyword: id}));
+          filtered = _.reject(filtered, {_keyword: id});
+        } else {
+          //console.log([typeof_.filter(results, {_keyword: id})));
+          // Toggle off
+          filtered = filtered.concat(_.filter(results, {_keyword: id}));
+          results = _.reject(results, {_keyword: id});
+        }
+
+        console.log(id, results, filtered);
+
+        $rootScope.$emit('isotopeArrange');
+      }
+
       return {
         data: _data,
         setDomain: setDomain,
@@ -431,7 +456,8 @@ angular
           posts: results
         },
         setMode: setMode,
-        mode: mode
+        mode: mode,
+        filterKeyword: filterKeyword
       };
     }
   );
