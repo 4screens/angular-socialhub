@@ -194,8 +194,6 @@
           width: $actionIconSize;
           height: $actionIconSize;
 
-          .pin-icon { @include transform(rotate(-180deg) translateY($actionIconSize * .2)); }
-
           i {
             color: #fff;
 
@@ -231,10 +229,6 @@
       &:after {
         content: "\f08d";
         right: 11px;
-      }
-
-      .pin-icon {
-        @include transform(rotate(0) translateY(0));
       }
     }
 
