@@ -1,11 +1,26 @@
 <link rel="stylesheet" type="text/css" data-ng-href="{{ cssUrl }}" />
 
+<!-- Load more -->
+<div class="text-center" ng-style="{ 'background-color': sh.config.theme.backgroundColor }">
+  <button ng-if="engagehub.newest.posts.length"
+    ng-click="engagehub.renderNewest()"
+    ng-style="{
+      'color': sh.config.theme.buttonColor,
+      'background-color': sh.config.theme.buttonBackgroundColor
+    }"
+    class="engagehub-commerce engagehub-button-background-color engagehub-button-color engagehub-load-posts"
+   >
+    <i class="fa fa-info"></i> {{ engagehub.newest.posts.length > 50 ? '50+' : engagehub.newest.posts.length }} new {{ engagehub.newest.posts.length > 1 ? 'posts' : 'post' }}
+  </button>
+</div>
+<!--/Load more -->
+
 <!-- Stream -->
 <div class="engagehub-isotope engagehub-stream showApproved engagehub-background-color"
      ng-style="{ 'background-color': sh.config.theme.backgroundColor }">
   <article
     class="engagehub-tile engagehub-isotope-tile"
-    ng-repeat="post in results.posts | orderBy: ['-pinned', '-post.created']"
+    ng-repeat="post in engagehub.results.posts | orderBy: ['-pinned', '-post.created']"
     ng-class="{
       featured: post.featured,
       'not-featured': !post.featured,
@@ -62,14 +77,13 @@
         <a ng-if="post.commerce && post.commerce.url && post.commerce.text"
           ng-href="post.commerce.url"
           title="{{ post.commerce.text }}"
+          target="_blank" rel="nofollow"
           ng-style="{
             'color': sh.config.theme.buttonColor,
             'background-color': sh.config.theme.buttonBackgroundColor
           }"
-        target="_blank" rel="nofollow"
-        class="engagehub-commerce engagehub-button-background-color engagehub-button-color">
-          {{ post.commerce.text }}
-        </a>
+          class="engagehub-commerce engagehub-button-background-color engagehub-button-color"
+        >{{ post.commerce.text }}</a>
 
         <p class="engagehub-tile--signature-caption engagehub-description-color"
            data-ng-show="hasImage(post.post)"
@@ -115,7 +129,7 @@
 <!--/Stream -->
 
 <!-- Loader -->
-<div class="engagehub-preloader text-center engagehub-background-color" data-ng-if="!complete.value"
+<div class="engagehub-preloader text-center engagehub-background-color" data-ng-if="!engagehub.complete.value"
      ng-style="{ 'background-color': sh.config.theme.backgroundColor }">
   <i class="fa fa-spinner fa-spin"></i>
 </div>
