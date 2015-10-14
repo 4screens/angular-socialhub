@@ -297,7 +297,7 @@ angular
             //console.log(visibled, newest, queue, archived, results);
 
             if (queue.length > visibled) {
-              renderVisibled();
+              renderVisibled(step);
             }
           });
         } else {
