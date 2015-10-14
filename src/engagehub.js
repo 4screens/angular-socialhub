@@ -109,6 +109,10 @@ angular
           return v.id === postId;
         });
 
+        _.remove(archived, function(v) {
+          return v.id === postId;
+        });
+
         $rootScope.$emit('isotopeArrange');
       }
 
@@ -234,7 +238,6 @@ angular
         return $http.delete(URL + CONFIG.backend.engagehub.base +
             '/' + sh._id + '/keywords/' + keyword._id)
           .then(function(data) {
-            //console.debug(data.data);
             //return data;
             if (data.data.status === 'ok') {
               // getHubs();
