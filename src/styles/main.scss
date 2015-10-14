@@ -194,8 +194,6 @@
           width: $actionIconSize;
           height: $actionIconSize;
 
-          .pin-icon { @include transform(rotate(-180deg) translateY($actionIconSize * .2)); }
-
           i {
             color: #fff;
 
@@ -232,10 +230,6 @@
         content: "\f08d";
         right: 11px;
       }
-
-      .pin-icon {
-        @include transform(rotate(0) translateY(0));
-      }
     }
 
     &.commerce {
@@ -256,9 +250,6 @@
         &-instagram i { color: $fa-instagram; }
       }
     }
-
-    // Filter
-    &.filter-inactive { opacity: 0.25; }
 
     &:hover .engagehub-tile--overflow{ display: block; }
   }

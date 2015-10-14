@@ -10,7 +10,7 @@
     }"
     class="engagehub-commerce engagehub-button-background-color engagehub-button-color engagehub-load-posts"
    >
-    <i class="fa fa-info"></i> {{ engagehub.newest.posts.length > 50 ? '50+' : engagehub.newest.posts.length }} new {{ engagehub.newest.posts.length > 1 ? 'posts' : 'post' }}
+    <i class="fa fa-info"></i> {{ engagehub.newest.posts.length > 50 ? '50+' : engagehub.newest.posts.length }} new {{ engagehub.newest.posts.length > 1 ? 'posts' : 'post' }}. Click to load
   </button>
 </div>
 <!--/Load more -->
@@ -24,8 +24,6 @@
     ng-class="{
       featured: post.featured,
       'not-featured': !post.featured,
-      'filter-active': keywordFilter.indexOf(post._keyword) !== -1 && keywordFilter.length,
-      'filter-inactive': keywordFilter.indexOf(post._keyword) === -1 && keywordFilter.length,
       'no-image': !hasImage(post.post),
       pinned: post.pinned === 2,
       commerce: (post.commerce && post.commerce.url)
@@ -50,8 +48,7 @@
 
       <div class="engagehub-tile--text {{ post.source.channel }}" data-ng-show="!hasImage(post.post)">
         <div>
-          <div data-ng-style="{'font-size': getFontSize(post.post.headline || post.post.message)}">{{ post.post.headline
-            || post.post.message | excerpt }}
+          <div data-ng-style="{'font-size': getFontSize(post.post.headline || post.post.message)}">{{ post.post.headline || post.post.message | excerpt }}
           </div>
         </div>
       </div>

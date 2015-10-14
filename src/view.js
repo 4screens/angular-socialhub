@@ -103,6 +103,7 @@ angular
   )
   .filter('excerpt', function() {
     return function(txt) {
+      txt || (txt = '');
       return txt.length > 180 ? txt.slice(0, 180) + ' ..' : txt;
     };
   });
