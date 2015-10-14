@@ -39,7 +39,11 @@ angular
 
       var instance = null, container = null, options = {
         itemSelector: '.engagehub-isotope-tile',
-        transitionDuration: '0.1s'
+        transitionDuration: '0.1s',
+        percentPosition: true,
+        masonry: {
+          columnWidth: '.engagehub-isotope-tile.not-featured'
+        }
       };
 
       var unsubscribeIsotopeArrange = $rootScope.$on('isotopeArrange', function() {
