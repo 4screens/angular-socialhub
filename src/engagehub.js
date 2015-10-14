@@ -404,7 +404,7 @@ angular
         // Check if there is a filter on that keyword
         if (_.find(filtered, {_keyword: id})) {
           // Toggle on
-          results = results.concat(_.filter({filtered, _keyword: id}));
+          results = results.concat(_.filter(filtered, {_keyword: id}));
           filtered = _.reject(filtered, {_keyword: id});
         } else {
           //console.log([typeof_.filter(results, {_keyword: id})));
