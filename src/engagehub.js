@@ -3,7 +3,18 @@ angular
   .factory('engagehub',
     function(CONFIG, $rootScope, $http, $q, CommonSocketService, $document, $window) {
       'use strict';
-      var _data = {}, streamId = null, visibled = 0, pack = 50, complete = {value: false}, queue = [], newest = [], archived = {}, results = [], currentSocket, URL = '', mode = 'embed';
+
+      var _data = {}, streamId = null, visibled = 0, pack = 50;
+
+      // FIXME: get rid of postLimit, it's TEMPORARY, applied couse of InfinityScroller
+      var postLimit = pack * 3; // Infinity scroll will be disabed after this
+      var complete = {value: true}; // Spinner
+      var queue = [], newest = [];  // Array of id's
+
+      // FIXME: Normalization - change it to array ?
+      var archived = {}; // Contains posts objects, after render are copied to results
+      var results = []; // Collection of posts
+      var currentSocket, URL = '', mode = 'embed';
 
       function setDomain(domain) {
         URL = domain;
@@ -29,21 +40,22 @@ angular
 
       function clearData() {
         _data = {};
+        queue.length = 0;
+        newest.length = 0;
+        results.length = 0;
+        visibled = 0;
+        archived = {};
       }
 
       function setStreamId(id) {
         console.debug('[ Engagehub Service ] SetStreamId');
         streamId = id;
-
         visibled = 0;
-        complete.value = false;
 
         queue.length = 0;
-
         newest.length = 0;
-
-        archived = {};
         results.length = 0;
+        archived = {};
 
         connectSocketIo();
       }
@@ -51,9 +63,11 @@ angular
       function getPosts(params) {
         console.debug('[ Engagehub Service ] GetPosts');
         params = params || {};
+        complete.value = false;
         var url = URL + CONFIG.backend.engagehub.posts.replace(':id', streamId);
 
         return $http.get(url, {params: params}).then(function(res) {
+          complete.value = true;
           if (res.status === 200) {
             return res.data;
           }
@@ -260,17 +274,16 @@ angular
           });
       }
 
-      function renderVisibled(step, reload) {
-        console.debug('[ Engagehub Service ] Render visibled');
-        visibled += step || 0;
+      function renderVisibled(step, reload, page) {
         reload = reload || false;
+        step = step || 0;
 
-        if (visibled > _.size(archived) && complete.value === false) {
-          getPosts({page: Math.floor(_.size(archived) / pack)}).then(function(posts) {
-            if (posts.length < 50) {
-              complete.value = true;
-            }
+        console.debug('[ Engagehub Service ] Render visibled - step: ' + (step || 0));
+        page = typeof page === 'number' ? page : Math.floor(_.size(archived) / pack);
 
+        // Should i request next posts ?
+        if (visibled + step > _.size(archived) && complete.value) {
+          getPosts({page: page}).then(function(posts) {
             _.forEach(posts, function(post) {
               if (_.findIndex(queue, post.id) === -1) {
                 archived[post.id] = post;
@@ -278,14 +291,18 @@ angular
               }
             });
 
+            //console.log(visibled, newest, queue, archived, results);
+
             if (queue.length > visibled) {
               renderVisibled();
             }
           });
         } else {
-          _.each(queue.slice(0, visibled), function(postId, postIndex) {
-            if (_.findIndex(results, {id: postId}) === -1) {
+          _.each(queue, function(postId, postIndex) {
+            if (_.findIndex(results, {id: postId}) === -1 && step) {
               results.splice(postIndex, 0, archived[postId]);
+              visibled++;
+              step--;
             }
           });
 
@@ -299,82 +316,74 @@ angular
             $rootScope.$emit('isotopeReload');
           }
 
-          if (complete.value === true && queue.length === visibled) {
+          if (complete.value && queue.length >= postLimit) {
             $document.unbind('scroll');
           }
-
         }
       }
 
       function renderNewest() {
-        queue = newest.concat(queue);
-        queue = queue.slice(0, visibled);
-
-        // Najszybszy znany mi sposób wyczyszczenia tablicy
-        // nie usuwając samej tablicy.
-        // newest = [] 'ubija' watch angulara
+        console.debug('[ Engagehub Service ] Render newest');
+        var nl = newest.length;
         newest.length = 0;
+        //queue = newest.concat(queue);
+        //queue = queue.slice(0, visibled);
 
-        renderVisibled(0, true);
+        // More than pack ?
+        if (nl > pack) {
+          clearData();
+          renderVisibled(10, true);
+        } else {
+          renderVisibled(nl, true, 0);
+        }
       }
 
-      function connectSocketIo() {
-        console.log('connecting socket', streamId);
+      function socketOnNewPost(data) {
+        console.debug('[ Socket ] New post');
 
+        if (mode === 'admin' || data.approved === 2) {
+          newest.push(data.id);
+
+          // There is no post shown so reneder some feed
+          if (visibled === 0) {
+            renderNewest();
+          }
+        }
+      }
+
+      // function socketOnUpdatePost(data) {
+      //   console.debug('[ Socket ] Update post');
+      //   if (_.findIndex(queue, data.id) !== -1) {
+      //     // Update
+      //     queue[data.id].featured = data.featured;
+      //     queue[data.id].pinned = data.pinned;
+      //     queue[data.id].approved = data.approved;
+
+      //     // Need DOM change ?
+      //     if (data.approved !== 2 && mode === 'embed') {
+      //       removeLocalPost(data.id);
+      //     }
+      //     $rootScope.$emit('IsotopeArrange');
+      //   }
+      // }
+
+      function connectSocketIo() {
         if (currentSocket) {
+          console.debug('[ Socket ] Found one, disconnect');
           currentSocket.disconnect();
         }
 
         currentSocket = CommonSocketService.get(CONFIG.backend.engagehub.socketio.namespace.replace(':id', streamId));
 
-        console.log(currentSocket);
         currentSocket.on('connect', function(a) {
-          console.log('socket connected');
+          console.debug('[ Socket ] Connected');
         });
 
         // New post
-        currentSocket.on('socialhub:newPost', function(data) {
-          console.log('[ Socket ] New post');
-
-          if (mode === 'admin' || data.approved === 2) {
-            getPost(data.id).then(function(post) {
-              if (_.findIndex(queue, data.id) === -1) {
-                archived[data.id] = post;
-                if ($window.scrollY === 0 && newest.length === 0) {
-                  queue.unshift(data.id);
-                  visibled++;
-                  renderVisibled();
-                } else {
-                  newest.unshift(data.id);
-                }
-              }
-            }).catch(function(err) {
-              if (err.status === 404 || err.status === 500) {
-                removeLocalPost(data.id);
-              }
-            });
-          }
-        });
+        currentSocket.on('socialhub:newPost', socketOnNewPost);
 
         // Post update
-        currentSocket.on('socialhub:updatePost', function(data) {
-          console.log('[ Socket ] Update post');
-          if (_.findIndex(queue, data.id) !== -1) {
-
-            // Update
-            queue[data.id].featured = data.featured;
-            queue[data.id].pinned = data.pinned;
-            queue[data.id].approved = data.approved;
-
-            // Need DOM change ?
-            if (data.approved !== 2 && mode === 'embed') {
-              queue.splice(_.findIndex(queue, data.id), 1);
-              $rootScope.$emit('IsotopeReload');
-            } else {
-              $rootScope.$emit('IsotopeArrange');
-            }
-          }
-        });
+        // currentSocket.on('socialhub:updatePost', socketOnUpdatePost);
       }
 
       function setMode(m) {
@@ -409,7 +418,7 @@ angular
 
         setStreamId: setStreamId,
         renderVisibled: renderVisibled,
-        renderNewest: renderNewest,
+        renderNewest: _.throttle(renderNewest, 500),
         removeLocalPost: removeLocalPost,
         newest: {
           posts: newest
