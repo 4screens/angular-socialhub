@@ -15,7 +15,6 @@
   </button>
 </div>
 <!--/Load more -->
-
 <!-- Stream -->
 <div class="engagehub-isotope engagehub-stream showApproved engagehub-background-color"
      ng-style="{ 'background-color': sh.config.theme.backgroundColor }">
@@ -27,7 +26,8 @@
       'not-featured': !post.featured,
       'no-image': !hasImage(post.post),
       pinned: post.pinned === 2,
-      commerce: (post.commerce && post.commerce.url)
+      commerce: (post.commerce && post.commerce.url),
+      filter: _.indexOf(filtered, {value: post.source.value, channel: post.source.channel}) !== -1
     }"
   >
     <figure ng-style="{

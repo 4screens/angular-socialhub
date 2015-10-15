@@ -37,7 +37,7 @@ angular
     function(EngagehubInfinityService, $rootScope, $document, $timeout) {
       'use strict';
 
-      var instance = null, container = null, options = {
+      var instance = null, container = null, filter = [], options = {
         itemSelector: '.engagehub-isotope-tile',
         transitionDuration: '0.1s',
         percentPosition: true,
@@ -79,6 +79,27 @@ angular
         });
       });
 
+      var unsubscribeIsotopeFilter = $rootScope.$on('isotopeFilter', function() {
+        console.debug('[ Isotope ] On Filter');
+
+        $timeout(function() {
+          $timeout(function() {
+            $timeout(function() {
+              if (instance) {
+                instance.arrange({
+                  filter: function(item) {
+                    return item.className.indexOf('filter');
+                  }
+                });
+              }
+
+              EngagehubInfinityService.enable();
+              $document.triggerHandler('scroll');
+            });
+          });
+        });
+      });
+
       function init(element) {
         console.debug('[ Isotope ] Init');
         container = element;
@@ -101,15 +122,22 @@ angular
         console.debug('[ Isotope ] Clean');
         unsubscribeIsotopeArrange();
         unsubscribeIsotopeReload();
+        unsubscribeIsotopeFilter();
 
         instance = null;
+      }
+
+      function filter(cls) {
+        console.debug('[ Isotope ] Filter');
+
       }
 
       // public API
       return {
         init: init,
         addItem: addItem,
-        clean: clean
+        clean: clean,
+        filter: filter
       };
     }
   );
