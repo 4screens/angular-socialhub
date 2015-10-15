@@ -432,6 +432,16 @@ angular
         mode = m;
       }
 
+      // Executed on scope destroy
+      function close() {
+        console.debug('[ Engagehub Service ] Close');
+        clearData();
+
+        if (currentSocket) {
+          currentSocket.disconnect();
+        }
+      }
+
       // Passing no @id will resets filters, otherwhise @id will toggle filter for connection / keyword
       // Filtered post still should stay in visibled array
       // FIXME: FINISH IT
@@ -495,7 +505,8 @@ angular
         },
         setMode: setMode,
         mode: mode,
-        filterKeyword: filterKeyword
+        filterKeyword: filterKeyword,
+        close: close
       };
     }
   );
