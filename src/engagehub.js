@@ -166,6 +166,7 @@ angular
 
             return data.data;
           });
+
       }
 
       var sockets = {};
@@ -442,29 +443,37 @@ angular
         }
       }
 
+      // It will use isotope filter @what should be items class name
+      function filterPosts(cls) {
+        console.debug('[ Engagehub Service ] Filter');
+        $rootScope.$emit('isotopeFilter', cls);
+      }
+
       // Passing no @id will resets filters, otherwhise @id will toggle filter for connection / keyword
       // Filtered post still should stay in visibled array
       // FIXME: FINISH IT
-      function filterKeyword(id) {
-        console.debug('[ Engagehub Service ] Filter connection');
-        if (!id) results = results.concat(filtered);
+      // function filterKeyword(value, channel) {
+      //   console.debug('[ Engagehub Service ] Filter connection');
+      //   if (!value || !channel) {
+      //     results = results.concat(filtered);
+      //     filtered.length = 0;
+      //     $rootScope.$emit('isotopeArrange');
+      //   }
 
-        // Check if there is a filter on that keyword
-        if (_.find(filtered, {_keyword: id})) {
-          // Toggle on
-          results = results.concat(_.filter(filtered, {_keyword: id}));
-          filtered = _.reject(filtered, {_keyword: id});
-        } else {
-          //console.log([typeof_.filter(results, {_keyword: id})));
-          // Toggle off
-          filtered = filtered.concat(_.filter(results, {_keyword: id}));
-          results = _.reject(results, {_keyword: id});
-        }
+      //   // Check if there is a filter on that keyword
+      //   if (_.find(filtered, {_keyword: id})) {
+      //     // Toggle on
 
-        //console.log(id, results, filtered);
+      //   } else {
+      //     // Toggle off
+      //     filtered = filtered.concat(_.where(results, {: id}));
+      //     // results = _.reject(results, {_keyword: id});
+      //   }
 
-        $rootScope.$emit('isotopeArrange');
-      }
+      //   console.log(value, channel, results, filtered);
+
+      //   $rootScope.$emit('isotopeArrange');
+      // }
 
       return {
         data: _data,
@@ -505,7 +514,7 @@ angular
         },
         setMode: setMode,
         mode: mode,
-        filterKeyword: filterKeyword,
+        filterPosts: filterPosts,
         close: close
       };
     }
