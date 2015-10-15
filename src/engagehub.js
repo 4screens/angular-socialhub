@@ -15,16 +15,6 @@ angular
       var filtered = []; // Collections of filtered (hidden) posts
       var currentSocket, URL = '', mode = 'embed';
 
-      // FIXME: Debug stuff
-      // window.D = {
-      //   queue: queue,
-      //   newest: newest,
-      //   visibled: visibled,
-      //   archived: archived,
-      //   results: results,
-      //   filtered: filtered
-      // };
-
       function setDomain(domain) {
         URL = domain;
       }
@@ -185,6 +175,7 @@ angular
         _data.selected = _data.selected || {};
         _data.selected.type = 'sh';
         _data.selected.data = sh;
+        clearData();
       }
 
       function createStreamGroup(name) {
@@ -309,23 +300,21 @@ angular
               //   return;
               // }
 
-              console.log(_.findIndex(queue, post.id));
-              console.log(post.id);
+              // console.log(_.indexOf(queue, post.id));
+              // console.log(post.id);
 
-              if (_.findIndex(queue, post.id) === -1) {
+              if (_.indexOf(queue, post.id) === -1) {
                 archived[post.id] = post;
                 queue.push(post.id);
 
                 // Update newest
                 newest.splice(newest.indexOf(post.id), 1);
               }
+
             });
 
-            //console.log(visibled, newest, queue, archived, results);
-
             if (queue.length > visibled) {
-              console.log(queue.length, visibled);
-              renderVisibled(step);
+              renderVisibled(Math.min(step, queue.length - visibled));
             }
           }).catch(function() {
             complete.value = true;
@@ -353,6 +342,8 @@ angular
           //   $document.unbind('scroll');
           // }
         }
+
+        // console.log(visibled, results.length, Object.keys(archived).length, queue.length, complete.value);
       }
 
       // TODO: This is overkill, improve it to use renderVisibled here
@@ -371,7 +362,7 @@ angular
             complete.newest = true;
 
             _.forEach(posts, function(post) {
-              if (_.findIndex(queue, post.id) === -1) {
+              if (_.indexOf(queue, post.id) === -1) {
                 newest.length = 0;
                 results.unshift(post);
                 archived[post.id] = post;
@@ -404,7 +395,7 @@ angular
 
       // function socketOnUpdatePost(data) {
       //   console.debug('[ Socket ] Update post');
-      //   if (_.findIndex(queue, data.id) !== -1) {
+      //   if (_.indexOf(queue, data.id) !== -1) {
       //     // Update
       //     queue[data.id].featured = data.featured;
       //     queue[data.id].pinned = data.pinned;
@@ -460,7 +451,7 @@ angular
           results = _.reject(results, {_keyword: id});
         }
 
-        console.log(id, results, filtered);
+        //console.log(id, results, filtered);
 
         $rootScope.$emit('isotopeArrange');
       }
