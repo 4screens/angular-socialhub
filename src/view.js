@@ -9,6 +9,7 @@ angular
      * be taken from $stateParams.shId or from some other source.
      */
 
+      $scope.filtered = [];
       $scope.engagehub = engagehub;
 
       this.refreshAndSelect = function refreshAndSelect(shId) {
@@ -107,4 +108,15 @@ angular
       txt || (txt = '');
       return txt.length > 180 ? txt.slice(0, 180) + ' ..' : txt;
     };
+  // })
+  // .filter('keywordFilter', function() {
+  //   return function(posts, filtered) {
+  //     if (!filtered.length) return posts;
+
+  //     return _.filter(posts, function(post) {
+  //       return _.some(filtered, function(fk) {
+  //         return (fk.channel === post.source.channel && fk.value === post.source.value);
+  //       });
+  //     });
+  //   };
   });
