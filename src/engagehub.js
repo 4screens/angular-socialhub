@@ -5,11 +5,9 @@ angular
       'use strict';
 
       var _data = {}, streamId = null, visibled = 0, pack = 50;
-
-      // FIXME: get rid of postLimit, it's TEMPORARY, applied couse of InfinityScroller
-      var postLimit = pack * 3; // Infinity scroll will be disabed after this
-      var complete = {value: true}; // Spinner
+      var complete = {value: true, newest: true}; // Spinner
       var queue = [], newest = [];  // Array of id's
+      //var throttler = 500; // Time (msc) used to throttle renderVisibled posts in public service api
 
       // FIXME: Normalization - change it to array ?
       var archived = {}; // Contains posts objects, after render are copied to results
@@ -44,6 +42,8 @@ angular
         queue.length = 0;
         newest.length = 0;
         results.length = 0;
+        complete.value = true;
+        complete.newest = true;
         visibled = 0;
         archived = {};
       }
@@ -74,6 +74,8 @@ angular
           }
 
           return $q.reject(res.data);
+        }).catch(function() {
+          complete.value = true;
         });
       }
 
@@ -173,6 +175,7 @@ angular
         _data.selected = _data.selected || {};
         _data.selected.type = 'sh';
         _data.selected.data = sh;
+        clearData();
       }
 
       function createStreamGroup(name) {
@@ -287,20 +290,34 @@ angular
 
         // Should i request next posts ?
         if (visibled + step > _.size(archived) && complete.value) {
+          complete.value = false;
+
           getPosts({page: page}).then(function(posts) {
+            complete.value = true;
             _.forEach(posts, function(post) {
-              if (_.findIndex(queue, post.id) === -1) {
+              // if (!posts.length) {
+              //   throttler = Math.min(Math.max(500, throttler * 2), 5000);
+              //   return;
+              // }
+
+              // console.log(_.indexOf(queue, post.id));
+              // console.log(post.id);
+
+              if (_.indexOf(queue, post.id) === -1) {
                 archived[post.id] = post;
                 queue.push(post.id);
+
+                // Update newest
+                newest.splice(newest.indexOf(post.id), 1);
               }
+
             });
 
-            //console.log(visibled, newest, queue, archived, results);
-
-            console.log(posts.length);
-            if (queue.length > visibled && posts.length) {
-              renderVisibled(step);
+            if (queue.length > visibled) {
+              renderVisibled(Math.min(step, queue.length - visibled));
             }
+          }).catch(function() {
+            complete.value = true;
           });
         } else {
           _.each(queue, function(postId, postIndex) {
@@ -321,25 +338,45 @@ angular
             $rootScope.$emit('isotopeReload');
           }
 
-          if (complete.value && queue.length >= postLimit) {
-            $document.unbind('scroll');
-          }
+          // if (complete.value && queue.length >= postLimit) {
+          //   $document.unbind('scroll');
+          // }
         }
+
+        // console.log(visibled, results.length, Object.keys(archived).length, queue.length, complete.value);
       }
 
+      // TODO: This is overkill, improve it to use renderVisibled here
       function renderNewest() {
         console.debug('[ Engagehub Service ] Render newest');
-        var nl = newest.length;
-        newest.length = 0;
-        //queue = newest.concat(queue);
-        //queue = queue.slice(0, visibled);
 
         // More than pack ?
-        if (nl > pack) {
+        if (newest.length > pack) {
+          newest.length = 0;
           clearData();
           renderVisibled(10, true);
         } else {
-          renderVisibled(nl, true, 0);
+          complete.newest = false;
+
+          getPosts({page: 0}).then(function(posts) {
+            complete.newest = true;
+
+            _.forEach(posts, function(post) {
+              if (_.indexOf(queue, post.id) === -1) {
+                newest.length = 0;
+                results.unshift(post);
+                archived[post.id] = post;
+                queue.push(post.id);
+                visibled++;
+
+                $rootScope.$emit('isotopeArrange');
+              }
+            });
+
+          }).catch(function() {
+            newest.length = 0;
+            complete.newest = true;
+          });
         }
       }
 
@@ -358,7 +395,7 @@ angular
 
       // function socketOnUpdatePost(data) {
       //   console.debug('[ Socket ] Update post');
-      //   if (_.findIndex(queue, data.id) !== -1) {
+      //   if (_.indexOf(queue, data.id) !== -1) {
       //     // Update
       //     queue[data.id].featured = data.featured;
       //     queue[data.id].pinned = data.pinned;
@@ -396,6 +433,7 @@ angular
       }
 
       // Passing no @id will resets filters, otherwhise @id will toggle filter for connection / keyword
+      // Filtered post still should stay in visibled array
       // FIXME: FINISH IT
       function filterKeyword(id) {
         console.debug('[ Engagehub Service ] Filter connection');
@@ -413,7 +451,7 @@ angular
           results = _.reject(results, {_keyword: id});
         }
 
-        console.log(id, results, filtered);
+        //console.log(id, results, filtered);
 
         $rootScope.$emit('isotopeArrange');
       }

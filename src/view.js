@@ -77,6 +77,7 @@ angular
       };
 
       $scope.getFontSize = function(message) {
+        message = message || '';
         return Math.min(200, Math.max(170 / message.length * 100, 100)) + '%';
       };
 
