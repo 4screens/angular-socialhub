@@ -219,16 +219,6 @@ angular
             value: keyword,
             channel: type,
             channelContentType: type === 'facebook' ? 'page' : 'tag'
-          })
-          .then(function(data) {
-            //console.debug(data.data);
-            //return data;
-            if (data.data.status === 'ok') {
-              // getHubs();
-              return (true);
-            } else {
-              return (false);
-            }
           });
       }
 
