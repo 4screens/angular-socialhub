@@ -116,6 +116,8 @@ angular
           return v.id === postId;
         });
 
+        visibled = results.length;
+
         $rootScope.$emit('isotopeArrange');
       }
 
@@ -243,13 +245,15 @@ angular
         return $http.delete(URL + CONFIG.backend.engagehub.base +
             '/' + sh._id + '/keywords/' + keyword._id)
           .then(function(data) {
-            //return data;
-            if (data.data.status === 'ok') {
-              // getHubs();
-              return (true);
-            } else {
-              return (false);
-            }
+
+            // Remove posts
+            _.forEach(archived, function(post) {
+              if (post.source.channel === keyword.channel && post.source.value === keyword.value) {
+                removeLocalPost(post.id);
+              }
+            });
+
+            $rootScope.$emit('isotopeReload');
           });
       }
 
