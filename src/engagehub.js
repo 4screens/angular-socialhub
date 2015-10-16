@@ -23,8 +23,10 @@ angular
         console.debug('[ Engagehub Service ] GetHubs');
         return $http.get(URL + CONFIG.backend.engagehub.base)
           .then(function(data) {
-              _data.socialhubs = data.data;
-              _data.selected = {};
+            _data.socialhubs = data.data;
+            _data.selected = {};
+
+            return data.data;
           });
       }
 
@@ -196,17 +198,7 @@ angular
 
       function removeStreamGroup(sh) {
         console.debug('[ Engagehub Service ] RemoveStreamGroup');
-        return $http.delete(URL + CONFIG.backend.engagehub.base + '/' + sh._id)
-          .then(function(data) {
-            //console.debug(data.data);
-            //return data;
-            if (data.data.status && data.data.status === 'removed') {
-              getHubs();
-              return (true);
-            } else {
-              return (false);
-            }
-          });
+        return $http.delete(URL + CONFIG.backend.engagehub.base + '/' + sh._id);
       }
 
       /**
