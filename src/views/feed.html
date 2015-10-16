@@ -1,8 +1,8 @@
 <link rel="stylesheet" type="text/css" data-ng-href="{{ cssUrl }}" />
 
 <!-- Load more -->
-<div class="text-center" ng-style="{ 'background-color': sh.config.theme.backgroundColor }">
-  <button ng-if="engagehub.newest.posts.length"
+<div ng-if="engagehub.newest.posts.length" class="engagehub-load-posts-wrapper" ng-style="{ 'background-color': sh.config.theme.backgroundColor }">
+  <button
     ng-click="engagehub.renderNewest()"
     ng-style="{
       'color': sh.config.theme.buttonColor,

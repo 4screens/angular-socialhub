@@ -330,11 +330,16 @@
   }
 }
 
-.engagehub-load-posts {
-  margin: 1em auto;
+.engagehub-load-posts-wrapper {
+  margin: 0;
   text-align: center;
-  padding: .5em;
-  border: none;
+  padding: 1em;
+
+  .engagehub-load-posts {
+    text-align: center;
+    padding: .5em;
+    border: none;
+  }
 }
 
 // Hide optional elements
