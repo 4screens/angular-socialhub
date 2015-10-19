@@ -88,6 +88,7 @@
         >{{ post.post.headline || post.post.message | excerpt }}</p>
       </figcaption>
     </figure>
+
     <div class="approvedStatus"
          data-ng-class="{
         'btn-success': post.approved === 2,
@@ -97,28 +98,47 @@
 
     <div class="engagehub-tile--overflow" data-ng-class="{approved: post.approved, 'not-approved': !post.approved}">
       <div class="engagehub-tile--overflow-mask" data-ng-click="openModal(post)"></div>
-        <div class="btn-group">
-          <button type="button" class="btn btn-default btn-transparent" data-ng-click="pinPost(post)">
-            <i class="fa fa-thumb-tack pin-icon"></i>
-          </button>
-          <button type="button" class="btn btn-default btn-transparent" data-ng-click="approvePost(post)">
-            <i class="fa" data-ng-class="post.approved === 2 ? 'fa-times' : 'fa-check'"></i>
-          </button>
-          <button type="button" class="btn btn-default btn-transparent" data-ng-click="featurePost(post)">
-            <i class="fa" data-ng-class="post.featured ? 'fa-star' : 'fa-star-o'"></i>
-          </button>
+        <div class="details clearfix text-center">
+
+          <span data-ng-click="openModal(post)" class="action-icon">
+            <i class="icon-circled-eye"></i>
+            <span class="info-tooltip animate-show">Preview</span>
+          </span>
+
+          <!-- approved -->
+          <span data-ng-click="approvePost(post, 2)" data-ng-hide="post._approved === 2" class="action-icon icon-approve">
+            <i class="fa fa-check-circle"></i>
+            <span class="info-tooltip animate-show">Approve</span>
+          </span>
+          <span data-ng-click="approvePost(post, 3)" data-ng-hide="post._approved === 3" class="action-icon icon-decline">
+            <i class="fa fa-times-circle"></i>
+            <span class="info-tooltip animate-show">Decline</span>
+          </span>
+          <!--/approved -->
+
+          <span data-ng-confirm="remove(post)" data-ng-confirm-message='Are you sure you want to delete this post ?' class="action-icon">
+            <i class="icon-circled-trash"></i>
+            <span class="info-tooltip animate-show">Remove</span>
+          </span>
+
         </div>
-        <div class="btn-group">
-          <button type="button" class="btn btn-default btn-transparent" data-ng-click="openModal(post)">
-            <i class="fa fa-search"></i>
-          </button>
-          <button type="button" class="btn btn-default btn-transparent" data-ng-click="remove(post)">
-            <i class="fa fa-trash"></i>
-          </button>
-          <button type="button" class="btn btn-default btn-transparent" data-ng-click="addCommerceModal(post)">
-            <i class="fa" data-ng-class="{'fa-tag': (post.commerce && post.commerce.url), 'fa-tags': (!post.commerce || !post.commerce.url) }"></i>
-          </button>
+
+        <div class="btn-group-mini">
+          <span class="icon-mini" data-ng-click="featurePost(post)">
+            <i class="fa fa-external-link"></i>
+          </span>
+
+          <span class="icon-mini" data-ng-click="addCommerceModal(post)">
+            <i class="fa fa-link"></i>
+          </span>
+
+          <span class="icon-mini icon-pinned" data-ng-click="pinPost(post)">
+            <i class="fa fa-thumb-tack"></i>
+          </span>
+
+          <span class="icon-mini trigger"><i class="fa fa-cog"></i></span>
         </div>
+
       </div>
     </div>
 

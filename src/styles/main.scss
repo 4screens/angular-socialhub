@@ -2,11 +2,15 @@
   $paddingLg: 42px;
   $paddingMd: 6px;
   $playIconSize: 60px;
-  $actionIconSize: 46px;
+  $actionIconSize: 45px;
+  $actionMiniIconSize: $actionIconSize * .5;
 
   $fa-twitter: #55acee !global !default;
   $fa-facebook: #3b5998 !global !default;
   $fa-instagram: #3f729b !global !default;
+
+  $color-approve: #84e47a;
+  $color-decline: #eb4e4e;
 
   $tileMinWidth: 330px;
 
@@ -42,7 +46,9 @@
     top: -100%;
     width: 100%;
     padding: 3.5px;
+    margin: 0;
     cursor: pointer;
+    background-color: transparent;
 
     @include transition(opacity .2s ease);
 
@@ -173,32 +179,51 @@
       top: 2px;
       bottom: 2px;
       z-index: 2;
-      background-color: rgba(33, 33, 33, .35);
+      background-color: rgba(0, 0, 0, .38);
       cursor: pointer;
       overflow: hidden;
 
-      .btn-group {
+      .details {
         position: absolute;
         display: block;
         width: 100%;
         top: 50%;
-        left: 50%;
-        margin-left: $actionIconSize * -1.5;
-        margin-top: $actionIconSize * -1;
+        margin-top: $actionIconSize * -.5;
 
-        + .btn-group {margin-top: -1px;}
+        .action-icon {
+          color: #ddd;
+          opacity: .7;
+          font-size: $actionIconSize;
+          line-height: 1;
+          display: inline-block;
+          text-align: center;
+          margin: 0;
+          vertical-align: middle;
 
-        .btn {
-          transform-origin: 50% 50%;
-          color: #fff;
-          width: $actionIconSize;
-          height: $actionIconSize;
-
-          i {
-            color: #fff;
-
-            @include transition(transform .2s ease);
+          & i {
+            margin-bottom: 2px;
+            display: block;
           }
+
+          &, & span { @include transition(opacity .3s ease); }
+
+          // Dirty FA fonts overwrite
+          &.icon-approve, &.icon-decline {
+            font-size: $actionIconSize * 1.111;
+          }
+          &.icon-approve { color: $color-approve; }
+          &.icon-decline { color: $color-decline; }
+
+          span {
+            display: block;
+            font-size: 12px;
+            opacity: 0;
+            position: relative;
+            vertical-align: top;
+            @include transform(none);
+          }
+
+          &:hover, &:hover span { opacity: 1; }
         }
       }
 
@@ -211,9 +236,45 @@
         display: block;
         z-index: 0;
       }
+
+      .btn-group-mini {
+        font-size: $actionMiniIconSize;
+        line-height: 1;
+        height: $actionMiniIconSize;
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        overflow: hidden;
+
+        .icon-mini {
+          color: #eee;
+          opacity: 0;
+          display: inline-block;
+          margin: 0 2px;
+
+          @include transform(translateY($actionMiniIconSize * -1));
+          @include transition(transform .5s ease, opacity .5s ease, color .3s ease);
+
+          &:hover { color: #fff; }
+        }
+        .trigger {
+          opacity: .7!important;
+
+          @include transform(none);
+        }
+
+        &:hover, .active {
+          .icon-mini {
+            opacity: 1;
+
+            @include transform(translateY(0));
+          }
+          .trigger { @include transform(rotate(-180deg)); }
+        }
+      }
     }
 
-    &.commerce:before, &.pinned:after {
+    &.commerce:before {
       position: absolute;
       display: inline-block;
       right: 10px;
@@ -223,13 +284,6 @@
       color: #fff;
       text-shadow: 0 1px 2px #000;
       z-index: 3;
-    }
-
-    &.pinned {
-      &:after {
-        content: "\f08d";
-        right: 11px;
-      }
     }
 
     &.commerce {
@@ -252,6 +306,12 @@
     }
 
     &:hover .engagehub-tile--overflow{ display: block; }
+
+    &.pinned .icon-pinned {
+      opacity: 1;
+
+      @include transform(translateY(0));
+    }
   }
 
   .approvedStatus {
