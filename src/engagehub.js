@@ -207,10 +207,10 @@ angular
        * @param type - jaki typ taga
        * @param keyword - tag do dodania
        */
-      function addTagToStream(sh, type, keyword) {
+      function addTagToStream(shId, type, keyword) {
         console.debug('[ Engagehub Service ] AddTagToStream');
 
-        return $http.post(URL + CONFIG.backend.engagehub.base + '/' + sh._id + '/keywords', {
+        return $http.post(URL + CONFIG.backend.engagehub.base + '/' + shId + '/keywords', {
             type: type,
             name: keyword,
             config: {},
