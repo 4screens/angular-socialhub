@@ -12,7 +12,6 @@ angular
       // FIXME: Normalization - change it to array ?
       var archived = {}; // Contains posts objects, after render are copied to results
       var results = []; // Collection of posts
-      var filtered = []; // Collections of filtered (hidden) posts
       var currentSocket, URL = '', mode = 'embed';
 
       function setDomain(domain) {
@@ -429,38 +428,6 @@ angular
         }
       }
 
-      // It will use isotope filter @what should be items class name
-      function filterPosts(cls) {
-        console.debug('[ Engagehub Service ] Filter');
-        $rootScope.$emit('isotopeFilter', cls);
-      }
-
-      // Passing no @id will resets filters, otherwhise @id will toggle filter for connection / keyword
-      // Filtered post still should stay in visibled array
-      // FIXME: FINISH IT
-      // function filterKeyword(value, channel) {
-      //   console.debug('[ Engagehub Service ] Filter connection');
-      //   if (!value || !channel) {
-      //     results = results.concat(filtered);
-      //     filtered.length = 0;
-      //     $rootScope.$emit('isotopeArrange');
-      //   }
-
-      //   // Check if there is a filter on that keyword
-      //   if (_.find(filtered, {_keyword: id})) {
-      //     // Toggle on
-
-      //   } else {
-      //     // Toggle off
-      //     filtered = filtered.concat(_.where(results, {: id}));
-      //     // results = _.reject(results, {_keyword: id});
-      //   }
-
-      //   console.log(value, channel, results, filtered);
-
-      //   $rootScope.$emit('isotopeArrange');
-      // }
-
       return {
         data: _data,
         setDomain: setDomain,
@@ -500,7 +467,6 @@ angular
         },
         setMode: setMode,
         mode: mode,
-        filterPosts: filterPosts,
         close: close
       };
     }

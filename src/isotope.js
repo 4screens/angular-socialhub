@@ -43,6 +43,11 @@ angular
         percentPosition: true,
         masonry: {
           columnWidth: '.engagehub-isotope-tile.not-featured'
+        },
+        sortBy: '[data-order]',
+        sortAscending: false,
+        filter: function(item) {
+          return item.className.indexOf('filter');
         }
       };
 
@@ -52,7 +57,8 @@ angular
           $timeout(function() {
             $timeout(function() {
               if (instance) {
-                instance.arrange();
+                // instance.updateSortData();
+                instance.arrange(options);
               }
 
               EngagehubInfinityService.enable();
@@ -62,35 +68,16 @@ angular
         });
       });
 
-      var unsubscribeIsotopeReload = $rootScope.$on('isotopeReload', function() {
+      var unsubscribeIsotope = $rootScope.$on('isotopeReload', function() {
         console.debug('[ Isotope ] On Reloaded');
         $timeout(function() {
           $timeout(function() {
             $timeout(function() {
               if (instance) {
+
+                // instance.updateSortData();
                 instance.reloadItems();
-                instance.arrange();
-              }
-
-              EngagehubInfinityService.enable();
-              $document.triggerHandler('scroll');
-            });
-          });
-        });
-      });
-
-      var unsubscribeIsotopeFilter = $rootScope.$on('isotopeFilter', function() {
-        console.debug('[ Isotope ] On Filter');
-
-        $timeout(function() {
-          $timeout(function() {
-            $timeout(function() {
-              if (instance) {
-                instance.arrange({
-                  filter: function(item) {
-                    return item.className.indexOf('filter');
-                  }
-                });
+                instance.arrange(options);
               }
 
               EngagehubInfinityService.enable();
@@ -127,17 +114,11 @@ angular
         instance = null;
       }
 
-      function filter(cls) {
-        console.debug('[ Isotope ] Filter');
-
-      }
-
       // public API
       return {
         init: init,
         addItem: addItem,
-        clean: clean,
-        filter: filter
+        clean: clean
       };
     }
   );

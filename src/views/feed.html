@@ -20,6 +20,7 @@
      ng-style="{ 'background-color': sh.config.theme.backgroundColor }">
   <article
     class="engagehub-tile engagehub-isotope-tile"
+    data-order="{{ post.pinned + '' + post.created }}"
     ng-repeat="post in engagehub.results.posts | orderBy: ['-pinned', '-post.created']"
     ng-class="{
       featured: post.featured,
