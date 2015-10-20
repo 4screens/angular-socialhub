@@ -274,25 +274,6 @@
       }
     }
 
-    &.commerce:before {
-      position: absolute;
-      display: inline-block;
-      right: 10px;
-      top: 5px;
-      font-family: 'FontAwesome';
-      font-size: 18px;
-      color: #fff;
-      text-shadow: 0 1px 2px #000;
-      z-index: 3;
-    }
-
-    &.commerce {
-      &:before {
-        content: "\f02b";
-        top: 30px;
-      }
-    }
-
     &.no-image {
       .engagehub-tile--text { display: table; }
 
@@ -307,7 +288,7 @@
 
     &:hover .engagehub-tile--overflow{ display: block; }
 
-    &.pinned .icon-pinned {
+    &.pinned .icon-pinned, &.commerce .icon-commerce {
       opacity: 1;
 
       @include transform(translateY(0));
