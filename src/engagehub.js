@@ -290,13 +290,6 @@ angular
           getPosts({page: page, status: currentPostsStatus}).then(function(posts) {
             complete.value = true;
             _.forEach(posts, function(post) {
-              // if (!posts.length) {
-              //   throttler = Math.min(Math.max(500, throttler * 2), 5000);
-              //   return;
-              // }
-
-              // console.log(_.indexOf(queue, post.id));
-              // console.log(post.id);
 
               if (_.indexOf(queue, post.id) === -1) {
                 archived[post.id] = post;
@@ -327,6 +320,7 @@ angular
             return postIndex >= visibled;
           });
 
+
           if (reload === false) {
             $rootScope.$emit('isotopeArrange');
           } else {
@@ -337,8 +331,8 @@ angular
           //   $document.unbind('scroll');
           // }
         }
+        // console.log(step, visibled, results.length, Object.keys(archived).length, queue.length, complete.value);
 
-        // console.log(visibled, results.length, Object.keys(archived).length, queue.length, complete.value);
       }
 
       // TODO: This is overkill, improve it to use renderVisibled here
@@ -382,7 +376,7 @@ angular
           newest.push(data.id);
 
           // There is no post shown so reneder some feed
-          if (visibled === 0) {
+          if (visibled === 0 && (currentPostsStatus === 1 || mode !== 'admin')) {
             renderNewest();
           }
         }
