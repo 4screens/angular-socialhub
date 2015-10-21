@@ -3,19 +3,19 @@ angular
   .factory('EngagehubInfinityService', function(engagehub) {
       'use strict';
 
-      var scrollHandler, available = true, offset = 0, step = 10;
+      var scrollHandler, available = true, offset = 0;
 
       function enable() {
         available = true;
       }
 
       scrollHandler = _.throttle(function(s, e, w) {
-        console.debug('[ InfinityService ] Scroll handler');
         return function() {
           if (w.innerHeight - e.prop('offsetTop') + w.scrollY + offset >= parseInt(e.css('height'), 10)) {
             if (available) {
+              console.debug('[ InfinityService ] Scroll handler');
               available = false;
-              engagehub.renderVisibled(step);
+              engagehub.renderVisibled(10);
             }
           }
         };

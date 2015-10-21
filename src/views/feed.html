@@ -1,7 +1,7 @@
 <link rel="stylesheet" type="text/css" data-ng-href="{{ cssUrl }}" />
 
 <!-- Load more -->
-<div ng-if="engagehub.newest.posts.length" class="engagehub-load-posts-wrapper" ng-style="{ 'background-color': sh.config.theme.backgroundColor }">
+<div ng-if="engagehub.newest.posts.length && subContent === 'new'" class="engagehub-load-posts-wrapper" ng-style="{ 'background-color': sh.config.theme.backgroundColor }">
   <button
     ng-click="engagehub.renderNewest()"
     ng-style="{
@@ -17,10 +17,13 @@
 <!--/Load more -->
 <!-- Stream -->
 <div class="engagehub-isotope engagehub-stream showApproved engagehub-background-color"
-     ng-style="{ 'background-color': sh.config.theme.backgroundColor }">
+     ng-style="{ 'background-color': sh.config.theme.backgroundColor }"
+     ng-if="engagehub.results.posts.length"
+  >
   <article
     class="engagehub-tile engagehub-isotope-tile"
-    ng-repeat="post in engagehub.results.posts | orderBy: ['-pinned', '-post.created']"
+    data-order="{{ post.pinned + '' + post.created }}"
+    ng-repeat="post in engagehub.results.posts"
     ng-class="{
       featured: post.featured,
       'not-featured': !post.featured,
@@ -128,7 +131,7 @@
             <i class="fa fa-external-link"></i>
           </span>
 
-          <span class="icon-mini" data-ng-click="addCommerceModal(post)">
+          <span class="icon-mini icon-commerce" data-ng-click="addCommerceModal(post)">
             <i class="fa fa-link"></i>
           </span>
 

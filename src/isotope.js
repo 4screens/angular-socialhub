@@ -43,6 +43,15 @@ angular
         percentPosition: true,
         masonry: {
           columnWidth: '.engagehub-isotope-tile.not-featured'
+        },
+        getSortData: {
+          order: '[data-order] parseInt'
+        },
+        sortAscending: false,
+        sortBy: 'order',
+        // sortAscending: false,
+        filter: function(item) {
+          return item.className.indexOf('filter');
         }
       };
 
@@ -51,50 +60,34 @@ angular
         $timeout(function() {
           $timeout(function() {
             $timeout(function() {
-              if (instance) {
-                instance.arrange();
-              }
+              //$rootScope.$applyAsync(function() {
+                if (instance) {
+                  instance.arrange(options);
+                  instance.updateSortData();
+                }
 
-              EngagehubInfinityService.enable();
-              $document.triggerHandler('scroll');
+                EngagehubInfinityService.enable();
+                // $document.triggerHandler('scroll');
+              // });
             });
           });
         });
       });
 
-      var unsubscribeIsotopeReload = $rootScope.$on('isotopeReload', function() {
+      var unsubscribeIsotope = $rootScope.$on('isotopeReload', function() {
         console.debug('[ Isotope ] On Reloaded');
         $timeout(function() {
           $timeout(function() {
             $timeout(function() {
               if (instance) {
+
                 instance.reloadItems();
-                instance.arrange();
+                instance.arrange(options);
+                instance.updateSortData();
               }
 
               EngagehubInfinityService.enable();
-              $document.triggerHandler('scroll');
-            });
-          });
-        });
-      });
-
-      var unsubscribeIsotopeFilter = $rootScope.$on('isotopeFilter', function() {
-        console.debug('[ Isotope ] On Filter');
-
-        $timeout(function() {
-          $timeout(function() {
-            $timeout(function() {
-              if (instance) {
-                instance.arrange({
-                  filter: function(item) {
-                    return item.className.indexOf('filter');
-                  }
-                });
-              }
-
-              EngagehubInfinityService.enable();
-              $document.triggerHandler('scroll');
+              // $document.triggerHandler('scroll');
             });
           });
         });
@@ -127,17 +120,11 @@ angular
         instance = null;
       }
 
-      function filter(cls) {
-        console.debug('[ Isotope ] Filter');
-
-      }
-
       // public API
       return {
         init: init,
         addItem: addItem,
-        clean: clean,
-        filter: filter
+        clean: clean
       };
     }
   );

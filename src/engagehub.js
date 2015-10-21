@@ -12,8 +12,13 @@ angular
       // FIXME: Normalization - change it to array ?
       var archived = {}; // Contains posts objects, after render are copied to results
       var results = []; // Collection of posts
-      var filtered = []; // Collections of filtered (hidden) posts
       var currentSocket, URL = '', mode = 'embed';
+
+      // Used by console, to get posts with specific status
+      // 1 - new
+      // 2 - approved
+      // 3 - declined
+      var currentPostsStatus = 1;
 
       function setDomain(domain) {
         URL = domain;
@@ -39,8 +44,7 @@ angular
           });
       }
 
-      function clearData() {
-        _data = {};
+      function clearData(onlyPosts) {
         queue.length = 0;
         newest.length = 0;
         results.length = 0;
@@ -48,6 +52,10 @@ angular
         complete.newest = true;
         visibled = 0;
         archived = {};
+
+        if (!onlyPosts) {
+          _data = {};
+        }
       }
 
       function setStreamId(id) {
@@ -279,16 +287,9 @@ angular
         if (visibled + step > _.size(archived) && complete.value) {
           complete.value = false;
 
-          getPosts({page: page}).then(function(posts) {
+          getPosts({page: page, status: currentPostsStatus}).then(function(posts) {
             complete.value = true;
             _.forEach(posts, function(post) {
-              // if (!posts.length) {
-              //   throttler = Math.min(Math.max(500, throttler * 2), 5000);
-              //   return;
-              // }
-
-              // console.log(_.indexOf(queue, post.id));
-              // console.log(post.id);
 
               if (_.indexOf(queue, post.id) === -1) {
                 archived[post.id] = post;
@@ -319,6 +320,7 @@ angular
             return postIndex >= visibled;
           });
 
+
           if (reload === false) {
             $rootScope.$emit('isotopeArrange');
           } else {
@@ -329,8 +331,8 @@ angular
           //   $document.unbind('scroll');
           // }
         }
+        // console.log(step, visibled, results.length, Object.keys(archived).length, queue.length, complete.value);
 
-        // console.log(visibled, results.length, Object.keys(archived).length, queue.length, complete.value);
       }
 
       // TODO: This is overkill, improve it to use renderVisibled here
@@ -345,7 +347,7 @@ angular
         } else {
           complete.newest = false;
 
-          getPosts({page: 0}).then(function(posts) {
+          getPosts({page: 0, status: currentPostsStatus}).then(function(posts) {
             complete.newest = true;
 
             _.forEach(posts, function(post) {
@@ -374,7 +376,7 @@ angular
           newest.push(data.id);
 
           // There is no post shown so reneder some feed
-          if (visibled === 0) {
+          if (visibled === 0 && (currentPostsStatus === 1 || mode !== 'admin')) {
             renderNewest();
           }
         }
@@ -429,37 +431,10 @@ angular
         }
       }
 
-      // It will use isotope filter @what should be items class name
-      function filterPosts(cls) {
-        console.debug('[ Engagehub Service ] Filter');
-        $rootScope.$emit('isotopeFilter', cls);
-      }
-
-      // Passing no @id will resets filters, otherwhise @id will toggle filter for connection / keyword
-      // Filtered post still should stay in visibled array
-      // FIXME: FINISH IT
-      // function filterKeyword(value, channel) {
-      //   console.debug('[ Engagehub Service ] Filter connection');
-      //   if (!value || !channel) {
-      //     results = results.concat(filtered);
-      //     filtered.length = 0;
-      //     $rootScope.$emit('isotopeArrange');
-      //   }
-
-      //   // Check if there is a filter on that keyword
-      //   if (_.find(filtered, {_keyword: id})) {
-      //     // Toggle on
-
-      //   } else {
-      //     // Toggle off
-      //     filtered = filtered.concat(_.where(results, {: id}));
-      //     // results = _.reject(results, {_keyword: id});
-      //   }
-
-      //   console.log(value, channel, results, filtered);
-
-      //   $rootScope.$emit('isotopeArrange');
-      // }
+      function changeCurrentPostsStatus(status) {
+        console.debug('[ Engagehub Service ] Change current posts status');
+        currentPostsStatus = status || 1;
+      };
 
       return {
         data: _data,
@@ -500,8 +475,8 @@ angular
         },
         setMode: setMode,
         mode: mode,
-        filterPosts: filterPosts,
-        close: close
+        close: close,
+        changeCurrentPostsStatus: changeCurrentPostsStatus
       };
     }
   );
