@@ -44,8 +44,12 @@ angular
         masonry: {
           columnWidth: '.engagehub-isotope-tile.not-featured'
         },
-        sortBy: '[data-order]',
+        getSortData: {
+          order: '[data-order] parseInt'
+        },
         sortAscending: false,
+        sortBy: 'order',
+        // sortAscending: false,
         filter: function(item) {
           return item.className.indexOf('filter');
         }
@@ -53,38 +57,40 @@ angular
 
       var unsubscribeIsotopeArrange = $rootScope.$on('isotopeArrange', function() {
         console.debug('[ Isotope ] On Arrange');
-        $timeout(function() {
-          $timeout(function() {
-            $timeout(function() {
-              if (instance) {
-                // instance.updateSortData();
-                instance.arrange(options);
-              }
+        // $timeout(function() {
+        //   $timeout(function() {
+        //     $timeout(function() {
+              //$rootScope.$applyAsync(function() {
+                if (instance) {
+                  instance.arrange(options);
+                  instance.updateSortData();
+                }
 
-              EngagehubInfinityService.enable();
-              $document.triggerHandler('scroll');
-            });
-          });
-        });
+                EngagehubInfinityService.enable();
+                $document.triggerHandler('scroll');
+              // });
+        //     });
+        //   });
+        // });
       });
 
       var unsubscribeIsotope = $rootScope.$on('isotopeReload', function() {
         console.debug('[ Isotope ] On Reloaded');
-        $timeout(function() {
-          $timeout(function() {
-            $timeout(function() {
+        // $timeout(function() {
+        //   $timeout(function() {
+        //     $timeout(function() {
               if (instance) {
 
-                // instance.updateSortData();
                 instance.reloadItems();
                 instance.arrange(options);
+                instance.updateSortData();
               }
 
               EngagehubInfinityService.enable();
               $document.triggerHandler('scroll');
-            });
-          });
-        });
+        //     });
+        //   });
+        // });
       });
 
       function init(element) {

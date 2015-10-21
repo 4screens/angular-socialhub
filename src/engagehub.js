@@ -14,6 +14,12 @@ angular
       var results = []; // Collection of posts
       var currentSocket, URL = '', mode = 'embed';
 
+      // Used by console, to get posts with specific status
+      // 1 - new
+      // 2 - approved
+      // 3 - declined
+      var currentPostsStatus = 1;
+
       function setDomain(domain) {
         URL = domain;
       }
@@ -38,8 +44,7 @@ angular
           });
       }
 
-      function clearData() {
-        _data = {};
+      function clearData(onlyPosts) {
         queue.length = 0;
         newest.length = 0;
         results.length = 0;
@@ -47,6 +52,10 @@ angular
         complete.newest = true;
         visibled = 0;
         archived = {};
+
+        if (!onlyPosts) {
+          _data = {};
+        }
       }
 
       function setStreamId(id) {
@@ -278,7 +287,7 @@ angular
         if (visibled + step > _.size(archived) && complete.value) {
           complete.value = false;
 
-          getPosts({page: page}).then(function(posts) {
+          getPosts({page: page, status: currentPostsStatus}).then(function(posts) {
             complete.value = true;
             _.forEach(posts, function(post) {
               // if (!posts.length) {
@@ -344,7 +353,7 @@ angular
         } else {
           complete.newest = false;
 
-          getPosts({page: 0}).then(function(posts) {
+          getPosts({page: 0, status: currentPostsStatus}).then(function(posts) {
             complete.newest = true;
 
             _.forEach(posts, function(post) {
@@ -428,6 +437,11 @@ angular
         }
       }
 
+      function changeCurrentPostsStatus(status) {
+        console.debug('[ Engagehub Service ] Change current posts status');
+        currentPostsStatus = status || 1;
+      };
+
       return {
         data: _data,
         setDomain: setDomain,
@@ -467,7 +481,8 @@ angular
         },
         setMode: setMode,
         mode: mode,
-        close: close
+        close: close,
+        changeCurrentPostsStatus: changeCurrentPostsStatus
       };
     }
   );
