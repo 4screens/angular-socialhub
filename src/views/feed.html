@@ -1,7 +1,7 @@
 <link rel="stylesheet" type="text/css" data-ng-href="{{ cssUrl }}" />
 
 <!-- Load more -->
-<div ng-if="engagehub.newest.posts.length" class="engagehub-load-posts-wrapper" ng-style="{ 'background-color': sh.config.theme.backgroundColor }">
+<div ng-if="engagehub.newest.posts.length && subContent === 'new'" class="engagehub-load-posts-wrapper" ng-style="{ 'background-color': sh.config.theme.backgroundColor }">
   <button
     ng-click="engagehub.renderNewest()"
     ng-style="{
