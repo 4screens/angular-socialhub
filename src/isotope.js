@@ -57,9 +57,9 @@ angular
 
       var unsubscribeIsotopeArrange = $rootScope.$on('isotopeArrange', function() {
         console.debug('[ Isotope ] On Arrange');
-        // $timeout(function() {
-        //   $timeout(function() {
-        //     $timeout(function() {
+        $timeout(function() {
+          $timeout(function() {
+            $timeout(function() {
               //$rootScope.$applyAsync(function() {
                 if (instance) {
                   instance.arrange(options);
@@ -67,18 +67,18 @@ angular
                 }
 
                 EngagehubInfinityService.enable();
-                $document.triggerHandler('scroll');
+                // $document.triggerHandler('scroll');
               // });
-        //     });
-        //   });
-        // });
+            });
+          });
+        });
       });
 
       var unsubscribeIsotope = $rootScope.$on('isotopeReload', function() {
         console.debug('[ Isotope ] On Reloaded');
-        // $timeout(function() {
-        //   $timeout(function() {
-        //     $timeout(function() {
+        $timeout(function() {
+          $timeout(function() {
+            $timeout(function() {
               if (instance) {
 
                 instance.reloadItems();
@@ -87,10 +87,10 @@ angular
               }
 
               EngagehubInfinityService.enable();
-              $document.triggerHandler('scroll');
-        //     });
-        //   });
-        // });
+              // $document.triggerHandler('scroll');
+            });
+          });
+        });
       });
 
       function init(element) {
