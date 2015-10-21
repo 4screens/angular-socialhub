@@ -17,7 +17,9 @@
 <!--/Load more -->
 <!-- Stream -->
 <div class="engagehub-isotope engagehub-stream showApproved engagehub-background-color"
-     ng-style="{ 'background-color': sh.config.theme.backgroundColor }">
+     ng-style="{ 'background-color': sh.config.theme.backgroundColor }"
+     ng-if="engagehub.results.posts.length"
+  >
   <article
     class="engagehub-tile engagehub-isotope-tile"
     data-order="{{ post.pinned + '' + post.created }}"
