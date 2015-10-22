@@ -15,40 +15,42 @@
         </span>
         </a>
       </div>
-      <figcaption class="engagehub-tile--signature">
+      <figcaption class="engagehub-iframe--signature">
         <div class="engagehub-tile--signature-avatar">
           <img data-ng-src="{{ detail.user.avatar }}" alt="" class="img-responsive" />
           <span class="name"
                 ng-bind-html="detail.user.name"
                 ng-style="{
-              'font-family': sh.config.theme.authorFont,
-              'color': sh.config.theme.authorColor
-            }"
+                  'font-family': sh.config.theme.authorFont,
+                  'color': sh.config.theme.authorColor
+                }"
           ></span>
           <span class="time" am-time-ago="detail.publish"></span>
         </div>
       </figcaption>
-      <div class="engagehub-tile--fullimage" data-ng-if="detail.image || detail.video">
+      <div class="engagehub-iframe--fullimage" data-ng-if="detail.image || detail.video">
+
         <img data-ng-src="{{ detail.image }}" alt="" data-ng-if="!detail.video" class="img-responsive"/>
-        <videogular data-ng-if="!!detail.video">
-          <vg-video vg-src="detail.video"></vg-video>
+        <videogular ng-if="detail.video">
+          <vg-media vg-src="detail.video"></vg-media>
           <vg-buffering></vg-buffering>
           <vg-controls vg-autohide="true" vg-autohide-time="1000">
             <vg-play-pause-button></vg-play-pause-button>
-            <vg-timedisplay>{{ currentTime | date:'mm:ss' }}</vg-timedisplay>
-            <vg-scrubBar>
-              <vg-scrubbarcurrenttime></vg-scrubbarcurrenttime>
-            </vg-scrubBar>
-            <vg-timedisplay>{{ timeLeft | date:'mm:ss' }}</vg-timedisplay>
-            <vg-timedisplay>{{ totalTime | date:'mm:ss' }}</vg-timedisplay>
+            <vg-time-display>{{ currentTime | date:'mm:ss':'+0000' }}</vg-time-display>
+            <vg-scrub-bar>
+              <vg-scrub-bar-current-time></vg-scrub-bar-current-time>
+            </vg-scrub-bar>
+            <vg-time-display>{{ timeLeft | date:'mm:ss':'+0000' }}</vg-time-display>
+            <vg-time-display>{{ totalTime | date:'mm:ss':'+0000' }}</vg-time-display>
             <vg-volume>
-              <vg-mutebutton></vg-mutebutton>
-              <vg-volumebar></vg-volumebar>
+              <vg-mute-button></vg-mute-button>
+              <vg-volume-bar></vg-volume-bar>
             </vg-volume>
-            <vg-fullscreenButton></vg-fullscreenButton>
+
+            <vg-fullscreen-button></vg-fullscreen-button>
           </vg-controls>
           <vg-overlay-play></vg-overlay-play>
-          <vg-poster-image vg-url="detail.image"></vg-poster-image>
+          <vg-poster vg-url="detail.image"></vg-poster>
         </videogular>
       </div>
 

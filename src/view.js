@@ -1,5 +1,16 @@
 angular
-  .module('4screen.engagehub.view', ['4screen.engagehub.service', '4screen.engagehub.isotope', '4screen.engagehub.infinity', 'ngLoad'])
+  .module('4screen.engagehub.view', [
+    '4screen.engagehub.service',
+    '4screen.engagehub.isotope',
+    '4screen.engagehub.infinity',
+    'com.2fdevs.videogular',
+    'com.2fdevs.videogular.plugins.controls',
+    'com.2fdevs.videogular.plugins.overlayplay',
+    'com.2fdevs.videogular.plugins.poster',
+    'com.2fdevs.videogular.plugins.buffering',
+    'info.vietnamcode.nampnq.videogular.plugins.youtube',
+    'ngLoad'
+  ])
   .controller('EngagehubVievController',
     function($rootScope, $scope, $sce, engagehub, $timeout, CONFIG) {
       'use strict';
@@ -44,8 +55,21 @@ angular
 
         // video ???
         if (post.post.type === 'video') {
+          var videoUrl;
+
+          if (post.post.video.format) {
+            videoUrl = post.post.video.format.small ? post.post.video.format.small.source : videoUrl;
+            videoUrl = post.post.video.format.medium ? post.post.video.format.medium.source : videoUrl;
+            videoUrl = post.post.video.format.large ? post.post.video.format.large.source : videoUrl;
+          }
+
+          // It's youtube and no link so far, let's build link
+          if (!videoUrl && post.post.video.providerId && post.post.video.provider === 'youtube') {
+            videoUrl = 'https://www.youtube.com/watch?v=' + providerId;
+          }
+
           $scope.detail.video = [{
-            src: $sce.trustAsResourceUrl(post.post.video.source),
+            src: $sce.trustAsResourceUrl(videoUrl),
             type: 'video/mp4'
           }];
         }
