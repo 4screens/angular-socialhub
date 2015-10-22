@@ -42,8 +42,6 @@
 
     float: left;
     position: relative;
-    left: -100%;
-    top: -100%;
     width: 100%;
     padding: 3.5px;
     margin: 0;
@@ -120,7 +118,7 @@
         color: #fff;
 
         >* {
-          padding: $paddingLg / 2 0;
+          padding: $paddingLg 0;
           width: calc(100% - #{$paddingLg * 2});
           margin: 0 auto;
         }
@@ -351,6 +349,9 @@
     max-width: 550px;
     margin: 0 auto;
     background-color: #fff;
+  }
+  &--signature {
+    padding: 12px;
   }
 }
 
