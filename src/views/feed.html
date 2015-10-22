@@ -92,13 +92,6 @@
       </figcaption>
     </figure>
 
-    <div class="approvedStatus"
-         data-ng-class="{
-        'btn-success': post.approved === 2,
-        'btn-danger': post.approved === 3
-      }"
-    ></div>
-
     <div class="engagehub-tile--overflow" data-ng-class="{approved: post.approved, 'not-approved': !post.approved}">
       <div class="engagehub-tile--overflow-mask" data-ng-click="openModal(post)"></div>
         <div class="details clearfix text-center">
