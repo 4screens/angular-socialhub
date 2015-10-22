@@ -118,7 +118,7 @@
         color: #fff;
 
         >* {
-          padding: $paddingLg / 2 0;
+          padding: $paddingLg 0;
           width: calc(100% - #{$paddingLg * 2});
           margin: 0 auto;
         }
