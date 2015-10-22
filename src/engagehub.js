@@ -114,6 +114,7 @@ angular
       }
 
       function removeLocalPost(postId) {
+
         _.remove(queue, function(v) {
           return v === postId;
         });
@@ -127,8 +128,6 @@ angular
         });
 
         visibled = results.length;
-
-        $rootScope.$emit('isotopeArrange');
       }
 
       function changeCommerce(shId, postId, commerce) {
