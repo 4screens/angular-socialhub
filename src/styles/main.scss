@@ -130,7 +130,7 @@
     }
 
     &--signature {
-      padding: $paddingMd * 2 $paddingMd * 2;
+      padding: $paddingMd * 2;
       position: relative;
       min-height: 65px;
 
@@ -169,6 +169,7 @@
         line-height: 1.4em;
         word-wrap: break-word;
         padding-top: $paddingMd * 2;
+        padding-right: 33px;
       }
     }
 
@@ -306,6 +307,7 @@
 
 .engagehub-stream {
   position: relative;
+
 }
 
 .engagehub-iframe {
@@ -354,7 +356,7 @@
     background-color: #fff;
   }
   &--signature {
-    padding: 12px 45px 12px 12px;
+    padding: 12px;
   }
 }
 
