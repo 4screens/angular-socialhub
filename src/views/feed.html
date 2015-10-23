@@ -76,7 +76,7 @@
         </div>
 
         <a ng-if="post.commerce && post.commerce.url && post.commerce.text"
-          ng-href="post.commerce.url"
+          ng-href="{{ post.commerce.url }}"
           title="{{ post.commerce.text }}"
           target="_blank" rel="nofollow"
           ng-style="{

@@ -55,7 +55,7 @@
       </div>
 
       <a ng-if="detail.commerce"
-        ng-href="detail.commerce.url"
+        ng-href="{{ detail.commerce.url }}"
         title="{{ detail.commerce.text }}"
         ng-style="{
           'color': sh.config.theme.buttonColor,
