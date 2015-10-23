@@ -214,12 +214,13 @@ angular
        * @param type - jaki typ taga
        * @param keyword - tag do dodania
        */
-      function addTagToStream(shId, type, keyword) {
+      function addTagToStream(shId, type, keyword, moderation) {
         console.debug('[ Engagehub Service ] AddTagToStream');
 
         return $http.post(URL + CONFIG.backend.engagehub.base + '/' + shId + '/keywords', {
             type: type,
             name: keyword,
+            moderation: moderation,
             config: {},
 
             // New stuff
@@ -227,6 +228,13 @@ angular
             channel: type,
             channelContentType: type === 'facebook' ? 'page' : 'tag'
           });
+      }
+      function updateTag(shId, id, moderation) {
+        console.debug('[ Engagehub Service ] Update tag');
+
+        return $http.post(URL + CONFIG.backend.engagehub.base + '/' + shId + '/keywords/' + id, {
+          moderation: moderation
+        });
       }
 
       function removeTagFromStream(sh, keyword) {
@@ -455,6 +463,7 @@ angular
           remove: removeStreamGroup,
           tags: {
             add: addTagToStream,
+            update: updateTag,
             remove: removeTagFromStream
           },
           get: getStreams
