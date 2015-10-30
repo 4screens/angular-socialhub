@@ -407,7 +407,11 @@ angular
         console.debug('[ Socket ] New post');
 
         if (mode === 'admin' || data.approved === 2) {
-          newest.push(data.id);
+          // I hate myself for this
+
+          for (var i = 0; i < data.hidden; i++) {
+            newest.push(data.id);
+          }
 
           // There is no post shown so reneder some feed
           if (visibled === 0 && (currentPostsStatus === 1 || mode !== 'admin')) {
@@ -445,7 +449,7 @@ angular
         });
 
         // New post
-        currentSocket.on('socialhub:newPost', socketOnNewPost);
+        currentSocket.on('socialhub:newPosts', socketOnNewPost);
 
         // Post update
         // currentSocket.on('socialhub:updatePost', socketOnUpdatePost);
@@ -468,7 +472,7 @@ angular
       function changeCurrentPostsStatus(status) {
         console.debug('[ Engagehub Service ] Change current posts status');
         currentPostsStatus = status || 1;
-      };
+      }
 
       return {
         data: _data,
