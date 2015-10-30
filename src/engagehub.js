@@ -208,27 +208,54 @@ angular
         return $http.delete(URL + CONFIG.backend.engagehub.base + '/' + sh._id);
       }
 
+      function tryAddTagToStream(shId, type, keyword, moderation) {
+        console.debug('[ Engagehub Service ] TryAddTagToStream');
+
+        var channelType = type === 'facebook' ? 'page' : 'tag';
+
+        if (channelType !== 'tag') {
+          return checkKeywordAccessability(type, channelType, keyword).then(function(res) {
+            return addTagToStream(shId, type, channelType, keyword, moderation, res.data.id);
+          });
+        }
+
+        return addTagToStream(shId, type, channelType, keyword, moderation);
+      }
+
       /**
        * dodaje taga do stream-a z defaultowym konfigiem, access_tokeny bierze z servisu auth
        * @param sh - stream do którego ma dodać
        * @param type - jaki typ taga
        * @param keyword - tag do dodania
        */
-      function addTagToStream(shId, type, keyword, moderation) {
+      function addTagToStream(shId, type, channelType, keyword, moderation, pageId) {
         console.debug('[ Engagehub Service ] AddTagToStream');
 
-        return $http.post(URL + CONFIG.backend.engagehub.base + '/' + shId + '/keywords', {
+        return $http.post(URL + CONFIG.backend.engagehub.addNewKeyword.replace(':id', shId), {
             type: type,
             name: keyword,
-            moderation: moderation,
-            config: {},
+            config: {
+              moderation: moderation
+            },
 
             // New stuff
-            value: keyword,
+            value: pageId || keyword,
             channel: type,
-            channelContentType: type === 'facebook' ? 'page' : 'tag'
+            channelContentType: channelType
           });
       }
+
+      function checkKeywordAccessability(type, channelType, keyword) {
+        console.debug('[ Engagehub Service ] CheckKeywordAccessability');
+
+        var requestPath = CONFIG.backend.engagehub.checkKeywordAccessability
+                            .replace(':channel', type)
+                            .replace(':channelType', channelType)
+                            .replace(':value', keyword);
+
+        return $http.get(URL + requestPath);
+      }
+
       function updateTag(shId, id, moderation) {
         console.debug('[ Engagehub Service ] Update tag');
 
@@ -380,7 +407,11 @@ angular
         console.debug('[ Socket ] New post');
 
         if (mode === 'admin' || data.approved === 2) {
-          newest.push(data.id);
+          // I hate myself for this
+
+          for (var i = 0; i < data.hidden; i++) {
+            newest.push(data.id);
+          }
 
           // There is no post shown so reneder some feed
           if (visibled === 0 && (currentPostsStatus === 1 || mode !== 'admin')) {
@@ -418,7 +449,7 @@ angular
         });
 
         // New post
-        currentSocket.on('socialhub:newPost', socketOnNewPost);
+        currentSocket.on('socialhub:newPosts', socketOnNewPost);
 
         // Post update
         // currentSocket.on('socialhub:updatePost', socketOnUpdatePost);
@@ -441,7 +472,7 @@ angular
       function changeCurrentPostsStatus(status) {
         console.debug('[ Engagehub Service ] Change current posts status');
         currentPostsStatus = status || 1;
-      };
+      }
 
       return {
         data: _data,
@@ -462,7 +493,7 @@ angular
           create: createStreamGroup,
           remove: removeStreamGroup,
           tags: {
-            add: addTagToStream,
+            add: tryAddTagToStream,
             update: updateTag,
             remove: removeTagFromStream
           },
