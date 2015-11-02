@@ -6,7 +6,8 @@ angular
 
       var _data = {}, streamId = null, visibled = 0, pack = 50;
       var complete = {value: true, newest: true}; // Spinner
-      var queue = [], newest = [];  // Array of id's
+      var queue = [];  // Array of id's
+      var newest = {value: 0}; // Number of new posts
       //var throttler = 500; // Time (msc) used to throttle renderVisibled posts in public service api
 
       // FIXME: Normalization - change it to array ?
@@ -18,7 +19,7 @@ angular
       // 1 - new
       // 2 - approved
       // 3 - declined
-      var currentPostsStatus = 1;
+      var currentPostsStatus = 2;
 
       function setDomain(domain) {
         URL = domain;
@@ -46,11 +47,11 @@ angular
 
       function clearData(onlyPosts) {
         queue.length = 0;
-        newest.length = 0;
         results.length = 0;
         complete.value = true;
         complete.newest = true;
         visibled = 0;
+        newest.value = 0;
         archived = {};
 
         if (!onlyPosts) {
@@ -64,7 +65,7 @@ angular
         visibled = 0;
 
         queue.length = 0;
-        newest.length = 0;
+        newest.value = 0;
         results.length = 0;
         archived = {};
 
@@ -328,9 +329,6 @@ angular
               if (_.indexOf(queue, post.id) === -1) {
                 archived[post.id] = post;
                 queue.push(post.id);
-
-                // Update newest
-                newest.splice(newest.indexOf(post.id), 1);
               }
 
             });
@@ -374,19 +372,19 @@ angular
         console.debug('[ Engagehub Service ] Render newest');
 
         // More than pack ?
-        if (newest.length > pack) {
-          newest.length = 0;
+        if (newest.value > pack) {
+          newest.value = 0;
           clearData();
-          renderVisibled(10, true);
+          renderVisibled(newest.value, true);
         } else {
           complete.newest = false;
 
-          getPosts({page: 0, status: currentPostsStatus}).then(function(posts) {
+          getPosts({page: 0, status: currentPostsStatus, ammount: newest.value}).then(function(posts) {
             complete.newest = true;
+            newest.value = 0;
 
             _.forEach(posts, function(post) {
               if (_.indexOf(queue, post.id) === -1) {
-                newest.length = 0;
                 results.unshift(post);
                 archived[post.id] = post;
                 queue.push(post.id);
@@ -397,7 +395,7 @@ angular
             });
 
           }).catch(function() {
-            newest.length = 0;
+            newest.value = 0;
             complete.newest = true;
           });
         }
@@ -406,11 +404,12 @@ angular
       function socketOnNewPost(data) {
         console.debug('[ Socket ] New post');
 
-        if (mode === 'admin' || data.approved === 2) {
-          // I hate myself for this
+        if (currentPostsStatus === 1 || currentPostsStatus === 2) {
 
-          for (var i = 0; i < data.hidden; i++) {
-            newest.push(data.id);
+          if (currentPostsStatus === 1) {
+            newest.value = data.hidden;
+          } else {
+            newest.value = data.approved;
           }
 
           // There is no post shown so reneder some feed
@@ -457,6 +456,7 @@ angular
 
       function setMode(m) {
         mode = m;
+        currentPostsStatus = 1;
       }
 
       // Executed on scope destroy
@@ -505,9 +505,7 @@ angular
         renderVisibled: renderVisibled,
         renderNewest: _.throttle(renderNewest, 500),
         removeLocalPost: removeLocalPost,
-        newest: {
-          posts: newest
-        },
+        newest: newest,
         complete: complete,
         results: {
           posts: results
