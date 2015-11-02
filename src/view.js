@@ -81,7 +81,7 @@ angular
         };
 
         // time
-        $scope.detail.publish = post.created;
+        $scope.detail.publish = post.created * 1000;
 
         // message
         $scope.detail.message = post.post.message || post.post.description || post.post.caption || post.post.story;
