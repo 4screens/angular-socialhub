@@ -272,13 +272,13 @@ angular
           .then(function(data) {
 
             // Remove posts
-            _.forEach(archived, function(post) {
-              if (post.source.channel === keyword.channel && post.source.value === keyword.value) {
-                removeLocalPost(post.id);
-              }
+            _.forEach([archived, results], function(e) {
+              _.forEach(e, function(post) {
+                if (post.source.channel === keyword.channel && post.source.value === keyword.value) {
+                  removeLocalPost(post.id);
+                }
+              });
             });
-
-            $rootScope.$emit('isotopeReload');
           });
       }
 
