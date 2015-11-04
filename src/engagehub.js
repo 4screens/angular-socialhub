@@ -1,12 +1,13 @@
 angular
   .module('4screen.engagehub.service', [])
   .factory('engagehub',
-    function(CONFIG, $rootScope, $http, $q, CommonSocketService, $document, $window) {
+    function(CONFIG, $rootScope, $http, $q, $timeout, CommonSocketService, $document, $window) {
       'use strict';
 
       var _data = {}, streamId = null, visibled = 0, pack = 50;
       var complete = {value: true, newest: true}; // Spinner
       var queue = [];  // Array of id's
+
       var newest = {value: 0}; // Number of new posts
       //var throttler = 500; // Time (msc) used to throttle renderVisibled posts in public service api
 
@@ -267,8 +268,7 @@ angular
 
       function removeTagFromStream(sh, keyword) {
         console.debug('[ Engagehub Service ] RemoveTagFromStream');
-        return $http.delete(URL + CONFIG.backend.engagehub.base +
-            '/' + sh._id + '/keywords/' + keyword._id)
+        return $http.delete(URL + CONFIG.backend.engagehub.base + '/' + sh._id + '/keywords/' + keyword._id)
           .then(function(data) {
 
             // Remove posts
@@ -419,21 +419,58 @@ angular
         }
       }
 
-      // function socketOnUpdatePost(data) {
-      //   console.debug('[ Socket ] Update post');
-      //   if (_.indexOf(queue, data.id) !== -1) {
-      //     // Update
-      //     queue[data.id].featured = data.featured;
-      //     queue[data.id].pinned = data.pinned;
-      //     queue[data.id].approved = data.approved;
+      function socketOnUpdatePost(data) {
+        console.debug('[ Socket ] Update post ' + data.id);
+        if (mode !== 'admin') {
+          var resultsPostIndex = _.findIndex(results, {id: data.id});
+          var archivedPost = archived[data.id];
+          var resultsPost = resultsPostIndex !== -1 ? results[resultsPostIndex] : null;
 
-      //     // Need DOM change ?
-      //     if (data.approved !== 2 && mode === 'embed') {
-      //       removeLocalPost(data.id);
-      //     }
-      //     $rootScope.$emit('IsotopeArrange');
-      //   }
-      // }
+          if (archivedPost) {
+
+            // Approve changed, just remove local post
+            if (archivedPost.approved !== data.approved) {
+
+              // Declined
+              if (data.approved === 3) {
+                removeLocalPost(data.id);
+
+                if (resultsPost) $rootScope.$emit('isotopeReload');
+              }
+
+              // Approved - post dont exists in archived array
+              return;
+            }
+
+            // Update archived
+            archivedPost.featured = data.featured;
+            archivedPost.pinned = data.pinned;
+
+            // Update results
+            if (resultsPost) {
+              resultsPost.featured = data.featured;
+              resultsPost.pinned = data.pinned;
+
+              // Rearange
+              $timeout(function() {
+                $rootScope.$emit('isotopeArrange');
+              }, 3000);
+            }
+          } else {
+            // Approved 3 -> 2
+            if (data.approved === 2) {
+              getPost(data.id).then(function(post) {
+                results.unshift(post);
+                archived[post.id] = post;
+                queue.push(post.id);
+                visibled++;
+
+                $rootScope.$emit('isotopeArrange');
+              });
+            }
+          }
+        }
+      }
 
       function connectSocketIo() {
         if (currentSocket) {
@@ -451,7 +488,7 @@ angular
         currentSocket.on('socialhub:newPosts', socketOnNewPost);
 
         // Post update
-        // currentSocket.on('socialhub:updatePost', socketOnUpdatePost);
+        currentSocket.on('socialhub:updatePost', socketOnUpdatePost);
       }
 
       function setMode(m) {
