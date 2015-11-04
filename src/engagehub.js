@@ -433,9 +433,12 @@ angular
 
               // Declined
               if (data.approved === 3) {
-                removeLocalPost(data.id);
-
-                if (resultsPost) $rootScope.$emit('isotopeReload');
+                if (resultsPost) {
+                  removeLocalPost(data.id);
+                  $rootScope.$emit('isotopeReload');
+                } else {
+                  removeLocalPost(data.id);
+                }
               }
 
               // Approved - post dont exists in archived array
@@ -472,6 +475,22 @@ angular
         }
       }
 
+      function socketOnDeletePost(id) {
+        console.debug('[ Socket ] Delete post ' + id);
+
+        if (mode !== 'admin') {
+          var resultsPostIndex = _.findIndex(results, {id: id});
+          var resultsPost = resultsPostIndex !== -1 ? results[resultsPostIndex] : null;
+
+          if (resultsPost) {
+            removeLocalPost(id);
+            $rootScope.$emit('isotopeReload');
+          } else {
+            removeLocalPost(id);
+          }
+        }
+      }
+
       function connectSocketIo() {
         if (currentSocket) {
           console.debug('[ Socket ] Found one, disconnect');
@@ -489,6 +508,9 @@ angular
 
         // Post update
         currentSocket.on('socialhub:updatePost', socketOnUpdatePost);
+
+        // Post delete
+        currentSocket.on('socialhub:deletePost', socketOnDeletePost);
       }
 
       function setMode(m) {
@@ -509,6 +531,7 @@ angular
       function changeCurrentPostsStatus(status) {
         console.debug('[ Engagehub Service ] Change current posts status');
         currentPostsStatus = status || 1;
+        newest.value = 0;
       }
 
       return {
