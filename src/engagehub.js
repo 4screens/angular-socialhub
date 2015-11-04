@@ -1,12 +1,14 @@
 angular
   .module('4screen.engagehub.service', [])
   .factory('engagehub',
-    function(CONFIG, $rootScope, $http, $q, CommonSocketService, $document, $window) {
+    function(CONFIG, $rootScope, $http, $q, $timeout, CommonSocketService, $document, $window) {
       'use strict';
 
       var _data = {}, streamId = null, visibled = 0, pack = 50;
       var complete = {value: true, newest: true}; // Spinner
-      var queue = [], newest = [];  // Array of id's
+      var queue = [];  // Array of id's
+
+      var newest = {value: 0}; // Number of new posts
       //var throttler = 500; // Time (msc) used to throttle renderVisibled posts in public service api
 
       // FIXME: Normalization - change it to array ?
@@ -18,7 +20,7 @@ angular
       // 1 - new
       // 2 - approved
       // 3 - declined
-      var currentPostsStatus = 1;
+      var currentPostsStatus = 2;
 
       function setDomain(domain) {
         URL = domain;
@@ -46,11 +48,11 @@ angular
 
       function clearData(onlyPosts) {
         queue.length = 0;
-        newest.length = 0;
         results.length = 0;
         complete.value = true;
         complete.newest = true;
         visibled = 0;
+        newest.value = 0;
         archived = {};
 
         if (!onlyPosts) {
@@ -64,7 +66,7 @@ angular
         visibled = 0;
 
         queue.length = 0;
-        newest.length = 0;
+        newest.value = 0;
         results.length = 0;
         archived = {};
 
@@ -266,18 +268,17 @@ angular
 
       function removeTagFromStream(sh, keyword) {
         console.debug('[ Engagehub Service ] RemoveTagFromStream');
-        return $http.delete(URL + CONFIG.backend.engagehub.base +
-            '/' + sh._id + '/keywords/' + keyword._id)
+        return $http.delete(URL + CONFIG.backend.engagehub.base + '/' + sh._id + '/keywords/' + keyword._id)
           .then(function(data) {
 
             // Remove posts
-            _.forEach(archived, function(post) {
-              if (post.source.channel === keyword.channel && post.source.value === keyword.value) {
-                removeLocalPost(post.id);
-              }
+            _.forEach([archived, results], function(e) {
+              _.forEach(e, function(post) {
+                if (post.source.channel === keyword.channel && post.source.value === keyword.value) {
+                  removeLocalPost(post.id);
+                }
+              });
             });
-
-            $rootScope.$emit('isotopeReload');
           });
       }
 
@@ -328,9 +329,6 @@ angular
               if (_.indexOf(queue, post.id) === -1) {
                 archived[post.id] = post;
                 queue.push(post.id);
-
-                // Update newest
-                newest.splice(newest.indexOf(post.id), 1);
               }
 
             });
@@ -374,19 +372,19 @@ angular
         console.debug('[ Engagehub Service ] Render newest');
 
         // More than pack ?
-        if (newest.length > pack) {
-          newest.length = 0;
+        if (newest.value > pack) {
+          newest.value = 0;
           clearData();
-          renderVisibled(10, true);
+          renderVisibled(newest.value, true);
         } else {
           complete.newest = false;
 
-          getPosts({page: 0, status: currentPostsStatus}).then(function(posts) {
+          getPosts({page: 0, status: currentPostsStatus, ammount: newest.value}).then(function(posts) {
             complete.newest = true;
+            newest.value = 0;
 
             _.forEach(posts, function(post) {
               if (_.indexOf(queue, post.id) === -1) {
-                newest.length = 0;
                 results.unshift(post);
                 archived[post.id] = post;
                 queue.push(post.id);
@@ -397,7 +395,7 @@ angular
             });
 
           }).catch(function() {
-            newest.length = 0;
+            newest.value = 0;
             complete.newest = true;
           });
         }
@@ -406,11 +404,12 @@ angular
       function socketOnNewPost(data) {
         console.debug('[ Socket ] New post');
 
-        if (mode === 'admin' || data.approved === 2) {
-          // I hate myself for this
+        if (currentPostsStatus === 1 || currentPostsStatus === 2) {
 
-          for (var i = 0; i < data.hidden; i++) {
-            newest.push(data.id);
+          if (currentPostsStatus === 1) {
+            newest.value = data.hidden;
+          } else {
+            newest.value = data.approved;
           }
 
           // There is no post shown so reneder some feed
@@ -420,21 +419,77 @@ angular
         }
       }
 
-      // function socketOnUpdatePost(data) {
-      //   console.debug('[ Socket ] Update post');
-      //   if (_.indexOf(queue, data.id) !== -1) {
-      //     // Update
-      //     queue[data.id].featured = data.featured;
-      //     queue[data.id].pinned = data.pinned;
-      //     queue[data.id].approved = data.approved;
+      function socketOnUpdatePost(data) {
+        console.debug('[ Socket ] Update post ' + data.id);
+        if (mode !== 'admin') {
+          var resultsPostIndex = _.findIndex(results, {id: data.id});
+          var archivedPost = archived[data.id];
+          var resultsPost = resultsPostIndex !== -1 ? results[resultsPostIndex] : null;
 
-      //     // Need DOM change ?
-      //     if (data.approved !== 2 && mode === 'embed') {
-      //       removeLocalPost(data.id);
-      //     }
-      //     $rootScope.$emit('IsotopeArrange');
-      //   }
-      // }
+          if (archivedPost) {
+
+            // Approve changed, just remove local post
+            if (archivedPost.approved !== data.approved) {
+
+              // Declined
+              if (data.approved === 3) {
+                if (resultsPost) {
+                  removeLocalPost(data.id);
+                  $rootScope.$emit('isotopeReload');
+                } else {
+                  removeLocalPost(data.id);
+                }
+              }
+
+              // Approved - post dont exists in archived array
+              return;
+            }
+
+            // Update archived
+            archivedPost.featured = data.featured;
+            archivedPost.pinned = data.pinned;
+
+            // Update results
+            if (resultsPost) {
+              resultsPost.featured = data.featured;
+              resultsPost.pinned = data.pinned;
+
+              // Rearange
+              $timeout(function() {
+                $rootScope.$emit('isotopeArrange');
+              }, 3000);
+            }
+          } else {
+            // Approved 3 -> 2
+            if (data.approved === 2) {
+              getPost(data.id).then(function(post) {
+                results.unshift(post);
+                archived[post.id] = post;
+                queue.push(post.id);
+                visibled++;
+
+                $rootScope.$emit('isotopeArrange');
+              });
+            }
+          }
+        }
+      }
+
+      function socketOnDeletePost(id) {
+        console.debug('[ Socket ] Delete post ' + id);
+
+        if (mode !== 'admin') {
+          var resultsPostIndex = _.findIndex(results, {id: id});
+          var resultsPost = resultsPostIndex !== -1 ? results[resultsPostIndex] : null;
+
+          if (resultsPost) {
+            removeLocalPost(id);
+            $rootScope.$emit('isotopeReload');
+          } else {
+            removeLocalPost(id);
+          }
+        }
+      }
 
       function connectSocketIo() {
         if (currentSocket) {
@@ -452,11 +507,15 @@ angular
         currentSocket.on('socialhub:newPosts', socketOnNewPost);
 
         // Post update
-        // currentSocket.on('socialhub:updatePost', socketOnUpdatePost);
+        currentSocket.on('socialhub:updatePost', socketOnUpdatePost);
+
+        // Post delete
+        currentSocket.on('socialhub:deletePost', socketOnDeletePost);
       }
 
       function setMode(m) {
         mode = m;
+        currentPostsStatus = 1;
       }
 
       // Executed on scope destroy
@@ -472,6 +531,7 @@ angular
       function changeCurrentPostsStatus(status) {
         console.debug('[ Engagehub Service ] Change current posts status');
         currentPostsStatus = status || 1;
+        newest.value = 0;
       }
 
       return {
@@ -505,9 +565,7 @@ angular
         renderVisibled: renderVisibled,
         renderNewest: _.throttle(renderNewest, 500),
         removeLocalPost: removeLocalPost,
-        newest: {
-          posts: newest
-        },
+        newest: newest,
         complete: complete,
         results: {
           posts: results
