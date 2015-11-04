@@ -49,7 +49,6 @@ angular
         },
         sortAscending: false,
         sortBy: 'order',
-        sortAscending: false,
         filter: function(item) {
           return item.className.indexOf('filter');
         }
