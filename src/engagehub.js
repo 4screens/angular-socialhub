@@ -210,54 +210,6 @@ angular
         return $http.delete(URL + CONFIG.backend.engagehub.base + '/' + sh._id);
       }
 
-      function tryAddTagToStream(shId, type, keyword, moderation) {
-        console.debug('[ Engagehub Service ] TryAddTagToStream');
-
-        var channelType = type === 'facebook' ? 'page' : 'tag';
-
-        if (channelType !== 'tag') {
-          return checkKeywordAccessability(type, channelType, keyword).then(function(res) {
-            return addTagToStream(shId, type, channelType, keyword, moderation, res.data.id);
-          });
-        }
-
-        return addTagToStream(shId, type, channelType, keyword, moderation);
-      }
-
-      /**
-       * dodaje taga do stream-a z defaultowym konfigiem, access_tokeny bierze z servisu auth
-       * @param sh - stream do którego ma dodać
-       * @param type - jaki typ taga
-       * @param keyword - tag do dodania
-       */
-      function addTagToStream(shId, type, channelType, keyword, moderation, pageId) {
-        console.debug('[ Engagehub Service ] AddTagToStream');
-
-        return $http.post(URL + CONFIG.backend.engagehub.addNewKeyword.replace(':id', shId), {
-            type: type,
-            name: keyword,
-            config: {
-              moderation: moderation
-            },
-
-            // New stuff
-            value: pageId || keyword,
-            channel: type,
-            channelContentType: channelType
-          });
-      }
-
-      function checkKeywordAccessability(type, channelType, keyword) {
-        console.debug('[ Engagehub Service ] CheckKeywordAccessability');
-
-        var requestPath = CONFIG.backend.engagehub.checkKeywordAccessability
-                            .replace(':channel', type)
-                            .replace(':channelType', channelType)
-                            .replace(':value', keyword);
-
-        return $http.get(URL + requestPath);
-      }
-
       function updateTag(shId, id, moderation) {
         console.debug('[ Engagehub Service ] Update tag');
 
@@ -544,7 +496,6 @@ angular
           create: createStreamGroup,
           remove: removeStreamGroup,
           tags: {
-            add: tryAddTagToStream,
             update: updateTag,
             remove: removeTagFromStream
           },
