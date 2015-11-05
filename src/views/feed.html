@@ -1,7 +1,7 @@
 <link rel="stylesheet" type="text/css" data-ng-href="{{ cssUrl }}" />
 
 <!-- Load more -->
-<div ng-if="engagehub.newest.value" class="engagehub-load-posts-wrapper" ng-style="{
+<div ng-if="engagehub.newest.value" class="engagehub-load-posts-wrapper engagehub-description-font-family" ng-style="{
   'background-color': sh.config.theme.backgroundColor,
   'font-family': sh.config.theme.descriptionFont
 }">
@@ -33,7 +33,7 @@
       'no-image': !hasImage(post.post),
       pinned: post.pinned === 2,
       commerce: (post.commerce && post.commerce.url),
-      filter: _.indexOf(filtered, {value: post.source.value, channel: post.source.channel}) !== -1
+      filter: _.indexOf(filtered, {value: post.post.source.value, channel: post.post.source.channel}) !== -1
     }"
   >
     <figure ng-style="{
@@ -53,7 +53,7 @@
         </div>
       </div>
 
-      <div class="engagehub-tile--text {{ post.source.channel }}" data-ng-show="!hasImage(post.post)">
+      <div class="engagehub-tile--text {{ post.post.source.channel }}" data-ng-show="!hasImage(post.post)">
         <div>
           <div data-ng-style="{'font-size': getFontSize(post.post.headline || post.post.message)}">{{ post.post.headline || post.post.message | excerpt }}
           </div>
@@ -61,8 +61,8 @@
       </div>
 
       <figcaption class="engagehub-tile--signature" data-ng-style="{ color: sh.config.theme.descriptionColor }">
-        <div class="engagehub-tile--social" data-ng-class="'engagehub-tile--social-'+ post.source.channel">
-          <i class="fa" data-ng-class="'fa-'+ post.source.channel"></i>
+        <div class="engagehub-tile--social" data-ng-class="'engagehub-tile--social-'+ post.post.source.channel">
+          <i class="fa" data-ng-class="'fa-'+ post.post.source.channel"></i>
         </div>
         <div class="engagehub-tile--signature-avatar">
           <img data-ng-src="{{ post.post.author.picture || 'http://graph.facebook.com/' + post.post.author.id + '/picture' }}"
