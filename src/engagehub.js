@@ -421,56 +421,49 @@ angular
 
       function socketOnUpdatePost(data) {
         console.debug('[ Socket ] Update post ' + data.id);
-        if (mode !== 'admin') {
-          var resultsPostIndex = _.findIndex(results, {id: data.id});
-          var archivedPost = archived[data.id];
-          var resultsPost = resultsPostIndex !== -1 ? results[resultsPostIndex] : null;
 
-          if (archivedPost) {
+        var resultsPostIndex = _.findIndex(results, {id: data.id});
+        var archivedPost = archived[data.id];
+        var resultsPost = resultsPostIndex !== -1 ? results[resultsPostIndex] : null;
 
-            // Approve changed, just remove local post
-            if (archivedPost.approved !== data.approved) {
+        if (archivedPost) {
 
-              // Declined
-              if (data.approved === 3) {
-                if (resultsPost) {
-                  removeLocalPost(data.id);
-                  $rootScope.$emit('isotopeReload');
-                } else {
-                  removeLocalPost(data.id);
-                }
-              }
-
-              // Approved - post dont exists in archived array
-              return;
-            }
-
-            // Update archived
-            archivedPost.featured = data.featured;
-            archivedPost.pinned = data.pinned;
-
-            // Update results
+          // Rmove local post
+          if (archivedPost.approved !== data.approved) {
             if (resultsPost) {
-              resultsPost.featured = data.featured;
-              resultsPost.pinned = data.pinned;
-
-              // Rearange
-              $timeout(function() {
-                $rootScope.$emit('isotopeArrange');
-              }, 3000);
+              removeLocalPost(data.id);
+              $rootScope.$emit('isotopeReload');
+            } else {
+              removeLocalPost(data.id);
             }
-          } else {
-            // Approved 3 -> 2
-            if (data.approved === 2) {
-              getPost(data.id).then(function(post) {
-                results.unshift(post);
-                archived[post.id] = post;
-                queue.push(post.id);
-                visibled++;
+            return;
+          }
 
-                $rootScope.$emit('isotopeArrange');
-              });
-            }
+          // Update archived
+          archivedPost.featured = data.featured;
+          archivedPost.pinned = data.pinned;
+
+          // Update results
+          if (resultsPost) {
+            resultsPost.featured = data.featured;
+            resultsPost.pinned = data.pinned;
+
+            // Rearange
+            $timeout(function() {
+              $rootScope.$emit('isotopeArrange');
+            }, 3000);
+          }
+        } else {
+          // Post has arrived
+          if (data.approved === currentPostsStatus) {
+            getPost(data.id).then(function(post) {
+              results.unshift(post);
+              archived[post.id] = post;
+              queue.push(post.id);
+              visibled++;
+
+              $rootScope.$emit('isotopeArrange');
+            });
           }
         }
       }
@@ -478,16 +471,14 @@ angular
       function socketOnDeletePost(id) {
         console.debug('[ Socket ] Delete post ' + id);
 
-        if (mode !== 'admin') {
-          var resultsPostIndex = _.findIndex(results, {id: id});
-          var resultsPost = resultsPostIndex !== -1 ? results[resultsPostIndex] : null;
+        var resultsPostIndex = _.findIndex(results, {id: id});
+        var resultsPost = resultsPostIndex !== -1 ? results[resultsPostIndex] : null;
 
-          if (resultsPost) {
-            removeLocalPost(id);
-            $rootScope.$emit('isotopeReload');
-          } else {
-            removeLocalPost(id);
-          }
+        if (resultsPost) {
+          removeLocalPost(id);
+          $rootScope.$emit('isotopeReload');
+        } else {
+          removeLocalPost(id);
         }
       }
 
