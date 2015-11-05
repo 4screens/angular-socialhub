@@ -1,6 +1,6 @@
 <div class="engagehub-iframe" data-ng-if="!!detail">
   <div class="engagehub-iframe--wrapper">
-    <div class="engagehub-iframe--content"
+    <div class="engagehub-iframe--content engagehub-description-font-family"
          ng-style="{
         'font-family': sh.config.theme.descriptionFont,
         'background-color': sh.config.theme.cardBackgroundColor,
@@ -18,7 +18,7 @@
       <figcaption class="engagehub-iframe--signature">
         <div class="engagehub-tile--signature-avatar">
           <img data-ng-src="{{ detail.user.avatar }}" alt="" class="img-responsive" />
-          <span class="name"
+          <span class="name engagehub-author-font-family"
                 ng-bind-html="detail.user.name"
                 ng-style="{
                   'font-family': sh.config.theme.authorFont,
