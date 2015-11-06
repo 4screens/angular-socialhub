@@ -310,9 +310,18 @@
 
 .showApproved .approvedStatus { display: block; }
 
-.engagehub-stream {
+.engagehub-stream-wrapper {
+  width: 100%;
   position: relative;
 
+  .engagehub-stream {
+    position: relative;
+  }
+
+  &.modalOpened {
+    position: fixed;
+    overflow-y: scroll;
+  }
 }
 
 .engagehub-iframe {

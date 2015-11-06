@@ -37,6 +37,7 @@ angular
         });
       };
 
+      // Image onLoad
       $scope.imageOnLoad = _.throttle(function() {
         console.debug('[ EngagehubView ] ImageLoaded');
         $rootScope.$emit('isotopeArrange');
@@ -44,9 +45,6 @@ angular
 
       $scope.openModal = function(post) {
         $scope.detail = {};
-
-        // FIXME:
-        $rootScope.noscroll = true;
 
         // image
         if (post.post.image) {
@@ -94,10 +92,6 @@ angular
 
       $scope.closeModal = function() {
         $scope.detail = null;
-
-        // FIXME
-        $rootScope.noscroll = false;
-
         $scope.$broadcast('modal-closed');
       };
 

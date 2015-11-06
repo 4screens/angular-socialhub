@@ -19,129 +19,133 @@
 </div>
 <!--/Load more -->
 <!-- Stream -->
-<div class="engagehub-isotope engagehub-stream showApproved engagehub-background-color"
-     ng-style="{ 'background-color': sh.config.theme.backgroundColor }"
-     ng-if="engagehub.results.posts.length"
-  >
-  <article
-    class="engagehub-tile engagehub-isotope-tile"
-    data-order="{{ post.pinned + '' + post.post.created }}"
-    ng-repeat="post in engagehub.results.posts"
-    ng-class="{
-      featured: post.featured,
-      'not-featured': !post.featured,
-      'no-image': !hasImage(post.post),
-      pinned: post.pinned === 2,
-      commerce: (post.commerce && post.commerce.url),
-      filter: _.indexOf(filtered, {value: post.post.source.value, channel: post.post.source.channel}) !== -1
-    }"
-  >
-    <figure ng-style="{
-        'font-family': sh.config.theme.descriptionFont,
-        'background-color': sh.config.theme.cardBackgroundColor
-      }" class="engagehub-description-font-family engagehub-card-background-color">
-      <div class="engagehub-tile--image" data-ng-show="hasImage(post.post)">
-        <div>
-          <img alt=""
-            data-ng-src="{{ hasImage(post.post, 'large') }}"
-            data-ng-class="ratio( post.post.image.medium.width, post.post.image.medium.height )"
-            ng-load="imageOnLoad()"
-          />
-    <span class="play" data-ng-if="post.post.type === 'video' || post.post.type === 'stream'">
-      <i class="fa fa-angle-right fa-5x fa-inverse"></i>
-    </span>
-        </div>
-      </div>
-
-      <div class="engagehub-tile--text {{ post.post.source.channel }}" data-ng-show="!hasImage(post.post)">
-        <div>
-          <div data-ng-style="{'font-size': getFontSize(post.post.headline || post.post.message)}">{{ post.post.headline || post.post.message | excerpt }}
+<div class="engagehub-stream-wrapper"
+     ng-class="{ modalOpened: detail }"
+>
+  <div class="engagehub-isotope engagehub-stream showApproved engagehub-background-color"
+       ng-style="{ 'background-color': sh.config.theme.backgroundColor }"
+       ng-if="engagehub.results.posts.length"
+    >
+    <article
+      class="engagehub-tile engagehub-isotope-tile"
+      data-order="{{ post.pinned + '' + post.post.created }}"
+      ng-repeat="post in engagehub.results.posts"
+      ng-class="{
+        featured: post.featured,
+        'not-featured': !post.featured,
+        'no-image': !hasImage(post.post),
+        pinned: post.pinned === 2,
+        commerce: (post.commerce && post.commerce.url),
+        filter: _.indexOf(filtered, {value: post.post.source.value, channel: post.post.source.channel}) !== -1
+      }"
+    >
+      <figure ng-style="{
+          'font-family': sh.config.theme.descriptionFont,
+          'background-color': sh.config.theme.cardBackgroundColor
+        }" class="engagehub-description-font-family engagehub-card-background-color">
+        <div class="engagehub-tile--image" data-ng-show="hasImage(post.post)">
+          <div>
+            <img alt=""
+              data-ng-src="{{ hasImage(post.post, 'large') }}"
+              data-ng-class="ratio( post.post.image.medium.width, post.post.image.medium.height )"
+              ng-load="imageOnLoad()"
+            />
+      <span class="play" data-ng-if="post.post.type === 'video' || post.post.type === 'stream'">
+        <i class="fa fa-angle-right fa-5x fa-inverse"></i>
+      </span>
           </div>
         </div>
-      </div>
 
-      <figcaption class="engagehub-tile--signature" data-ng-style="{ color: sh.config.theme.descriptionColor }">
-        <div class="engagehub-tile--social" data-ng-class="'engagehub-tile--social-'+ post.post.source.channel">
-          <i class="fa" data-ng-class="'fa-'+ post.post.source.channel"></i>
+        <div class="engagehub-tile--text {{ post.post.source.channel }}" data-ng-show="!hasImage(post.post)">
+          <div>
+            <div data-ng-style="{'font-size': getFontSize(post.post.headline || post.post.message)}">{{ post.post.headline || post.post.message | excerpt }}
+            </div>
+          </div>
         </div>
-        <div class="engagehub-tile--signature-avatar">
-          <img data-ng-src="{{ post.post.author.picture || 'http://graph.facebook.com/' + post.post.author.id + '/picture' }}"
-               alt="{{ post.post.author.name }}"/>
-          <span
+
+        <figcaption class="engagehub-tile--signature" data-ng-style="{ color: sh.config.theme.descriptionColor }">
+          <div class="engagehub-tile--social" data-ng-class="'engagehub-tile--social-'+ post.post.source.channel">
+            <i class="fa" data-ng-class="'fa-'+ post.post.source.channel"></i>
+          </div>
+          <div class="engagehub-tile--signature-avatar">
+            <img data-ng-src="{{ post.post.author.picture || 'http://graph.facebook.com/' + post.post.author.id + '/picture' }}"
+                 alt="{{ post.post.author.name }}"/>
+            <span
+              ng-style="{
+                'font-family': sh.config.theme.authorFont,
+                'color': sh.config.theme.authorColor
+              }"
+                ng-bind-html="post.post.author.name"
+                class="engagehub-author-font-family engagehub-author-color name"
+            ></span>
+            <span class="time" am-time-ago="(post.post.created * 1000)"></span>
+          </div>
+
+          <a ng-if="post.commerce && post.commerce.url && post.commerce.text"
+            ng-href="{{ post.commerce.url }}"
+            title="{{ post.commerce.text }}"
+            target="_blank" rel="nofollow"
             ng-style="{
-              'font-family': sh.config.theme.authorFont,
-              'color': sh.config.theme.authorColor
+              'color': sh.config.theme.buttonColor,
+              'background-color': sh.config.theme.buttonBackgroundColor
             }"
-              ng-bind-html="post.post.author.name"
-              class="engagehub-author-font-family engagehub-author-color name"
-          ></span>
-          <span class="time" am-time-ago="(post.post.created * 1000)"></span>
+            class="engagehub-commerce engagehub-button-background-color engagehub-button-color"
+          >{{ post.commerce.text }}</a>
+
+          <p class="engagehub-tile--signature-caption engagehub-description-color"
+             data-ng-show="hasImage(post.post)"
+          >{{ post.post.headline || post.post.message | excerpt }}</p>
+        </figcaption>
+      </figure>
+
+      <div class="engagehub-tile--overflow" data-ng-class="{approved: post.approved, 'not-approved': !post.approved}">
+        <div class="engagehub-tile--overflow-mask" data-ng-click="openModal(post)"></div>
+          <div class="details clearfix text-center">
+
+            <span data-ng-click="openModal(post)" class="action-icon">
+              <i class="icon-circled-eye"></i>
+              <span class="info-tooltip animate-show">Preview</span>
+            </span>
+
+            <!-- approved -->
+            <span data-ng-click="approvePost(post, 2)" data-ng-hide="post.approved === 2" class="action-icon icon-approve">
+              <i class="fa fa-check-circle"></i>
+              <span class="info-tooltip animate-show">Approve</span>
+            </span>
+            <span data-ng-click="approvePost(post, 3)" data-ng-hide="post.approved === 3" class="action-icon icon-decline">
+              <i class="fa fa-times-circle"></i>
+              <span class="info-tooltip animate-show">Decline</span>
+            </span>
+            <!--/approved -->
+
+            <span data-ng-confirm="remove(post)" data-ng-confirm-message='Are you sure you want to delete this post ?' class="action-icon">
+              <i class="icon-circled-trash"></i>
+              <span class="info-tooltip animate-show">Remove</span>
+            </span>
+
+          </div>
+
+          <div class="btn-group-mini">
+            <span class="icon-mini" data-ng-click="featurePost(post)">
+              <i class="fa fa-external-link"></i>
+            </span>
+
+            <span class="icon-mini icon-commerce" data-ng-click="addCommerceModal(post)">
+              <i class="fa fa-link"></i>
+            </span>
+
+            <span class="icon-mini icon-pinned" data-ng-click="pinPost(post)">
+              <i class="fa fa-thumb-tack"></i>
+            </span>
+
+            <span class="icon-mini trigger"><i class="fa fa-cog"></i></span>
+          </div>
+
         </div>
-
-        <a ng-if="post.commerce && post.commerce.url && post.commerce.text"
-          ng-href="{{ post.commerce.url }}"
-          title="{{ post.commerce.text }}"
-          target="_blank" rel="nofollow"
-          ng-style="{
-            'color': sh.config.theme.buttonColor,
-            'background-color': sh.config.theme.buttonBackgroundColor
-          }"
-          class="engagehub-commerce engagehub-button-background-color engagehub-button-color"
-        >{{ post.commerce.text }}</a>
-
-        <p class="engagehub-tile--signature-caption engagehub-description-color"
-           data-ng-show="hasImage(post.post)"
-        >{{ post.post.headline || post.post.message | excerpt }}</p>
-      </figcaption>
-    </figure>
-
-    <div class="engagehub-tile--overflow" data-ng-class="{approved: post.approved, 'not-approved': !post.approved}">
-      <div class="engagehub-tile--overflow-mask" data-ng-click="openModal(post)"></div>
-        <div class="details clearfix text-center">
-
-          <span data-ng-click="openModal(post)" class="action-icon">
-            <i class="icon-circled-eye"></i>
-            <span class="info-tooltip animate-show">Preview</span>
-          </span>
-
-          <!-- approved -->
-          <span data-ng-click="approvePost(post, 2)" data-ng-hide="post.approved === 2" class="action-icon icon-approve">
-            <i class="fa fa-check-circle"></i>
-            <span class="info-tooltip animate-show">Approve</span>
-          </span>
-          <span data-ng-click="approvePost(post, 3)" data-ng-hide="post.approved === 3" class="action-icon icon-decline">
-            <i class="fa fa-times-circle"></i>
-            <span class="info-tooltip animate-show">Decline</span>
-          </span>
-          <!--/approved -->
-
-          <span data-ng-confirm="remove(post)" data-ng-confirm-message='Are you sure you want to delete this post ?' class="action-icon">
-            <i class="icon-circled-trash"></i>
-            <span class="info-tooltip animate-show">Remove</span>
-          </span>
-
-        </div>
-
-        <div class="btn-group-mini">
-          <span class="icon-mini" data-ng-click="featurePost(post)">
-            <i class="fa fa-external-link"></i>
-          </span>
-
-          <span class="icon-mini icon-commerce" data-ng-click="addCommerceModal(post)">
-            <i class="fa fa-link"></i>
-          </span>
-
-          <span class="icon-mini icon-pinned" data-ng-click="pinPost(post)">
-            <i class="fa fa-thumb-tack"></i>
-          </span>
-
-          <span class="icon-mini trigger"><i class="fa fa-cog"></i></span>
-        </div>
-
       </div>
-    </div>
 
-  </article>
+    </article>
+  </div>
 </div>
 <!--/Stream -->
 
