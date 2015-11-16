@@ -22,6 +22,7 @@ angular
 
       $scope.filtered = [];
       $scope.engagehub = engagehub;
+      var view;
 
       this.refreshAndSelect = function refreshAndSelect(shId) {
         console.debug('[ EngagehubView ] RefreshAndSelect');
@@ -43,7 +44,11 @@ angular
         $rootScope.$emit('isotopeArrange');
       }, 1000);
 
-      $scope.openModal = function(post) {
+      $scope.openModal = function(e, post) {
+        view = e.view;
+        view.__tmpOffset = view.pageYOffset;
+        $scope.scrollOffset =  (-1 * view.__tmpOffset) + 'px';
+
         $scope.detail = {};
 
         // image
@@ -90,8 +95,10 @@ angular
         $scope.$broadcast('modal-opened', $scope.detail);
       };
 
-      $scope.closeModal = function() {
+      $scope.closeModal = function(e) {
+        $timeout(function() { view.scrollTo(0, view.__tmpOffset) });
         $scope.detail = null;
+        $scope.scrollOffset = 0;
         $scope.$broadcast('modal-closed');
       };
 

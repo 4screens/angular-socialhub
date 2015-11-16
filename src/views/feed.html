@@ -21,6 +21,7 @@
 <!-- Stream -->
 <div class="engagehub-stream-wrapper"
      ng-class="{ modalOpened: detail }"
+     ng-style="{ top: scrollOffset }"
 >
   <div class="engagehub-isotope engagehub-stream showApproved engagehub-background-color"
        ng-style="{ 'background-color': sh.config.theme.backgroundColor }"
@@ -99,10 +100,10 @@
       </figure>
 
       <div class="engagehub-tile--overflow" data-ng-class="{approved: post.approved, 'not-approved': !post.approved}">
-        <div class="engagehub-tile--overflow-mask" data-ng-click="openModal(post)"></div>
+        <div class="engagehub-tile--overflow-mask" data-ng-click="openModal($event, post)"></div>
           <div class="details clearfix text-center">
 
-            <span data-ng-click="openModal(post)" class="action-icon">
+            <span data-ng-click="openModal($event, post)" class="action-icon">
               <i class="icon-circled-eye"></i>
               <span class="info-tooltip animate-show">Preview</span>
             </span>
