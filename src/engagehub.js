@@ -1,7 +1,7 @@
 angular
   .module('4screen.engagehub.service', [])
   .factory('engagehub',
-    function(CONFIG, $rootScope, $http, $q, $timeout, CommonSocketService, $document, $window) {
+    function(CONFIG, $rootScope, $http, $q, $timeout, CommonSocketService, $document, $window, EngagehubEventsService) {
       'use strict';
 
       var _data = {}, streamId = null, visibled = 0, pack = 50;
@@ -305,17 +305,8 @@ angular
           });
 
 
-          if (reload === false) {
-            $rootScope.$emit('isotopeArrange');
-          } else {
-            $rootScope.$emit('isotopeReload');
-          }
-
-          // if (complete.value && queue.length >= postLimit) {
-          //   $document.unbind('scroll');
-          // }
+          EngagehubEventsService.triggerEvent('arrangePosts');
         }
-        // console.log(step, visibled, results.length, Object.keys(archived).length, queue.length, complete.value);
 
       }
 
@@ -342,7 +333,7 @@ angular
                 queue.push(post.id);
                 visibled++;
 
-                $rootScope.$emit('isotopeArrange');
+                EngagehubEventsService.triggerEvent('arrangePosts');
               }
             });
 
@@ -384,10 +375,11 @@ angular
           if (archivedPost.approved !== data.approved) {
             if (resultsPost) {
               removeLocalPost(data.id);
-              $rootScope.$emit('isotopeReload');
             } else {
               removeLocalPost(data.id);
             }
+
+            EngagehubEventsService.triggerEvent('renderLayout');
             return;
           }
 
@@ -399,11 +391,6 @@ angular
           if (resultsPost) {
             resultsPost.featured = data.featured;
             resultsPost.pinned = data.pinned;
-
-            // Rearange
-            $timeout(function() {
-              $rootScope.$emit('isotopeArrange');
-            }, 3000);
           }
         } else {
           // Post has arrived
@@ -413,25 +400,19 @@ angular
               archived[post.id] = post;
               queue.push(post.id);
               visibled++;
-
-              $rootScope.$emit('isotopeArrange');
             });
           }
         }
+
+        EngagehubEventsService.triggerEvent('renderLayout');
       }
 
       function socketOnDeletePost(id) {
         console.debug('[ Socket ] Delete post ' + id);
 
-        var resultsPostIndex = _.findIndex(results, {id: id});
-        var resultsPost = resultsPostIndex !== -1 ? results[resultsPostIndex] : null;
+        removeLocalPost(id);
 
-        if (resultsPost) {
-          removeLocalPost(id);
-          $rootScope.$emit('isotopeReload');
-        } else {
-          removeLocalPost(id);
-        }
+        EngagehubEventsService.triggerEvent('renderLayout');
       }
 
       function connectSocketIo() {
@@ -477,6 +458,14 @@ angular
         newest.value = 0;
       }
 
+      function setCallbackRearrangePosts(callback) {
+        EngagehubEventsService.setCallbackFor('arrangePosts', callback);
+      }
+
+      function setCallbackRenderLayout(callback) {
+        EngagehubEventsService.setCallbackFor('renderLayout', callback);
+      }
+
       return {
         data: _data,
         setDomain: setDomain,
@@ -485,6 +474,12 @@ angular
         getHub: getHub,
         getPosts: getPosts,
         removePost: removePost,
+        callbacks:{
+          set: {
+            onRearrangePosts: setCallbackRearrangePosts,
+            onNeedToRenderLayout: setCallbackRenderLayout
+          }
+        },
         changeCommerce: changeCommerce,
         changeModeration: changeModeration,
         changeFeatured: changeFeatured,

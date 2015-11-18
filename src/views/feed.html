@@ -24,12 +24,19 @@
 >
   <div class="engagehub-isotope engagehub-stream showApproved engagehub-background-color"
        ng-style="{ 'background-color': sh.config.theme.backgroundColor }"
+       isotope-container
+       iso-options="{
+        masonry: {
+          columnWidth: '.engagehub-isotope-tile.not-featured'
+        }
+       }"
        ng-if="engagehub.results.posts.length"
     >
     <article
       class="engagehub-tile engagehub-isotope-tile"
       data-order="{{ post.pinned + '' + post.post.created }}"
-      ng-repeat="post in engagehub.results.posts"
+      ng-repeat="post in engagehub.results.posts track by post.id"
+      isotope-item
       ng-class="{
         featured: post.featured,
         'not-featured': !post.featured,
@@ -45,10 +52,13 @@
         }" class="engagehub-description-font-family engagehub-card-background-color">
         <div class="engagehub-tile--image" data-ng-show="hasImage(post.post)">
           <div>
-            <img alt=""
-              data-ng-src="{{ hasImage(post.post, 'large') }}"
-              data-ng-class="ratio( post.post.image.medium.width, post.post.image.medium.height )"
-              ng-load="imageOnLoad()"
+            <img
+              preload-image
+              scale-image
+              scale-width="{{ post.post.image.medium.width }}"
+              scale-height="{{ post.post.image.medium.height }}"
+              ng-src="{{ hasImage(post.post, 'large') }}"
+              success="imageLoaded()"
             />
       <span class="play" data-ng-if="post.post.type === 'video' || post.post.type === 'stream'">
         <i class="fa fa-angle-right fa-5x fa-inverse"></i>

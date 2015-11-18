@@ -20,6 +20,7 @@
   $tileMinWidth: 330px;
 
   .engagehub-tile {
+
     @include breakpoint($tileMinWidth * 2) {
       width: (100% / 2);
       &.featured { width: 100%; }

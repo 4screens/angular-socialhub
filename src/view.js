@@ -1,8 +1,8 @@
 angular
   .module('4screen.engagehub.view', [
     '4screen.engagehub.service',
-    '4screen.engagehub.isotope',
     '4screen.engagehub.infinity',
+    '4screen.engagehub.events',
     'com.2fdevs.videogular',
     'com.2fdevs.videogular.plugins.controls',
     'com.2fdevs.videogular.plugins.overlayplay',
@@ -20,8 +20,31 @@ angular
      * be taken from $stateParams.shId or from some other source.
      */
 
+      $scope.renderLayout = function() {
+        $scope.$broadcast('iso-method', { name: 'layout', params: null});
+      };
+
+      var arrangeItems = function() {
+        $scope.$broadcast('iso-method', { name: 'arrange', params: null});
+      };
+
+      engagehub.callbacks.set.onRearrangePosts(function() {
+        arrangeItems();
+      });
+
+      engagehub.callbacks.set.onNeedToRenderLayout(function() {
+        $scope.renderLayout();
+      });
+
       $scope.filtered = [];
       $scope.engagehub = engagehub;
+
+      $scope.getImageHeight = function(imageOptions, $event) {
+        console.log($event, imageOptions);
+        return '320';
+      };
+
+      $scope.imageLoaded = _.debounce(arrangeItems, 300);
 
       this.refreshAndSelect = function refreshAndSelect(shId) {
         console.debug('[ EngagehubView ] RefreshAndSelect');
@@ -36,12 +59,6 @@ angular
           return $scope.sh;
         });
       };
-
-      // Image onLoad
-      $scope.imageOnLoad = _.throttle(function() {
-        console.debug('[ EngagehubView ] ImageLoaded');
-        $rootScope.$emit('isotopeArrange');
-      }, 1000);
 
       $scope.openModal = function(post) {
         $scope.detail = {};
@@ -121,20 +138,24 @@ angular
       };
     }
   )
+  // .directive('scaleImage',
+  //   function() {
+  //     'use strict';
+
+  //     return {
+  //       link: function(scope, $el, $attr) {
+  //         $attr.$observe('scaleWidth', function() {
+  //           var scale = $attr.scaleHeight / $attr.scaleWidth;
+
+  //           $attr.$set('height', $el[0].offsetWidth * scale);
+  //         });
+  //       },
+  //       priority: 1301
+  //     };
+  //   })
   .filter('excerpt', function() {
     return function(txt) {
       txt || (txt = '');
       return txt.length > 180 ? txt.slice(0, 180) + ' ..' : txt;
     };
-  // })
-  // .filter('keywordFilter', function() {
-  //   return function(posts, filtered) {
-  //     if (!filtered.length) return posts;
-
-  //     return _.filter(posts, function(post) {
-  //       return _.some(filtered, function(fk) {
-  //         return (fk.channel === post.source.channel && fk.value === post.source.value);
-  //       });
-  //     });
-  //   };
   });
