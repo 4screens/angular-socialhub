@@ -26,9 +26,14 @@
        ng-style="{ 'background-color': sh.config.theme.backgroundColor }"
        isotope-container
        iso-options="{
+        getSortData: {
+          order: '[data-order] parseInt'
+        },
+        sortAscending: false,
         masonry: {
           columnWidth: '.engagehub-isotope-tile.not-featured'
-        }
+        },
+        sortBy: 'order'
        }"
        ng-if="engagehub.results.posts.length"
     >
@@ -88,7 +93,7 @@
                 ng-bind-html="post.post.author.name"
                 class="engagehub-author-font-family engagehub-author-color name"
             ></span>
-            <span class="time" am-time-ago="(post.post.created * 1000)"></span>
+            <span class="time" created="{{ post.post.created }}" am-time-ago="(post.post.created * 1000)"></span>
           </div>
 
           <a ng-if="post.commerce && post.commerce.url && post.commerce.text"

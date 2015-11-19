@@ -14,7 +14,7 @@ angular
           if (w.innerHeight - e.prop('offsetTop') + w.scrollY + offset >= parseInt(e.css('height'), 10)) {
             if (available) {
               console.debug('[ InfinityService ] Scroll handler');
-              available = false;
+              // available = false;
               engagehub.renderVisibled(10);
             }
           }

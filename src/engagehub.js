@@ -287,6 +287,8 @@ angular
 
             if (queue.length > visibled) {
               renderVisibled(Math.min(step, queue.length - visibled));
+            } else {
+              EngagehubEventsService.triggerEvent('arrangePosts');
             }
           }).catch(function() {
             complete.value = true;
@@ -303,11 +305,9 @@ angular
           _.remove(results, function(postId, postIndex) {
             return postIndex >= visibled;
           });
-
-
-          EngagehubEventsService.triggerEvent('arrangePosts');
         }
 
+        EngagehubEventsService.triggerEvent('arrangePosts');
       }
 
       // TODO: This is overkill, improve it to use renderVisibled here
