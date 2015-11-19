@@ -1,12 +1,14 @@
 angular
   .module('4screen.engagehub.service', [])
   .factory('engagehub',
-    function(CONFIG, $rootScope, $http, $q, CommonSocketService, $document, $window) {
+    function(CONFIG, $rootScope, $http, $q, $timeout, CommonSocketService, $document, $window, EngagehubEventsService) {
       'use strict';
 
       var _data = {}, streamId = null, visibled = 0, pack = 50;
       var complete = {value: true, newest: true}; // Spinner
-      var queue = [], newest = [];  // Array of id's
+      var queue = [];  // Array of id's
+
+      var newest = {value: 0}; // Number of new posts
       //var throttler = 500; // Time (msc) used to throttle renderVisibled posts in public service api
 
       // FIXME: Normalization - change it to array ?
@@ -18,7 +20,7 @@ angular
       // 1 - new
       // 2 - approved
       // 3 - declined
-      var currentPostsStatus = 1;
+      var currentPostsStatus = 2;
 
       function setDomain(domain) {
         URL = domain;
@@ -46,11 +48,11 @@ angular
 
       function clearData(onlyPosts) {
         queue.length = 0;
-        newest.length = 0;
         results.length = 0;
         complete.value = true;
         complete.newest = true;
         visibled = 0;
+        newest.value = 0;
         archived = {};
 
         if (!onlyPosts) {
@@ -64,7 +66,7 @@ angular
         visibled = 0;
 
         queue.length = 0;
-        newest.length = 0;
+        newest.value = 0;
         results.length = 0;
         archived = {};
 
@@ -208,27 +210,6 @@ angular
         return $http.delete(URL + CONFIG.backend.engagehub.base + '/' + sh._id);
       }
 
-      /**
-       * dodaje taga do stream-a z defaultowym konfigiem, access_tokeny bierze z servisu auth
-       * @param sh - stream do którego ma dodać
-       * @param type - jaki typ taga
-       * @param keyword - tag do dodania
-       */
-      function addTagToStream(shId, type, keyword, moderation) {
-        console.debug('[ Engagehub Service ] AddTagToStream');
-
-        return $http.post(URL + CONFIG.backend.engagehub.base + '/' + shId + '/keywords', {
-            type: type,
-            name: keyword,
-            moderation: moderation,
-            config: {},
-
-            // New stuff
-            value: keyword,
-            channel: type,
-            channelContentType: type === 'facebook' ? 'page' : 'tag'
-          });
-      }
       function updateTag(shId, id, moderation) {
         console.debug('[ Engagehub Service ] Update tag');
 
@@ -239,18 +220,17 @@ angular
 
       function removeTagFromStream(sh, keyword) {
         console.debug('[ Engagehub Service ] RemoveTagFromStream');
-        return $http.delete(URL + CONFIG.backend.engagehub.base +
-            '/' + sh._id + '/keywords/' + keyword._id)
+        return $http.delete(URL + CONFIG.backend.engagehub.base + '/' + sh._id + '/keywords/' + keyword._id)
           .then(function(data) {
 
             // Remove posts
-            _.forEach(archived, function(post) {
-              if (post.source.channel === keyword.channel && post.source.value === keyword.value) {
-                removeLocalPost(post.id);
-              }
+            _.forEach([archived, results], function(e) {
+              _.forEach(e, function(post) {
+                if (post.source.channel === keyword.channel && post.source.value === keyword.value) {
+                  removeLocalPost(post.id);
+                }
+              });
             });
-
-            $rootScope.$emit('isotopeReload');
           });
       }
 
@@ -301,9 +281,6 @@ angular
               if (_.indexOf(queue, post.id) === -1) {
                 archived[post.id] = post;
                 queue.push(post.id);
-
-                // Update newest
-                newest.splice(newest.indexOf(post.id), 1);
               }
 
             });
@@ -328,17 +305,8 @@ angular
           });
 
 
-          if (reload === false) {
-            $rootScope.$emit('isotopeArrange');
-          } else {
-            $rootScope.$emit('isotopeReload');
-          }
-
-          // if (complete.value && queue.length >= postLimit) {
-          //   $document.unbind('scroll');
-          // }
+          EngagehubEventsService.triggerEvent('arrangePosts');
         }
-        // console.log(step, visibled, results.length, Object.keys(archived).length, queue.length, complete.value);
 
       }
 
@@ -347,30 +315,30 @@ angular
         console.debug('[ Engagehub Service ] Render newest');
 
         // More than pack ?
-        if (newest.length > pack) {
-          newest.length = 0;
+        if (newest.value > pack) {
+          newest.value = 0;
           clearData();
-          renderVisibled(10, true);
+          renderVisibled(newest.value, true);
         } else {
           complete.newest = false;
 
-          getPosts({page: 0, status: currentPostsStatus}).then(function(posts) {
+          getPosts({page: 0, status: currentPostsStatus, ammount: newest.value}).then(function(posts) {
             complete.newest = true;
+            newest.value = 0;
 
             _.forEach(posts, function(post) {
               if (_.indexOf(queue, post.id) === -1) {
-                newest.length = 0;
                 results.unshift(post);
                 archived[post.id] = post;
                 queue.push(post.id);
                 visibled++;
 
-                $rootScope.$emit('isotopeArrange');
+                EngagehubEventsService.triggerEvent('arrangePosts');
               }
             });
 
           }).catch(function() {
-            newest.length = 0;
+            newest.value = 0;
             complete.newest = true;
           });
         }
@@ -379,8 +347,13 @@ angular
       function socketOnNewPost(data) {
         console.debug('[ Socket ] New post');
 
-        if (mode === 'admin' || data.approved === 2) {
-          newest.push(data.id);
+        if (currentPostsStatus === 1 || currentPostsStatus === 2) {
+
+          if (currentPostsStatus === 1) {
+            newest.value = data.hidden;
+          } else {
+            newest.value = data.approved;
+          }
 
           // There is no post shown so reneder some feed
           if (visibled === 0 && (currentPostsStatus === 1 || mode !== 'admin')) {
@@ -389,21 +362,58 @@ angular
         }
       }
 
-      // function socketOnUpdatePost(data) {
-      //   console.debug('[ Socket ] Update post');
-      //   if (_.indexOf(queue, data.id) !== -1) {
-      //     // Update
-      //     queue[data.id].featured = data.featured;
-      //     queue[data.id].pinned = data.pinned;
-      //     queue[data.id].approved = data.approved;
+      function socketOnUpdatePost(data) {
+        console.debug('[ Socket ] Update post ' + data.id);
 
-      //     // Need DOM change ?
-      //     if (data.approved !== 2 && mode === 'embed') {
-      //       removeLocalPost(data.id);
-      //     }
-      //     $rootScope.$emit('IsotopeArrange');
-      //   }
-      // }
+        var resultsPostIndex = _.findIndex(results, {id: data.id});
+        var archivedPost = archived[data.id];
+        var resultsPost = resultsPostIndex !== -1 ? results[resultsPostIndex] : null;
+
+        if (archivedPost) {
+
+          // Rmove local post
+          if (archivedPost.approved !== data.approved) {
+            if (resultsPost) {
+              removeLocalPost(data.id);
+            } else {
+              removeLocalPost(data.id);
+            }
+
+            EngagehubEventsService.triggerEvent('renderLayout');
+            return;
+          }
+
+          // Update archived
+          archivedPost.featured = data.featured;
+          archivedPost.pinned = data.pinned;
+
+          // Update results
+          if (resultsPost) {
+            resultsPost.featured = data.featured;
+            resultsPost.pinned = data.pinned;
+          }
+        } else {
+          // Post has arrived
+          if (data.approved === currentPostsStatus) {
+            getPost(data.id).then(function(post) {
+              results.unshift(post);
+              archived[post.id] = post;
+              queue.push(post.id);
+              visibled++;
+            });
+          }
+        }
+
+        EngagehubEventsService.triggerEvent('renderLayout');
+      }
+
+      function socketOnDeletePost(id) {
+        console.debug('[ Socket ] Delete post ' + id);
+
+        removeLocalPost(id);
+
+        EngagehubEventsService.triggerEvent('renderLayout');
+      }
 
       function connectSocketIo() {
         if (currentSocket) {
@@ -418,14 +428,18 @@ angular
         });
 
         // New post
-        currentSocket.on('socialhub:newPost', socketOnNewPost);
+        currentSocket.on('socialhub:newPosts', socketOnNewPost);
 
         // Post update
-        // currentSocket.on('socialhub:updatePost', socketOnUpdatePost);
+        currentSocket.on('socialhub:updatePost', socketOnUpdatePost);
+
+        // Post delete
+        currentSocket.on('socialhub:deletePost', socketOnDeletePost);
       }
 
       function setMode(m) {
         mode = m;
+        currentPostsStatus = 1;
       }
 
       // Executed on scope destroy
@@ -441,7 +455,16 @@ angular
       function changeCurrentPostsStatus(status) {
         console.debug('[ Engagehub Service ] Change current posts status');
         currentPostsStatus = status || 1;
-      };
+        newest.value = 0;
+      }
+
+      function setCallbackRearrangePosts(callback) {
+        EngagehubEventsService.setCallbackFor('arrangePosts', callback);
+      }
+
+      function setCallbackRenderLayout(callback) {
+        EngagehubEventsService.setCallbackFor('renderLayout', callback);
+      }
 
       return {
         data: _data,
@@ -451,6 +474,12 @@ angular
         getHub: getHub,
         getPosts: getPosts,
         removePost: removePost,
+        callbacks:{
+          set: {
+            onRearrangePosts: setCallbackRearrangePosts,
+            onNeedToRenderLayout: setCallbackRenderLayout
+          }
+        },
         changeCommerce: changeCommerce,
         changeModeration: changeModeration,
         changeFeatured: changeFeatured,
@@ -462,7 +491,6 @@ angular
           create: createStreamGroup,
           remove: removeStreamGroup,
           tags: {
-            add: addTagToStream,
             update: updateTag,
             remove: removeTagFromStream
           },
@@ -474,9 +502,7 @@ angular
         renderVisibled: renderVisibled,
         renderNewest: _.throttle(renderNewest, 500),
         removeLocalPost: removeLocalPost,
-        newest: {
-          posts: newest
-        },
+        newest: newest,
         complete: complete,
         results: {
           posts: results

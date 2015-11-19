@@ -1,6 +1,6 @@
 {
   "name": "4screens-socialhub",
-  "version": "0.2.0",
+  "version": "0.2.2",
   "main": "socialhub.js",
   "homepage": "https://github.com/4screens/angular-socialhub",
   "authors": [
@@ -27,7 +27,7 @@
     "angular": "~1.3.0",
     "angular-moment": "~0.8.3",
     "angular-sanitize": "~1.3.0",
-    "isotope": "~2.0.1",
+    "angular-isotope": "~0.1.14",
     "lodash": "~3.10.1",
     "angulartics": "~0.19.3",
     "4screens-settings": "~0.1",
@@ -39,7 +39,9 @@
     "videogular-overlay-play": "*",
     "videogular-buffering": "~1.3.2",
     "videogular-themes-default": "~1.3.2",
-    "videogular-poster": "~1.3.2"
+    "videogular-poster": "~1.3.2",
+    "wilsonic-angular-isotope": "git@github.com:willSonic/angular-isotope.git#master",
+    "4screens-angular-preload-image": "~0.1.0"
   },
   "resolutions": {
     "angular": "~1.3.0",

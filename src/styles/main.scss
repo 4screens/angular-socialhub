@@ -1,3 +1,8 @@
+.engagehub {
+  -webkit-font-smoothing: antialiased;
+  font-size: 12px;
+}
+
 .engagehub-stream, .engagehub-iframe {
   $paddingLg: 42px;
   $paddingMd: 6px;
@@ -15,6 +20,7 @@
   $tileMinWidth: 330px;
 
   .engagehub-tile {
+
     @include breakpoint($tileMinWidth * 2) {
       width: (100% / 2);
       &.featured { width: 100%; }
@@ -305,9 +311,18 @@
 
 .showApproved .approvedStatus { display: block; }
 
-.engagehub-stream {
+.engagehub-stream-wrapper {
+  width: 100%;
   position: relative;
 
+  .engagehub-stream {
+    position: relative;
+  }
+
+  &.modalOpened {
+    position: fixed;
+    overflow-y: scroll;
+  }
 }
 
 .engagehub-iframe {
@@ -323,7 +338,7 @@
   justify-content:center;
 
   &--navigation {
-    position: absolute;
+    position: relative;
     left: 0;
     right: 0;
     max-width: 550px;
@@ -349,6 +364,9 @@
   }
   &--wrapper {
     overflow-y: auto;
+  }
+  &--fullimage {
+    img { margin: 0 auto; }
   }
   &--content {
     max-width: 550px;
