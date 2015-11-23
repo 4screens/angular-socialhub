@@ -12,7 +12,7 @@ angular
     'ngLoad'
   ])
   .controller('EngagehubVievController',
-    function($rootScope, $scope, $sce, engagehub, $timeout, CONFIG) {
+    function($rootScope, $scope, $sce, engagehub, $timeout, CONFIG, EngagehubInfinityService) {
       'use strict';
 
 		/**
@@ -20,29 +20,29 @@ angular
      * be taken from $stateParams.shId or from some other source.
      */
 
-      $scope.renderLayout = function() {
-        $scope.$broadcast('iso-method', { name: 'layout', params: null});
-      };
-
       var arrangeItems = function() {
         $scope.$broadcast('iso-method', { name: 'arrange', params: null});
       };
+
+      EngagehubInfinityService.enable();
 
       engagehub.callbacks.set.onRearrangePosts(function() {
         arrangeItems();
       });
 
       engagehub.callbacks.set.onNeedToRenderLayout(function() {
-        $scope.renderLayout();
+        arrangeItems();
+      });
+
+      engagehub.callbacks.set.setCallbackNewPostsReady(function() {
+        $scope.$applyAsync(function() {
+          arrangeItems();
+          EngagehubInfinityService.enable();
+        });
       });
 
       $scope.filtered = [];
       $scope.engagehub = engagehub;
-
-      $scope.getImageHeight = function(imageOptions, $event) {
-        console.log($event, imageOptions);
-        return '320';
-      };
 
       $scope.imageLoaded = _.debounce(arrangeItems, 300);
 
@@ -138,21 +138,21 @@ angular
       };
     }
   )
-  // .directive('scaleImage',
-  //   function() {
-  //     'use strict';
+  .directive('infiniteScroll',
+    function($document, EngagehubInfinityService, $window) {
+      'use strict';
 
-  //     return {
-  //       link: function(scope, $el, $attr) {
-  //         $attr.$observe('scaleWidth', function() {
-  //           var scale = $attr.scaleHeight / $attr.scaleWidth;
+      return {
+        link: function(scope, $el) {
+          $document.unbind('scroll');
+          $document.bind('scroll', EngagehubInfinityService.scrollHandler(scope, $el, $window));
 
-  //           $attr.$set('height', $el[0].offsetWidth * scale);
-  //         });
-  //       },
-  //       priority: 1301
-  //     };
-  //   })
+          scope.$on('$destroy', function() {
+            $document.unbind('scroll');
+          });
+        }
+      };
+    })
   .filter('excerpt', function() {
     return function(txt) {
       txt || (txt = '');

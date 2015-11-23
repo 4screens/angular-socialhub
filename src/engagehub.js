@@ -305,9 +305,9 @@ angular
           _.remove(results, function(postId, postIndex) {
             return postIndex >= visibled;
           });
-        }
 
-        EngagehubEventsService.triggerEvent('arrangePosts');
+          EngagehubEventsService.triggerEvent('newPostsReady');
+        }
       }
 
       // TODO: This is overkill, improve it to use renderVisibled here
@@ -324,7 +324,6 @@ angular
 
           getPosts({page: 0, status: currentPostsStatus, ammount: newest.value}).then(function(posts) {
             complete.newest = true;
-            newest.value = 0;
 
             _.forEach(posts, function(post) {
               if (_.indexOf(queue, post.id) === -1) {
@@ -332,11 +331,11 @@ angular
                 archived[post.id] = post;
                 queue.push(post.id);
                 visibled++;
-
-                EngagehubEventsService.triggerEvent('arrangePosts');
               }
             });
 
+            newest.value = 0;
+            EngagehubEventsService.triggerEvent('arrangePosts');
           }).catch(function() {
             newest.value = 0;
             complete.newest = true;
@@ -466,6 +465,10 @@ angular
         EngagehubEventsService.setCallbackFor('renderLayout', callback);
       }
 
+      function setCallbackNewPostsReady(callback) {
+        EngagehubEventsService.setCallbackFor('newPostsReady', callback);
+      }
+
       return {
         data: _data,
         setDomain: setDomain,
@@ -477,7 +480,8 @@ angular
         callbacks:{
           set: {
             onRearrangePosts: setCallbackRearrangePosts,
-            onNeedToRenderLayout: setCallbackRenderLayout
+            onNeedToRenderLayout: setCallbackRenderLayout,
+            setCallbackNewPostsReady: setCallbackNewPostsReady
           }
         },
         changeCommerce: changeCommerce,

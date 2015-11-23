@@ -25,6 +25,7 @@
   <div class="engagehub-isotope engagehub-stream showApproved engagehub-background-color"
        ng-style="{ 'background-color': sh.config.theme.backgroundColor }"
        isotope-container
+       infinite-scroll
        iso-options="{
         getSortData: {
           order: '[data-order] parseInt'
@@ -59,9 +60,6 @@
           <div>
             <img
               preload-image
-              scale-image
-              scale-width="{{ post.post.image.medium.width }}"
-              scale-height="{{ post.post.image.medium.height }}"
               ng-src="{{ hasImage(post.post, 'large') }}"
               success="imageLoaded()"
             />
