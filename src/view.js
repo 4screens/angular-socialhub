@@ -27,11 +27,15 @@ angular
       EngagehubInfinityService.enable();
 
       engagehub.callbacks.set.onRearrangePosts(function() {
-        arrangeItems();
+        $timeout(function() {
+          arrangeItems();
+        });
       });
 
       engagehub.callbacks.set.onNeedToRenderLayout(function() {
-        arrangeItems();
+        $timeout(function() {
+          arrangeItems();
+        });
       });
 
       engagehub.callbacks.set.setCallbackNewPostsReady(function() {
