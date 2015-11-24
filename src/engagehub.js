@@ -134,7 +134,7 @@ angular
 
       function changeCommerce(shId, postId, commerce) {
         console.debug('[ Engagehub Service ] ChangeCommerce');
-        return $http.post(URL + CONFIG.backend.engagehub.postsModeration.replace(':id', shId).replace(':postId', postId), {commerce: commerce})
+        return $http.post(URL + CONFIG.backend.engagehub.postsModeration.replace(':id', streamId).replace(':postId', postId), {commerce: commerce})
           .then(function(data) {
             return data.data;
           });
@@ -142,7 +142,7 @@ angular
 
       function changeModeration(shId, postId, moderationStatus) {
         console.debug('[ Engagehub Service ] ChangeModeration');
-        return $http.post(URL + CONFIG.backend.engagehub.postsModeration.replace(':id', shId).replace(':postId', postId),
+        return $http.post(URL + CONFIG.backend.engagehub.postsModeration.replace(':id', streamId).replace(':postId', postId),
           {approved: moderationStatus})
           .then(function(data) {
             return data.data;
@@ -151,7 +151,7 @@ angular
 
       function changePinned(shId, postId, pinnedStatus) {
         console.debug('[ Engagehub Service ] ChangePinned');
-        return $http.post(URL + CONFIG.backend.engagehub.postsModeration.replace(':id', shId).replace(':postId', postId),
+        return $http.post(URL + CONFIG.backend.engagehub.postsModeration.replace(':id', streamId).replace(':postId', postId),
           {pinned: pinnedStatus})
           .then(function(data) {
             return data.data;
@@ -160,7 +160,7 @@ angular
 
       function changeFeatured(shId, postId, featuredStatus) {
         console.debug('[ Engagehub Service ] ChangeFeatured');
-        return $http.post(URL + CONFIG.backend.engagehub.postsModeration.replace(':id', shId).replace(':postId', postId),
+        return $http.post(URL + CONFIG.backend.engagehub.postsModeration.replace(':id', streamId).replace(':postId', postId),
           {featured: featuredStatus})
           .then(function(data) {
             return data.data;
@@ -171,7 +171,7 @@ angular
         console.debug('[ Engagehub ] UpdateAccessToken');
         var at = {channel: provider, tokenValue: accessToken};
 
-        return $http.post(URL + CONFIG.backend.engagehub.accessTokens.replace(':id', shId), at)
+        return $http.post(URL + CONFIG.backend.engagehub.accessTokens.replace(':id', streamId), at)
           .then(function(data) {
             if (data && data.data && data.data.status) {
               growl.success(data.data.status);
@@ -207,20 +207,20 @@ angular
 
       function removeStreamGroup(sh) {
         console.debug('[ Engagehub Service ] RemoveStreamGroup');
-        return $http.delete(URL + CONFIG.backend.engagehub.base + '/' + sh._id);
+        return $http.delete(URL + CONFIG.backend.engagehub.base + '/' + streamId);
       }
 
       function updateTag(shId, id, moderation) {
         console.debug('[ Engagehub Service ] Update tag');
 
-        return $http.post(URL + CONFIG.backend.engagehub.base + '/' + shId + '/keywords/' + id, {
+        return $http.post(URL + CONFIG.backend.engagehub.base + '/' + streamId + '/keywords/' + id, {
           moderation: moderation
         });
       }
 
       function removeTagFromStream(sh, keyword) {
         console.debug('[ Engagehub Service ] RemoveTagFromStream');
-        return $http.delete(URL + CONFIG.backend.engagehub.base + '/' + sh._id + '/keywords/' + keyword._id)
+        return $http.delete(URL + CONFIG.backend.engagehub.base + '/' + streamId + '/keywords/' + keyword._id)
           .then(function(data) {
 
             // Remove posts
@@ -257,7 +257,7 @@ angular
 
       function update(sh) {
         console.debug('[ Engagehub Service ] Update');
-        return $http.post(URL + CONFIG.backend.engagehub.update.replace(':id', sh._id), sh)
+        return $http.post(URL + CONFIG.backend.engagehub.update.replace(':id', streamId), sh)
           .then(function(res) {
             return res.data;
           });
