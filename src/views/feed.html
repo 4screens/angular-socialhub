@@ -59,6 +59,7 @@
         <div class="engagehub-tile--image" data-ng-show="hasImage(post.post)">
           <div>
             <img
+              ng-if="hasImage(post.post, 'large')"
               preload-image
               ng-src="{{ hasImage(post.post, 'large') }}"
               success="imageLoaded()"

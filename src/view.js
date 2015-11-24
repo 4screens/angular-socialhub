@@ -35,7 +35,7 @@ angular
       });
 
       engagehub.callbacks.set.setCallbackNewPostsReady(function() {
-        $scope.$applyAsync(function() {
+        $timeout(function() {
           arrangeItems();
           EngagehubInfinityService.enable();
         });

@@ -82,6 +82,7 @@ angular
         return $http.get(url, {params: params}).then(function(res) {
           complete.value = true;
           if (res.status === 200) {
+            EngagehubEventsService.triggerEvent('arrangePosts');
             return res.data;
           }
 
@@ -111,6 +112,7 @@ angular
             .replace(':id', id)
             .replace(':postId', postId)
         ).then(function(res) {
+          EngagehubEventsService.triggerEvent('arrangePosts');
           return res.data;
         });
       }
@@ -207,7 +209,7 @@ angular
 
       function removeStreamGroup(sh) {
         console.debug('[ Engagehub Service ] RemoveStreamGroup');
-        return $http.delete(URL + CONFIG.backend.engagehub.base + '/' + streamId);
+        return $http.delete(URL + CONFIG.backend.engagehub.base + '/' + sh._id);
       }
 
       function updateTag(shId, id, moderation) {
@@ -231,6 +233,8 @@ angular
                 }
               });
             });
+
+            EngagehubEventsService.triggerEvent('arrangePosts');
           });
       }
 
@@ -314,33 +318,26 @@ angular
       function renderNewest() {
         console.debug('[ Engagehub Service ] Render newest');
 
-        // More than pack ?
-        if (newest.value > pack) {
-          newest.value = 0;
-          clearData();
-          renderVisibled(newest.value, true);
-        } else {
-          complete.newest = false;
+        complete.newest = false;
 
-          getPosts({page: 0, status: currentPostsStatus, ammount: newest.value}).then(function(posts) {
-            complete.newest = true;
+        getPosts({page: 0, status: currentPostsStatus, ammount: newest.value}).then(function(posts) {
+          complete.newest = true;
 
-            _.forEach(posts, function(post) {
-              if (_.indexOf(queue, post.id) === -1) {
-                results.unshift(post);
-                archived[post.id] = post;
-                queue.push(post.id);
-                visibled++;
-              }
-            });
-
-            newest.value = 0;
-            EngagehubEventsService.triggerEvent('arrangePosts');
-          }).catch(function() {
-            newest.value = 0;
-            complete.newest = true;
+          _.forEach(posts, function(post) {
+            if (_.indexOf(queue, post.id) === -1) {
+              results.unshift(post);
+              archived[post.id] = post;
+              queue.push(post.id);
+              visibled++;
+            }
           });
-        }
+
+          newest.value = 0;
+          EngagehubEventsService.triggerEvent('arrangePosts');
+        }).catch(function() {
+          newest.value = 0;
+          complete.newest = true;
+        });
       }
 
       function socketOnNewPost(data) {
@@ -349,13 +346,13 @@ angular
         if (currentPostsStatus === 1 || currentPostsStatus === 2) {
 
           if (currentPostsStatus === 1) {
-            newest.value = data.hidden;
+            newest.value += data.hidden;
           } else {
-            newest.value = data.approved;
+            newest.value += data.approved;
           }
 
           // There is no post shown so reneder some feed
-          if (visibled === 0 && (currentPostsStatus === 1 || mode !== 'admin')) {
+          if (visibled === 0) {
             renderNewest();
           }
         }
