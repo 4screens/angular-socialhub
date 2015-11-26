@@ -110,6 +110,11 @@
         border: 2px solid #fff;
         text-align: center;
         border-radius: 50%;
+
+        i {
+          line-height: .9;
+          margin-left: 5px;
+        }
       }
     }
 
@@ -321,11 +326,6 @@
 
   .engagehub-stream {
     position: relative;
-  }
-
-  &.modalOpened {
-    position: fixed;
-    overflow-y: scroll;
   }
 }
 

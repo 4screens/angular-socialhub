@@ -264,7 +264,7 @@ angular
         if (visibled + step > _.size(archived) && complete.value) {
           complete.value = false;
 
-          getPosts({page: page, status: currentPostsStatus}).then(function(posts) {
+          return getPosts({page: page, status: currentPostsStatus}).then(function(posts) {
             complete.value = true;
             _.forEach(posts, function(post) {
 
@@ -298,6 +298,8 @@ angular
 
           EngagehubEventsService.triggerEvent('newPostsReady');
         }
+
+        return $q.resolve();
       }
 
       // TODO: This is overkill, improve it to use renderVisibled here
