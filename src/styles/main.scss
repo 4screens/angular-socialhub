@@ -56,6 +56,10 @@
 
     @include transition(opacity .2s ease);
 
+    .ng-preloader-loading-spinner {
+      height: 25px !important;
+    }
+
     figure {
       background: #f6f6f6;
       border-bottom-width: 0;
