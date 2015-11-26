@@ -20,9 +20,13 @@ angular
      * be taken from $stateParams.shId or from some other source.
      */
 
-      var arrangeItems = function() {
-        $scope.$broadcast('iso-method', { name: 'arrange', params: null});
+      var isoMethodBroadcast = function(name, params) {
+        $scope.$broadcast('iso-method', { name: name, params: params});
       };
+
+      var arrangeItems = _.debounce(function() {
+        isoMethodBroadcast('arrange', null);
+      }, 200);
 
       EngagehubInfinityService.enable();
 
@@ -38,7 +42,7 @@ angular
         });
       });
 
-      engagehub.callbacks.set.setCallbackNewPostsReady(function() {
+      engagehub.callbacks.set.onNewPostsReady(function() {
         $timeout(function() {
           arrangeItems();
           EngagehubInfinityService.enable();

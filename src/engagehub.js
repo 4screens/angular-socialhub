@@ -112,7 +112,6 @@ angular
             .replace(':id', id)
             .replace(':postId', postId)
         ).then(function(res) {
-          EngagehubEventsService.triggerEvent('arrangePosts');
           return res.data;
         });
       }
@@ -169,21 +168,6 @@ angular
           });
       }
 
-      function updateAccessToken(shId, accessToken, provider) {
-        console.debug('[ Engagehub ] UpdateAccessToken');
-        var at = {channel: provider, tokenValue: accessToken};
-
-        return $http.post(URL + CONFIG.backend.engagehub.accessTokens.replace(':id', streamId), at)
-          .then(function(data) {
-            if (data && data.data && data.data.status) {
-              growl.success(data.data.status);
-            }
-
-            return data.data;
-          });
-
-      }
-
       var sockets = {};
 
       function selectSocialHub(sh) {
@@ -233,6 +217,8 @@ angular
                 }
               });
             });
+
+            renderNewest();
 
             EngagehubEventsService.triggerEvent('arrangePosts');
           });
@@ -337,6 +323,7 @@ angular
         }).catch(function() {
           newest.value = 0;
           complete.newest = true;
+          EngagehubEventsService.triggerEvent('arrangePosts');
         });
       }
 
@@ -375,7 +362,7 @@ angular
               removeLocalPost(data.id);
             }
 
-            EngagehubEventsService.triggerEvent('renderLayout');
+            EngagehubEventsService.triggerEvent('arrangePosts');
             return;
           }
 
@@ -388,6 +375,8 @@ angular
             resultsPost.featured = data.featured;
             resultsPost.pinned = data.pinned;
           }
+
+          EngagehubEventsService.triggerEvent('arrangePosts');
         } else {
           // Post has arrived
           if (data.approved === currentPostsStatus) {
@@ -396,11 +385,10 @@ angular
               archived[post.id] = post;
               queue.push(post.id);
               visibled++;
+              EngagehubEventsService.triggerEvent('arrangePosts');
             });
           }
         }
-
-        EngagehubEventsService.triggerEvent('renderLayout');
       }
 
       function socketOnDeletePost(id) {
@@ -452,6 +440,8 @@ angular
         console.debug('[ Engagehub Service ] Change current posts status');
         currentPostsStatus = status || 1;
         newest.value = 0;
+
+        EngagehubEventsService.triggerEvent('arrangePosts');
       }
 
       function setCallbackRearrangePosts(callback) {
@@ -478,14 +468,13 @@ angular
           set: {
             onRearrangePosts: setCallbackRearrangePosts,
             onNeedToRenderLayout: setCallbackRenderLayout,
-            setCallbackNewPostsReady: setCallbackNewPostsReady
+            onNewPostsReady: setCallbackNewPostsReady
           }
         },
         changeCommerce: changeCommerce,
         changeModeration: changeModeration,
         changeFeatured: changeFeatured,
         changePinned: changePinned,
-        updateAccessToken: updateAccessToken,
         select: selectSocialHub,
         sendSMS: sendSMS,
         streams: {
