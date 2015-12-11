@@ -91,6 +91,7 @@
     &--image {
       position: relative;
       min-height: $playIconSize;
+      z-index: 1;
 
       img {
         height: auto;
@@ -177,6 +178,7 @@
         .time {
           font-size: 12px;
           margin-bottom: 0;
+          overflow: visible;
         }
       }
       &-caption {
@@ -384,6 +386,7 @@
 
 .engagehub-commerce {
   z-index: 6;
+  position: relative;
   display: block;
   background-color: rgb(220, 220, 220);
   color: rgb(33, 33, 33);
