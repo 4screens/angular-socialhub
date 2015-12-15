@@ -91,10 +91,12 @@ angular
             videoUrl = 'https://www.youtube.com/watch?v=' + providerId;
           }
 
-          $scope.detail.video = [{
-            src: $sce.trustAsResourceUrl(videoUrl),
-            type: 'video/mp4'
-          }];
+          if (videoUrl) {
+            $scope.detail.video = [{
+              src: $sce.trustAsResourceUrl(videoUrl),
+              type: 'video/mp4'
+            }];
+          }
         }
 
         // user
@@ -104,13 +106,16 @@ angular
         };
 
         // time
-        $scope.detail.publish = post.created * 1000;
+        $scope.detail.publish = post.post.created * 1000;
 
         // message
         $scope.detail.message = post.post.message || post.post.description || post.post.caption || post.post.story;
 
         // commerce
         $scope.detail.commerce = (post.commerce && post.commerce.url && post.commerce.text) ? post.commerce : null;
+
+        // headline
+        $scope.detail.headline = _.has(post, 'post.headline') && post.post.headline ? post.post.headline : null;
 
         $scope.$broadcast('modal-opened', $scope.detail);
       };

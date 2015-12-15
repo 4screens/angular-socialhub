@@ -1,3 +1,5 @@
+$mobileBreakpoint: 0px 768px;
+
 .engagehub {
   -webkit-font-smoothing: antialiased;
   font-size: 12px;
@@ -372,15 +374,53 @@
     overflow-y: auto;
   }
   &--fullimage {
-    img { margin: 0 auto; }
+    img {
+      float: left;
+      width: calc(100% - 300px);
+      @include breakpoint($mobileBreakpoint) {
+        float: none;
+        width: 100%;
+      }
+    }
   }
   &--content {
-    max-width: 550px;
-    margin: 0 auto;
+    max-width: 90%;
+    width: 1000px;
+    margin: 2% auto;
     background-color: #fff;
+    position: relative;
+
+    @include breakpoint($mobileBreakpoint) {
+      width: 400px;
+    }
   }
   &--signature {
     padding: 12px;
+  }
+
+  &--side-content {
+    width: 300px;
+    float: right;
+
+    .engagehub-tile--signature {
+      height: 100%;
+      max-height:calc(100% - 65px);
+      position: absolute;
+      width: 300px;
+      overflow: auto;
+
+      @include breakpoint($mobileBreakpoint) {
+        position: relative;
+        height: auto;
+        max-height: none;
+        width: 100%;
+      }
+    }
+
+    @include breakpoint($mobileBreakpoint) {
+      float: none;
+      width: 100%;
+    }
   }
 }
 
