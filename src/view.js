@@ -108,6 +108,12 @@ angular
         // time
         $scope.detail.publish = post.post.created * 1000;
 
+        // channel
+        $scope.detail.channel = post.post.source.channel;
+
+        $scope.detail.headline = post.post.headline;
+        $scope.detail.message = post.post.message;
+
         // message
         $scope.detail.message = post.post.message || post.post.description || post.post.caption || post.post.story;
 

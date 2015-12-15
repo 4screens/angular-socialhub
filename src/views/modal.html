@@ -9,6 +9,13 @@
       }"
     >
 
+      <div class="engagehub-tile--text {{ detail.channel }}" data-ng-hide="detail.image || detail.video">
+        <div>
+          <div data-ng-style="{'font-size': getFontSize(detail.headline || detail.message)}">{{ detail.headline || detail.message | excerpt }}
+          </div>
+        </div>
+      </div>
+
       <div class="engagehub-iframe--fullimage" data-ng-if="detail.image || detail.video">
 
         <img data-ng-src="{{ detail.image }}" alt="" data-ng-if="!detail.video" class="img-responsive"/>

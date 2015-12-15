@@ -394,6 +394,16 @@ $mobileBreakpoint: 0px 768px;
       width: 400px;
     }
   }
+
+  .engagehub-tile--text {
+    float: left;
+    width: calc(100% - 300px);
+    @include breakpoint($mobileBreakpoint) {
+      width: 100%;
+      float: none;
+    }
+  }
+
   &--signature {
     padding: 12px;
   }
@@ -415,6 +425,10 @@ $mobileBreakpoint: 0px 768px;
         max-height: none;
         width: 100%;
       }
+    }
+
+    a + .engagehub-tile--signature {
+      max-height: calc(100% - 114px);
     }
 
     @include breakpoint($mobileBreakpoint) {
@@ -456,11 +470,26 @@ $mobileBreakpoint: 0px 768px;
 
 // Hide optional elements
 .engagehub-tile {
-  .approvedStatus, &:after, &:before, .engagehub-tile--overflow > .btn-group { display: none!important; }
-  &:hover .engagehub-tile--overflow { opacity: 0!important; }
+  .approvedStatus,
+  &:after,
+  &:before,
+  .engagehub-tile--overflow > .details {
+    display: none!important;
+  }
 
+  &:hover .engagehub-tile--overflow {
+    opacity: 0!important;
+  }
 }
 .engagehub-admin .engagehub-tile {
-  .approvedStatus, &:after, &:before, .engagehub-tile--overflow > .btn-group { display: block!important; }
-  &:hover .engagehub-tile--overflow { opacity: 1!important; }
+  .approvedStatus,
+  &:after,
+  &:before,
+  .engagehub-tile--overflow > .details {
+    display: block!important;
+  }
+
+  &:hover .engagehub-tile--overflow {
+    opacity: 1!important;
+  }
 }
