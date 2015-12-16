@@ -6,8 +6,16 @@
         'font-family': sh.config.theme.descriptionFont,
         'background-color': sh.config.theme.cardBackgroundColor,
         color: sh.config.theme.descriptionColor
-      }"
-    >
+      }">
+
+      <div class="engagehub-iframe--navigation">
+        <a href="" data-ng-click="closeModal()" class="engagehub-iframe--close">
+          <span class="fa-stack fa-lg fa-stack-2x">
+            <i class="fa fa-circle fa-stack-2x fa-inverse"></i>
+            <i class="fa fa-times fa-stack-1x"></i>
+          </span>
+        </a>
+      </div>
 
       <div class="engagehub-tile--text {{ detail.channel }}" data-ng-hide="detail.image || detail.video">
         <div>
@@ -43,14 +51,7 @@
       </div>
 
       <div class="engagehub-iframe--side-content">
-        <div class="engagehub-iframe--navigation">
-          <a href="" data-ng-click="closeModal()" class="engagehub-iframe--close">
-        <span class="fa-stack fa-lg fa-stack-2x">
-          <i class="fa fa-circle fa-stack-2x fa-inverse"></i>
-          <i class="fa fa-times fa-stack-1x"></i>
-        </span>
-          </a>
-        </div>
+
 
         <figcaption class="engagehub-iframe--signature">
           <div class="engagehub-tile--signature-avatar">

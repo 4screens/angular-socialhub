@@ -346,11 +346,9 @@ $mobileBreakpoint: 0px 768px;
   justify-content:center;
 
   &--navigation {
-    position: relative;
-    left: 0;
+    position: absolute;
     right: 0;
     max-width: 550px;
-    margin: auto;
     z-index: 115;
     @include breakpoint($mediumBreakpoint) {
       z-index: 110;
