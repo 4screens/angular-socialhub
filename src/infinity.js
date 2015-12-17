@@ -5,7 +5,7 @@ angular
 
       var delay = 1000;
 
-      var scrollHandler, available = true, offset = 0, scrollTimeout;
+      var scrollHandler, available = true, offset = 0, scrollTimeout, renderVisibled;
 
       function enable() {
         $timeout.cancel(scrollTimeout);
@@ -17,6 +17,10 @@ angular
           enable();
         }, delay);
       }
+
+      renderVisibled = function() {
+        engagehub.renderVisibled(10);
+      };
 
       scrollHandler = _.throttle(function(s, e, w) {
         return function() {
@@ -35,6 +39,7 @@ angular
       // public API
       return {
         scrollHandler: scrollHandler,
+        renderVisible: renderVisibled,
         enable: enable
       };
     }

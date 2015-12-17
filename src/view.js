@@ -169,8 +169,18 @@ angular
           scope.$on('$destroy', function() {
             $document.unbind('scroll');
           });
+
+          var resizeListener = scope.$on('iso-method', _.debounce(
+            function() {
+              if ($el[0].offsetHeight <=  $window.innerHeight) {
+                EngagehubInfinityService.renderVisible(10);
+              } else {
+                resizeListener();
+              }
+            }, 500)
+          );
         }
-      };
+      }
     })
   .filter('excerpt', function() {
     return function(txt) {
