@@ -9,7 +9,8 @@ angular
     'com.2fdevs.videogular.plugins.poster',
     'com.2fdevs.videogular.plugins.buffering',
     'info.vietnamcode.nampnq.videogular.plugins.youtube',
-    'ngLoad'
+    'ngLoad',
+    'ngAnimate'
   ])
   .controller('EngagehubVievController',
     function($rootScope, $scope, $sce, engagehub, $timeout, CONFIG, EngagehubInfinityService) {

@@ -345,6 +345,20 @@ $mobileBreakpoint: 0px 768px;
   flex-direction: column;
   justify-content:center;
 
+  &.ng-enter, &.ng-leave {
+    transition: opacity .3s;
+  }
+
+  &.ng-enter,
+  &.ng-leave, &.ng-leave-active {
+    opacity: 1;
+  }
+
+  &.ng-enter, &.ng-enter-active,
+  &.ng-leave {
+    opacity: 0;
+  }
+
   &--navigation {
     position: absolute;
     right: 0;
