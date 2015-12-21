@@ -1,7 +1,7 @@
 <link rel="stylesheet" type="text/css" data-ng-href="{{ cssUrl }}" />
 
 <!-- Load more -->
-<div ng-if="engagehub.newest.value" class="engagehub-load-posts-wrapper engagehub-description-font-family" ng-style="{
+<div ng-if="engagehub.currentNewestCount()" class="engagehub-load-posts-wrapper engagehub-description-font-family" ng-style="{
   'background-color': sh.config.theme.backgroundColor,
   'font-family': sh.config.theme.descriptionFont
 }">
@@ -13,7 +13,7 @@
     }"
     class="engagehub-commerce engagehub-button-background-color engagehub-button-color engagehub-load-posts"
    >
-    <span ng-show="engagehub.complete.newest"><i class="fa fa-info"></i> {{ engagehub.newest.value > 50 ? '50+' : engagehub.newest.value }} new {{ engagehub.newest.value > 1 ? 'posts' : 'post' }}. Click to load</span>
+    <span ng-show="engagehub.complete.newest"><i class="fa fa-info"></i> {{ engagehub.currentNewestCount() }} new {{ engagehub.newest.value > 1 ? 'posts' : 'post' }}. Click to load</span>
     <span ng-show="!engagehub.complete.newest"><i class="fa fa-spinner fa-spin"></i> Loading posts</span>
   </button>
 </div>

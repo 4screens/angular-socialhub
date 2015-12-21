@@ -8,7 +8,10 @@ angular
       var complete = {value: true, newest: true}; // Spinner
       var queue = [];  // Array of id's
 
-      var newest = {value: 0}; // Number of new posts
+      var newest = {
+        hidden: 0,
+        approved: 0
+      }; // Number of new posts
       //var throttler = 500; // Time (msc) used to throttle renderVisibled posts in public service api
 
       // FIXME: Normalization - change it to array ?
@@ -52,7 +55,8 @@ angular
         complete.value = true;
         complete.newest = true;
         visibled = 0;
-        newest.value = 0;
+        newest.hidden = 0;
+        newest.approved = 0;
         archived = {};
 
         if (!onlyPosts) {
@@ -66,7 +70,8 @@ angular
         visibled = 0;
 
         queue.length = 0;
-        newest.value = 0;
+        newest.hidden = 0;
+        newest.approved = 0;
         results.length = 0;
         archived = {};
 
@@ -320,10 +325,10 @@ angular
             }
           });
 
-          newest.value = 0;
+          resetPostsCounter();
           EngagehubEventsService.triggerEvent('arrangePosts');
         }).catch(function() {
-          newest.value = 0;
+          resetPostsCounter();
           complete.newest = true;
           EngagehubEventsService.triggerEvent('arrangePosts');
         });
@@ -333,12 +338,8 @@ angular
         console.debug('[ Socket ] New post');
 
         if (currentPostsStatus === 1 || currentPostsStatus === 2) {
-
-          if (currentPostsStatus === 1) {
-            newest.value += data.hidden;
-          } else {
-            newest.value += data.approved;
-          }
+          newest.hidden += data.hidden;
+          newest.approved += data.approved;
 
           // There is no post shown so reneder some feed
           if (visibled === 0) {
@@ -438,10 +439,29 @@ angular
         }
       }
 
+      function resetPostsCounter() {
+        if (currentPostsStatus === 1) {
+          newest.hidden = 0;
+        } else if (currentPostsStatus === 2) {
+          newest.approved = 0;
+        }
+      }
+
+      function getCurrentNewestCount() {
+        if (currentPostsStatus === 1) {
+          return newest.hidden;
+        } else if (currentPostsStatus === 2) {
+          return newest.approved;
+        } else {
+          return 0;
+        }
+      }
+
       function changeCurrentPostsStatus(status) {
         console.debug('[ Engagehub Service ] Change current posts status');
         currentPostsStatus = status || 1;
-        newest.value = 0;
+
+        resetPostsCounter();
 
         EngagehubEventsService.triggerEvent('arrangePosts');
       }
@@ -495,6 +515,7 @@ angular
         renderNewest: _.throttle(renderNewest, 500),
         removeLocalPost: removeLocalPost,
         newest: newest,
+        currentNewestCount: getCurrentNewestCount,
         complete: complete,
         results: {
           posts: results
