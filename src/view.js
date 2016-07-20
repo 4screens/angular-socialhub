@@ -54,6 +54,43 @@ angular
 
       $scope.imageLoaded = _.debounce(arrangeItems, 300);
 
+      function colorToRgb(color) {
+          var colorParts, temp, triplets;
+          if (color[0] === '#') {
+              color = color.substr(1);
+          }
+          else {
+              colorParts = color.match(/^rgba?[\s+]?\([\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?/i);
+              color = (colorParts && colorParts.length === 4) ? ('0' + parseInt(colorParts[1], 10).toString(16)).slice(-2) +
+                  ('0' + parseInt(colorParts[2], 10).toString(16)).slice(-2) +
+                  ('0' + parseInt(colorParts[3], 10).toString(16)).slice(-2) : '';
+          }
+          if (color.length === 3) {
+              temp = color;
+              color = '';
+              temp = /^([a-f0-9])([a-f0-9])([a-f0-9])$/i.exec(temp).slice(1);
+              for (var i = 0; i < 3; i++) {
+                  color += temp[i] + temp[i];
+              }
+          }
+          triplets = /^([a-f0-9]{2})([a-f0-9]{2})([a-f0-9]{2})$/i.exec(color).slice(1);
+          return {
+              red: parseInt(triplets[0], 16),
+              green: parseInt(triplets[1], 16),
+              blue: parseInt(triplets[2], 16)
+          };
+      };
+
+      function getThemeType(color) {
+          var colorRGB = colorToRgb(color);
+          if ((colorRGB.red * 0.299 + colorRGB.green * 0.587 + colorRGB.blue * 0.114) > 186) {
+              return 'light';
+          }
+          else {
+              return 'dark';
+          }
+      };
+
       this.refreshAndSelect = function refreshAndSelect(shId) {
         console.debug('[ EngagehubView ] RefreshAndSelect');
         engagehub.setStreamId(shId);
