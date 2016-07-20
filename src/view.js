@@ -61,6 +61,15 @@ angular
         return engagehub.getHub(shId).then(function(data) {
           $scope.sh = data;
 
+          $scope.brandingDefault = {
+            enabled: !$scope.sh.stateBranding,
+            isDefault: true,
+            text: "Made with",
+            link: "https://4screens.net/engagehub/"
+          };
+
+          $scope.themeType = getThemeType($scope.sh.config.theme.backgroundColor);
+
           engagehub.select($scope.sh);
           engagehub.renderVisibled(10, true);
 
