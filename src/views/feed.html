@@ -59,7 +59,7 @@
           'font-family': sh.config.theme.descriptionFont,
           'background-color': sh.config.theme.cardBackgroundColor
         }" class="engagehub-description-font-family engagehub-card-background-color">
-        <div class="engagehub-tile--image" data-ng-show="hasImage(post.post)">
+        <div class="engagehub-tile--image" data-ng-show="hasImage(post.post)" data-ng-style="{ 'background-color': sh.config.theme.backgroundColor }">
           <div>
             <img
               ng-if="hasImage(post.post, 'large')"
@@ -80,11 +80,12 @@
           </div>
         </div>
 
-        <figcaption class="engagehub-tile--signature" data-ng-style="{ color: sh.config.theme.descriptionColor }">
-          <div class="engagehub-tile--social" data-ng-class="'engagehub-tile--social-'+ post.post.source.channel">
+        <figcaption class="engagehub-tile--signature"
+        data-ng-style="sh.config.theme.authorShow || sh.config.theme.descriptionShow ? { color: sh.config.theme.descriptionColor} : { 'background-color': sh.config.theme.backgroundColor, color: sh.config.theme.descriptionColor }">
+          <div class="engagehub-tile--social" ng-show="sh.config.theme.sourceIconShow" data-ng-class="'engagehub-tile--social-'+ post.post.source.channel">
             <i class="fa" data-ng-class="'fa-'+ post.post.source.channel"></i>
           </div>
-          <div class="engagehub-tile--signature-avatar">
+          <div class="engagehub-tile--signature-avatar" ng-show="sh.config.theme.authorShow">
             <img data-ng-src="{{ post.post.author.picture || 'http://graph.facebook.com/' + post.post.author.id + '/picture' }}"
                  alt="{{ post.post.author.name }}"/>
             <span
@@ -110,6 +111,7 @@
           >{{ post.commerce.text }}</a>
 
           <p class="engagehub-tile--signature-caption engagehub-description-color"
+             ng-if="sh.config.theme.descriptionShow"
              data-ng-show="hasImage(post.post)"
           >{{ post.post.headline || post.post.message | excerpt }}</p>
         </figcaption>
