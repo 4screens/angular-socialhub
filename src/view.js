@@ -105,7 +105,9 @@ angular
             link: "https://4screens.net/engagehub/"
           };
 
-          $scope.themeType = getThemeType($scope.sh.config.theme.backgroundColor);
+          if ($scope.sh.config.theme.backgroundColor) {
+            $scope.themeType = getThemeType($scope.sh.config.theme.backgroundColor);
+          }
 
           engagehub.select($scope.sh);
           engagehub.renderVisibled(10, true);
