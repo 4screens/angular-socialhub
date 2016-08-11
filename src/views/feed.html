@@ -99,9 +99,8 @@
             <span class="time" created="{{ post.post.created }}" am-time-ago="(post.post.created * 1000)"></span>
           </div>
 
-          <a ng-if="post.commerce && post.commerce.url && post.commerce.text"
+          <a ng-if="post.commerce && post.commerce.url && post.commerce.text && sh.config.theme.commerceButtonShow"
             ng-href="{{ post.commerce.url }}"
-            ng-if="sh.config.theme.commerceButtonShow"
             title="{{ post.commerce.text }}"
             target="_blank" rel="nofollow"
             ng-style="{
