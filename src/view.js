@@ -12,7 +12,7 @@ angular
     'ngLoad'
   ])
   .controller('EngagehubVievController',
-    function($rootScope, $scope, $sce, engagehub, $timeout, CONFIG, EngagehubInfinityService) {
+    function($rootScope, $scope, $sce, engagehub, $timeout, $window, CONFIG, EngagehubInfinityService) {
       'use strict';
 
 		/**
@@ -117,33 +117,37 @@ angular
       };
 
       $scope.openModal = function(post) {
-        $scope.detail = {};
+        if (post.commerce && post.commerce.url && post.commerce.text && $scope.sh.config.theme.commerceButtonShow) {
+           $window.location.href(post.commerce.url);
+        } else {
+          $scope.detail = {};
 
-        // image
-        if (post.post.image) {
-          $scope.detail.image = $scope.hasImage(post.post);
-        }
-
-        // video ???
-        if (post.post.type === 'video') {
-          var videoUrl;
-
-          if (post.post.video.format) {
-            videoUrl = post.post.video.format.small ? post.post.video.format.small.source : videoUrl;
-            videoUrl = post.post.video.format.medium ? post.post.video.format.medium.source : videoUrl;
-            videoUrl = post.post.video.format.large ? post.post.video.format.large.source : videoUrl;
+          // image
+          if (post.post.image) {
+            $scope.detail.image = $scope.hasImage(post.post);
           }
 
-          // It's youtube and no link so far, let's build link
-          if (!videoUrl && post.post.video.providerId && post.post.video.provider === 'youtube') {
-            videoUrl = 'https://www.youtube.com/watch?v=' + providerId;
-          }
+          // video ???
+          if (post.post.type === 'video') {
+            var videoUrl;
 
-          if (videoUrl) {
-            $scope.detail.video = [{
-              src: $sce.trustAsResourceUrl(videoUrl),
-              type: 'video/mp4'
-            }];
+            if (post.post.video.format) {
+              videoUrl = post.post.video.format.small ? post.post.video.format.small.source : videoUrl;
+              videoUrl = post.post.video.format.medium ? post.post.video.format.medium.source : videoUrl;
+              videoUrl = post.post.video.format.large ? post.post.video.format.large.source : videoUrl;
+            }
+
+            // It's youtube and no link so far, let's build link
+            if (!videoUrl && post.post.video.providerId && post.post.video.provider === 'youtube') {
+              videoUrl = 'https://www.youtube.com/watch?v=' + providerId;
+            }
+
+            if (videoUrl) {
+              $scope.detail.video = [{
+                src: $sce.trustAsResourceUrl(videoUrl),
+                type: 'video/mp4'
+              }];
+            }
           }
         }
 
