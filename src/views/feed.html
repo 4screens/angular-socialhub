@@ -1,7 +1,7 @@
 <link rel="stylesheet" type="text/css" data-ng-href="{{ cssUrl }}" />
 
 <!-- Load more -->
-<div style="height: 40px" ng-if="brandingDefault.enabled" ng-style="{'background-color': sh.config.theme.backgroundColor}">
+<div class="branding-box" ng-if="brandingDefault.enabled" ng-style="{'background-color': sh.config.theme.backgroundColor}">
   <branding class="four-screens__header-logo" theme-type="themeType" branding-data="brandingDefault"></branding>
 </div>
 <div ng-if="engagehub.currentNewestCount()" class="engagehub-load-posts-wrapper engagehub-description-font-family" ng-style="{
