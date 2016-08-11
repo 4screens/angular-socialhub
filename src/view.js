@@ -12,7 +12,7 @@ angular
     'ngLoad'
   ])
   .controller('EngagehubVievController',
-    function($rootScope, $scope, $sce, engagehub, $timeout, $window, CONFIG, EngagehubInfinityService) {
+    function($rootScope, $scope, $sce, engagehub, $timeout, CONFIG, EngagehubInfinityService) {
       'use strict';
 
 		/**
@@ -117,8 +117,8 @@ angular
       };
 
       $scope.openModal = function(post) {
-        if (post.commerce && post.commerce.url && post.commerce.text && $scope.sh.config.theme.commerceButtonShow) {
-           $window.location.href(post.commerce.url);
+        if (post.commerce && post.commerce.url && post.commerce.text && !$scope.sh.config.theme.commerceButtonShow) {
+           window.location.href = post.commerce.url;
         } else {
           $scope.detail = {};
 
