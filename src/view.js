@@ -118,7 +118,7 @@ angular
 
       $scope.openModal = function(post) {
         if (post.commerce && post.commerce.url && post.commerce.text && !$scope.sh.config.theme.commerceButtonShow) {
-           window.location.href = post.commerce.url;
+           window.open(post.commerce.url, '_blank');
         } else {
           $scope.detail = {};
 
