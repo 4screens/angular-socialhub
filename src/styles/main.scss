@@ -379,6 +379,13 @@ $mobileBreakpoint: 0px 768px;
     @include breakpoint($mediumBreakpoint) {
       z-index: 110;
     }
+    .fa-stack-2x {
+      font-size: 1.7em;
+    }
+    .fa-stack {
+      height: 1.7em;
+      line-height: 1.7em;
+    }
   }
   &--close {
     position: absolute;
