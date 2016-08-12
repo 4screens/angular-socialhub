@@ -79,7 +79,7 @@
           {{ detail.commerce.text }}
         </a>
         <figcaption class="engagehub-tile--signature">
-          <p class="engagehub-tile--signature-caption" ng-bind-html="detail.message"></p>
+          <p class="engagehub-tile--signature-caption" ng-bind-html="linkify(detail.message)"></p>
         </figcaption>
       </div>
     </div>

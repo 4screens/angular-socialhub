@@ -251,10 +251,9 @@ angular
         }
       }
     })
-  .filter('excerpt', function($sce) {
+  .filter('excerpt', function() {
     return function(txt) {
       txt || (txt = '');
-      var excerptTxt = xt.length > 180 ? txt.slice(0, 180) + ' ..' : txt;
-      return $sce.trustAsHtml($scope.linkify(excerptTxt));
+      return txt.length > 180 ? txt.slice(0, 180) + ' ..' : txt;
     };
   });
