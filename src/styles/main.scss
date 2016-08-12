@@ -5,6 +5,17 @@ $mobileBreakpoint: 0px 768px;
   font-size: 12px;
 }
 
+.engagehub {
+  .engagehub-tile--text {
+    @media screen and (max-width: 550px) {
+      font-size: 10px;
+    }
+    @media screen and (max-width: 750px) and (min-width: 660px) {
+      font-size: 10px;
+    }
+  }
+}
+
 .engagehub-stream, .engagehub-iframe {
   $paddingLg: 42px;
   $paddingMd: 6px;
