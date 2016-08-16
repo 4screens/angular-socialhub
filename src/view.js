@@ -102,7 +102,7 @@ angular
             enabled: !$scope.sh.stateBranding,
             isDefault: true,
             text: "Made with",
-            link: "https://4screens.net/engagehub/"
+            link: "https://4screens.net/engagehub/?utm_source=Default%20Branding&utm_medium=Embed&utm_campaign=Enagehub%20Embed"
           };
 
           if ($scope.sh.config.theme.backgroundColor) {
