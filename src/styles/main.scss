@@ -201,6 +201,10 @@ $mobileBreakpoint: 0px 768px;
         word-wrap: break-word;
         padding-top: $paddingMd * 2;
         padding-right: 33px;
+        a {
+          color: rgb(128, 128, 128);
+          text-decoration: underline;
+        }
       }
     }
 
