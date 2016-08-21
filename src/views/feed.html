@@ -118,10 +118,10 @@
       </figure>
 
       <div class="engagehub-tile--overflow" data-ng-class="{approved: post.approved, 'not-approved': !post.approved}">
-        <div class="engagehub-tile--overflow-mask" data-ng-click="openModal(post)"></div>
+        <div class="engagehub-tile--overflow-mask" data-ng-click="openModal(post, $event)"></div>
           <div class="details clearfix text-center">
 
-            <span data-ng-click="openModal(post)" class="action-icon">
+            <span data-ng-click="openModal(post, $event)" class="action-icon">
               <i class="icon-circled-eye"></i>
               <span class="info-tooltip animate-show">Preview</span>
             </span>

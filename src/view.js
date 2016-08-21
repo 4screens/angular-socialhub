@@ -116,7 +116,7 @@ angular
         });
       };
 
-      $scope.openModal = function(post) {
+      $scope.openModal = function(post, $event) {
         if (post.commerce && post.commerce.url && post.commerce.text && !$scope.sh.config.theme.commerceButtonShow) {
            window.open(post.commerce.url, '_blank');
         } else {
@@ -175,8 +175,38 @@ angular
         // headline
         $scope.detail.headline = _.has(post, 'post.headline') && post.post.headline ? post.post.headline : null;
 
-        $scope.$broadcast('modal-opened', $scope.detail);
+        $scope.$broadcast('modal-opened', $event);
+
       };
+
+      $scope.$on('modal-opened', function(event, args) {
+        if (window.self != window.top) {
+          setTimeout(function(){
+            /* here is applied stuff to hack modal position in inframed window*/
+
+            var iframe = angular.element(document.querySelector('.engagehub-iframe'));
+            iframe.css("display", "block");
+            var wrapper = angular.element(document.querySelector(".engagehub-iframe--wrapper"));
+            var center = parseFloat(window.getComputedStyle(wrapper[0],null).getPropertyValue("height"))/2;
+            var margin = args.clientY-center;
+
+            if (margin < 0) {
+              margin =0;
+            }
+
+            var height_size = 2*center;
+            var height_end = margin+height_size;
+            var body = document.body, html = document.documentElement;
+            var screen_height =  body.offsetHeight;
+
+            if (height_end > screen_height) {
+              margin = screen_height-height_size-12.134;
+            }
+
+            wrapper.css('margin-top', margin+"px");
+          }, 0);
+        }
+      });
 
       $scope.closeModal = function() {
         $scope.detail = null;
