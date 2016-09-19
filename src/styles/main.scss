@@ -19,6 +19,26 @@ $mobileBreakpoint: 0px 768px;
   }
 }
 
+.engagehub-iframe .engagehub-tile--social,
+.engagehub-stream .engagehub-tile--social {
+    @media screen and (max-width: 480px) {
+      width: 25px;
+      height: 34px;
+      line-height: 44px;
+    }
+    @media screen and (max-width: 550px) and (min-width: 481px) {
+      width: 30px;
+      height: 39px;
+      line-height: 44px;
+    }
+    @media screen and (max-width: 750px) and (min-width: 660px) {
+      width: 35px;
+      height: 44px;
+      line-height: 44px;
+    }
+  }
+}
+
 .engagehub-stream, .engagehub-iframe {
   $paddingLg: 42px;
   $paddingMd: 6px;
@@ -83,9 +103,9 @@ $mobileBreakpoint: 0px 768px;
       $w: 35px;
 
       position: absolute;
-      width: $w;
-      height: $h;
-      line-height: $h;
+      // width: $w;
+      // height: $h;
+      // line-height: $h;
       font-size: 18px;
       text-align: center;
       top: -10px;
