@@ -54,18 +54,40 @@ $mobileBreakpoint: 0px 768px;
   }
 }
 
-.engagehub .engagehub-iframe .engagehub-tile--signature-avatar .name,
+
 .engagehub .engagehub-iframe .engagehub-tile--signature-avatar .time,
-.engagehub .engagehub-stream .engagehub-tile--signature-avatar .name,
 .engagehub .engagehub-stream .engagehub-tile--signature-avatar .time {
   @media screen and (max-width: 480px) {
     padding-left: 43px;
+    font-size: 10px;
   }
   @media screen and (max-width: 550px) and (min-width: 481px) {
     padding-left: 47px;
+    font-size: 11px;
   }
   @media screen and (max-width: 750px) and (min-width: 660px) {
     padding-left: 47px;
+    font-size: 11px;
+  }
+}
+
+.engagehub .engagehub-stream .engagehub-tile--signature-avatar .name,
+.engagehub .engagehub-iframe .engagehub-tile--signature-avatar .name{
+  @media screen and (max-width: 440px) {
+    padding-left: 43px;
+    font-size: 12px;
+  }
+  @media screen and (max-width: 480px) and (min-width: 441px) {
+    padding-left: 43px;
+    font-size: 13px;
+  }
+  @media screen and (max-width: 550px) and (min-width: 481px) {
+    padding-left: 47px;
+    font-size: 14px;
+  }
+  @media screen and (max-width: 750px) and (min-width: 660px) {
+    padding-left: 47px;
+    font-size: 14px;
   }
 }
 
