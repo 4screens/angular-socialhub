@@ -102,9 +102,9 @@ $mobileBreakpoint: 0px 768px;
       $w: 35px;
 
       position: absolute;
-      // width: $w;
-      // height: $h;
-      // line-height: $h;
+      width: $w;
+      height: $h;
+      line-height: $h;
       font-size: 18px;
       text-align: center;
       top: -10px;
