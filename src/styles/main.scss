@@ -23,20 +23,51 @@ $mobileBreakpoint: 0px 768px;
 .engagehub .engagehub-stream .engagehub-tile--social {
     @media screen and (max-width: 480px) {
       width: 25px;
-      height: 34px;
-      line-height: 34px;
+      height: 30px;
+      line-height: 30px;
     }
     @media screen and (max-width: 550px) and (min-width: 481px) {
       width: 30px;
-      height: 39px;
-      line-height: 39px;
+      height: 37px;
+      line-height: 37px;
     }
     @media screen and (max-width: 750px) and (min-width: 660px) {
       width: 30px;
-      height: 39px;
-      line-height: 39px;
+      height: 37px;
+      line-height: 37px;
     }
   }
+
+.engagehub .engagehub-iframe .engagehub-tile--signature-avatar img,
+.engagehub .engagehub-stream .engagehub-tile--signature-avatar img {
+  @media screen and (max-width: 480px) {
+    width: 33px;
+    height: 33px;
+  }
+  @media screen and (max-width: 550px) and (min-width: 481px) {
+    width: 37px;
+    height: 37px;
+  }
+  @media screen and (max-width: 750px) and (min-width: 660px) {
+    width: 37px;
+    height: 37px;
+  }
+}
+
+.engagehub .engagehub-iframe .engagehub-tile--signature-avatar .name,
+.engagehub .engagehub-iframe .engagehub-tile--signature-avatar .time,
+.engagehub .engagehub-stream .engagehub-tile--signature-avatar .name,
+.engagehub .engagehub-stream .engagehub-tile--signature-avatar .time {
+  @media screen and (max-width: 480px) {
+    padding-left: 43px;
+  }
+  @media screen and (max-width: 550px) and (min-width: 481px) {
+    padding-left: 47px;
+  }
+  @media screen and (max-width: 750px) and (min-width: 660px) {
+    padding-left: 47px;
+  }
+}
 
 .engagehub-stream, .engagehub-iframe {
   $paddingLg: 42px;
