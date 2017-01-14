@@ -1,9 +1,11 @@
-<link rel="stylesheet" type="text/css" data-ng-href="{{ cssUrl }}" />
+<link rel="stylesheet" type="text/css" data-ng-href="{{ cssUrl }}"/>
 
-<div class="branding-box" ng-if="brandingDefault.enabled" ng-style="{'background-color': sh.config.theme.backgroundColor}">
+<div class="branding-box" ng-if="brandingDefault.enabled"
+     ng-style="{'background-color': sh.config.theme.backgroundColor}">
   <branding class="four-screens__header-logo" theme-type="themeType" branding-data="brandingDefault"></branding>
 </div>
-<div ng-if="engagehub.currentNewestCount()" class="engagehub-load-posts-wrapper engagehub-description-font-family" ng-style="{
+<div ng-if="engagehub.currentNewestCount()" class="engagehub-load-posts-wrapper engagehub-description-font-family"
+     ng-style="{
   'background-color': sh.config.theme.backgroundColor,
   'font-family': sh.config.theme.descriptionFont
 }">
@@ -13,33 +15,20 @@
       'color': sh.config.theme.buttonColor,
       'background-color': sh.config.theme.buttonBackgroundColor
     }"
-    class="engagehub-commerce engagehub-button-background-color engagehub-button-color engagehub-load-posts"
-   >
+    class="engagehub-commerce engagehub-button-background-color engagehub-button-color engagehub-load-posts">
     <span ng-show="engagehub.complete.newest"><i class="fa fa-info"></i> {{ engagehub.currentNewestCount() }} new {{ engagehub.newest.value > 1 ? 'posts' : 'post' }}. Click to load</span>
     <span ng-show="!engagehub.complete.newest"><i class="fa fa-spinner fa-spin"></i> Loading posts</span>
   </button>
 </div>
 <!--/Load more -->
 <!-- Stream -->
-<div class="engagehub-stream-wrapper"
-     ng-class="{ modalOpened: detail }"
->
+<div class="engagehub-stream-wrapper" ng-class="{ modalOpened: detail }">
   <div class="engagehub-isotope engagehub-stream showApproved engagehub-background-color"
        ng-style="{ 'background-color': sh.config.theme.backgroundColor }"
        isotope-container
        infinite-scroll
-       iso-options="{
-        getSortData: {
-          order: '[data-order] parseInt'
-        },
-        sortAscending: false,
-        masonry: {
-          columnWidth: '.engagehub-isotope-tile.not-featured'
-        },
-        sortBy: 'order'
-       }"
-       ng-if="engagehub.results.posts.length"
-    >
+       iso-options="isoOptions"
+       ng-if="engagehub.results.posts.length">
     <article
       class="engagehub-tile engagehub-isotope-tile"
       data-order="{{ post.pinned + '' + post.post.created }}"
@@ -52,61 +41,61 @@
         pinned: post.pinned === 2,
         commerce: (post.commerce && post.commerce.url),
         filter: _.indexOf(filtered, {value: post.post.source.value, channel: post.post.source.channel}) !== -1
-      }"
-    >
+      }">
       <figure ng-style="{
           'font-family': sh.config.theme.descriptionFont,
           'background-color': sh.config.theme.cardBackgroundColor
         }" class="engagehub-description-font-family engagehub-card-background-color">
-        <div class="engagehub-tile--image" data-ng-show="hasImage(post.post)" data-ng-style="{ 'background-color': sh.config.theme.backgroundColor }">
+        <div class="engagehub-tile--image" data-ng-show="hasImage(post.post)"
+             data-ng-style="{ 'background-color': sh.config.theme.backgroundColor }">
           <div>
-            <img
-              ng-if="hasImage(post.post, 'large')"
-              preload-image
-              ng-src="{{ hasImage(post.post, 'large') }}"
-              success="imageLoaded()"
-            />
-      <span class="play" data-ng-if="post.post.type === 'video' || post.post.type === 'stream'">
-        <i class="fa fa-angle-right fa-5x fa-inverse"></i>
-      </span>
+            <img ng-if="hasImage(post.post, 'large')"
+                 preload-image
+                 ng-src="{{ hasImage(post.post, 'large') }}"
+                 success="imageLoaded()"/>
+            <span class="play" data-ng-if="post.post.type === 'video' || post.post.type === 'stream'">
+              <i class="fa fa-angle-right fa-5x fa-inverse"></i>
+            </span>
           </div>
         </div>
-
         <div class="engagehub-tile--text {{ post.post.source.channel }}" data-ng-show="!hasImage(post.post)">
           <div>
-            <div data-ng-style="{'font-size': getFontSize(post.post.headline || post.post.message)}">{{ post.post.headline || post.post.message | excerpt }}
+            <div data-ng-style="{'font-size': getFontSize(post.post.headline || post.post.message)}">
+              {{post.post.headline || post.post.message | excerpt }}
             </div>
           </div>
         </div>
         <figcaption class="engagehub-tile--signature"
-            data-ng-class="{'engagehub-tile--signature-empty': !sh.config.theme.authorShow && !sh.config.theme.descriptionShow && !sh.config.theme.sourceIconShow}"
-            data-ng-style="sh.config.theme.authorShow || sh.config.theme.descriptionShow ? { color: sh.config.theme.descriptionColor} : { 'background-color': sh.config.theme.backgroundColor, color: sh.config.theme.descriptionColor }">
-          <div class="engagehub-tile--social" ng-show="sh.config.theme.sourceIconShow" data-ng-class="'engagehub-tile--social-'+ post.post.source.channel">
+                    data-ng-class="{'engagehub-tile--signature-empty': !sh.config.theme.authorShow && !sh.config.theme.descriptionShow && !sh.config.theme.sourceIconShow}"
+                    data-ng-style="sh.config.theme.authorShow || sh.config.theme.descriptionShow ? { color: sh.config.theme.descriptionColor} : { 'background-color': sh.config.theme.backgroundColor, color: sh.config.theme.descriptionColor }">
+          <div class="engagehub-tile--social" ng-show="sh.config.theme.sourceIconShow"
+               data-ng-class="'engagehub-tile--social-'+ post.post.source.channel">
             <i class="fa" data-ng-class="'fa-'+ post.post.source.channel"></i>
           </div>
           <div class="engagehub-tile--signature-avatar" ng-show="sh.config.theme.authorShow">
-            <img data-ng-src="{{ post.post.author.picture || 'http://graph.facebook.com/' + post.post.author.id + '/picture' }}"
-                 alt="{{ post.post.author.name }}"/>
+            <img
+              data-ng-src="{{ post.post.author.picture || 'http://graph.facebook.com/' + post.post.author.id + '/picture' }}"
+              alt="{{ post.post.author.name }}"/>
             <span
               ng-style="{
                 'font-family': sh.config.theme.authorFont,
                 'color': sh.config.theme.authorColor
               }"
-                ng-bind-html="post.post.author.name"
-                class="engagehub-author-font-family engagehub-author-color name"
+              ng-bind-html="post.post.author.name"
+              class="engagehub-author-font-family engagehub-author-color name"
             ></span>
             <span class="time" created="{{ post.post.created }}" am-time-ago="(post.post.created * 1000)"></span>
           </div>
 
           <a ng-if="post.commerce && post.commerce.url && post.commerce.text && sh.config.theme.commerceButtonShow"
-            ng-href="{{ post.commerce.url }}"
-            title="{{ post.commerce.text }}"
-            target="_blank" rel="nofollow"
-            ng-style="{
+             ng-href="{{ post.commerce.url }}"
+             title="{{ post.commerce.text }}"
+             target="_blank" rel="nofollow"
+             ng-style="{
               'color': sh.config.theme.buttonColor,
               'background-color': sh.config.theme.buttonBackgroundColor
             }"
-            class="engagehub-commerce engagehub-button-background-color engagehub-button-color"
+             class="engagehub-commerce engagehub-button-background-color engagehub-button-color"
           >{{ post.commerce.text }}</a>
 
           <p class="engagehub-tile--signature-caption engagehub-description-color"
@@ -118,50 +107,40 @@
 
       <div class="engagehub-tile--overflow" data-ng-class="{approved: post.approved, 'not-approved': !post.approved}">
         <div class="engagehub-tile--overflow-mask" data-ng-click="openModal(post, $event)"></div>
-          <div class="details clearfix text-center">
-
-            <span data-ng-click="openModal(post, $event)" class="action-icon">
-              <i class="icon-circled-eye"></i>
-              <span class="info-tooltip animate-show">Preview</span>
-            </span>
-
-            <!-- approved -->
-            <span data-ng-click="approvePost(post, 2)" data-ng-hide="post.approved === 2" class="action-icon icon-approve">
-              <i class="fa fa-check-circle"></i>
-              <span class="info-tooltip animate-show">Approve</span>
-            </span>
-            <span data-ng-click="approvePost(post, 3)" data-ng-hide="post.approved === 3" class="action-icon icon-decline">
-              <i class="fa fa-times-circle"></i>
-              <span class="info-tooltip animate-show">Decline</span>
-            </span>
-            <!--/approved -->
-
-            <span data-ng-confirm="remove(post)" data-ng-confirm-message='Are you sure you want to delete this post ?' class="action-icon">
-              <i class="icon-circled-trash"></i>
-              <span class="info-tooltip animate-show">Remove</span>
-            </span>
-
-          </div>
-
-          <div class="btn-group-mini">
-            <span class="icon-mini" data-ng-click="featurePost(post)">
-              <i class="fa fa-external-link"></i>
-            </span>
-
-            <span class="icon-mini icon-commerce" data-ng-click="addCommerceModal(post)">
-              <i class="fa fa-link"></i>
-            </span>
-
-            <span class="icon-mini icon-pinned" data-ng-click="pinPost(post)">
-              <i class="fa fa-thumb-tack"></i>
-            </span>
-
-            <span class="icon-mini trigger"><i class="fa fa-cog"></i></span>
-          </div>
-
+        <div class="details clearfix text-center">
+          <span data-ng-click="openModal(post, $event)" class="action-icon">
+            <i class="icon-circled-eye"></i>
+            <span class="info-tooltip animate-show">Preview</span>
+          </span>
+          <!-- approved -->
+          <span data-ng-click="approvePost(post, 2)" data-ng-hide="post.approved === 2" class="action-icon icon-approve">
+            <i class="fa fa-check-circle"></i>
+            <span class="info-tooltip animate-show">Approve</span>
+          </span>
+          <span data-ng-click="approvePost(post, 3)" data-ng-hide="post.approved === 3" class="action-icon icon-decline">
+            <i class="fa fa-times-circle"></i>
+            <span class="info-tooltip animate-show">Decline</span>
+          </span>
+          <!--/approved -->
+          <span data-ng-confirm="remove(post)" data-ng-confirm-message='Are you sure you want to delete this post ?'
+                class="action-icon">
+            <i class="icon-circled-trash"></i>
+            <span class="info-tooltip animate-show">Remove</span>
+          </span>
+        </div>
+        <div class="btn-group-mini">
+          <span class="icon-mini" data-ng-click="featurePost(post)">
+            <i class="fa fa-external-link"></i>
+          </span>
+          <span class="icon-mini icon-commerce" data-ng-click="addCommerceModal(post)">
+            <i class="fa fa-link"></i>
+          </span>
+          <span class="icon-mini icon-pinned" data-ng-click="pinPost(post)">
+            <i class="fa fa-thumb-tack"></i>
+          </span>
+          <span class="icon-mini trigger"><i class="fa fa-cog"></i></span>
         </div>
       </div>
-
     </article>
   </div>
 </div>

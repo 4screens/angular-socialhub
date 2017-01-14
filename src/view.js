@@ -19,6 +19,16 @@ angular
 		 * In order to initialise the hub, use this.refreshAndSelect(id) method, where 'id' is the hub's id that can
      * be taken from $stateParams.shId or from some other source.
      */
+      $scope.isoOptions = {
+        getSortData: {
+          order: '[data-order] parseInt'
+        },
+        sortAscending: false,
+          masonry: {
+        columnWidth: '.engagehub-isotope-tile.not-featured'
+      },
+        sortBy: 'order'
+      };
 
       var isoMethodBroadcast = function(name, params) {
         $scope.$broadcast('iso-method', { name: name, params: params});
