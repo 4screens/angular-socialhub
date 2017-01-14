@@ -275,7 +275,9 @@ angular
 
           var resizeListener = scope.$on('iso-method', _.debounce(
             function() {
-              if ($el[0].offsetHeight <=  $window.innerHeight) {
+              var elementsListHeight = $el[0].offsetHeight;
+              var availableHeight = $window.innerHeight;
+              if (elementsListHeight < availableHeight) {
                 EngagehubInfinityService.renderVisible(10);
               } else {
                 resizeListener();

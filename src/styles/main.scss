@@ -1,4 +1,5 @@
 $mobileBreakpoint: 0px 768px;
+$branding-height: 40px;
 
 .engagehub {
   -webkit-font-smoothing: antialiased;
@@ -431,6 +432,8 @@ $mobileBreakpoint: 0px 768px;
 
   .engagehub-stream {
     position: relative;
+    // The branding's space.
+    padding-top: $branding-height;
   }
 }
 
@@ -614,11 +617,13 @@ $mobileBreakpoint: 0px 768px;
   }
 }
 
-
 .branding-box {
-  height: 40px;
+  // Position absolutely to avoid the need of obtaining it's height in the JS code when dealing with infinite scrolling.
+  position: absolute;
+  height: $branding-height;
+  width: 100%;
 }
 
 .engagehub-admin .branding-box {
-  height: 0px;
+  height: 0;
 }
