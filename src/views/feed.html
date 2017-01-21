@@ -1,32 +1,29 @@
 <link rel="stylesheet" type="text/css" data-ng-href="{{ cssUrl }}"/>
 
-<div class="branding-box" ng-if="brandingDefault.enabled"
-     ng-style="{'background-color': sh.config.theme.backgroundColor}">
-  <branding class="four-screens__header-logo" theme-type="themeType" branding-data="brandingDefault"></branding>
-</div>
-<div ng-if="engagehub.currentNewestCount()" class="engagehub-load-posts-wrapper engagehub-description-font-family"
-     ng-style="{
+<div class="engagehub-stream-wrapper" ng-class="{ modalOpened: detail }" infinite-scroll>
+  <div class="branding-box" ng-if="brandingDefault.enabled"
+       ng-style="{'background-color': sh.config.theme.backgroundColor}">
+    <branding class="four-screens__header-logo" theme-type="themeType" branding-data="brandingDefault"></branding>
+  </div>
+  <div ng-if="engagehub.currentNewestCount()" class="engagehub-load-posts-wrapper engagehub-description-font-family"
+       ng-style="{
   'background-color': sh.config.theme.backgroundColor,
   'font-family': sh.config.theme.descriptionFont
 }">
-  <button
-    ng-click="engagehub.renderNewest()"
-    ng-style="{
+    <button
+      ng-click="engagehub.renderNewest()"
+      ng-style="{
       'color': sh.config.theme.buttonColor,
       'background-color': sh.config.theme.buttonBackgroundColor
     }"
-    class="engagehub-commerce engagehub-button-background-color engagehub-button-color engagehub-load-posts">
-    <span ng-show="engagehub.complete.newest"><i class="fa fa-info"></i> {{ engagehub.currentNewestCount() }} new {{ engagehub.newest.value > 1 ? 'posts' : 'post' }}. Click to load</span>
-    <span ng-show="!engagehub.complete.newest"><i class="fa fa-spinner fa-spin"></i> Loading posts</span>
-  </button>
-</div>
-<!--/Load more -->
-<!-- Stream -->
-<div class="engagehub-stream-wrapper" ng-class="{ modalOpened: detail }">
+      class="engagehub-commerce engagehub-button-background-color engagehub-button-color engagehub-load-posts">
+      <span ng-show="engagehub.complete.newest"><i class="fa fa-info"></i> {{ engagehub.currentNewestCount() }} new {{ engagehub.newest.value > 1 ? 'posts' : 'post' }}. Click to load</span>
+      <span ng-show="!engagehub.complete.newest"><i class="fa fa-spinner fa-spin"></i> Loading posts</span>
+    </button>
+  </div>
   <div class="engagehub-isotope engagehub-stream showApproved engagehub-background-color"
        ng-style="{ 'background-color': sh.config.theme.backgroundColor }"
        isotope-container
-       infinite-scroll
        iso-options="isoOptions"
        ng-if="engagehub.results.posts.length">
     <article
@@ -143,12 +140,9 @@
       </div>
     </article>
   </div>
+  <div class="engagehub-preloader text-center engagehub-background-color" data-ng-if="!engagehub.complete.value"
+       ng-style="{ 'background-color': sh.config.theme.backgroundColor }">
+    <i class="fa fa-spinner fa-spin"></i>
+  </div>
 </div>
-<!--/Stream -->
 
-<!-- Loader -->
-<div class="engagehub-preloader text-center engagehub-background-color" data-ng-if="!engagehub.complete.value"
-     ng-style="{ 'background-color': sh.config.theme.backgroundColor }">
-  <i class="fa fa-spinner fa-spin"></i>
-</div>
-<!--/Loader -->

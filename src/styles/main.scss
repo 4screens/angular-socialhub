@@ -429,15 +429,6 @@ $branding-height: 40px;
 .engagehub-stream-wrapper {
   width: 100%;
   position: relative;
-
-  .engagehub-stream {
-    position: relative;
-  }
-}
-
-.branding-box + .engagehub-stream-wrapper .engagehub-stream {
-  // The branding's space.
-  padding-top: $branding-height;
 }
 
 .engagehub-iframe {
@@ -619,10 +610,8 @@ $branding-height: 40px;
     opacity: 1!important;
   }
 }
-
+//
 .branding-box {
-  // Position absolutely to avoid the need of obtaining it's height in the JS code when dealing with infinite scrolling.
-  position: absolute;
   height: $branding-height;
   width: 100%;
 }

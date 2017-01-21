@@ -24,7 +24,7 @@ angular
 
       scrollHandler = _.throttle(function(s, e, w) {
         return function() {
-          if (w.innerHeight - e.prop('offsetTop') + w.scrollY + offset >= parseInt(e.css('height'), 10)) {
+          if (w.innerHeight - e.prop('offsetTop') + w.scrollY + offset >= e[0].offsetHeight) {
             if (available) {
               console.debug('[ InfinityService ] Scroll handler (disabled)');
               available = false;
