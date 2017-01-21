@@ -610,7 +610,7 @@ $branding-height: 40px;
     opacity: 1!important;
   }
 }
-//
+
 .branding-box {
   height: $branding-height;
   width: 100%;
@@ -618,4 +618,12 @@ $branding-height: 40px;
 
 .engagehub-admin .branding-box {
   height: 0;
+}
+
+.load-more-button {
+  margin: 1em auto 0;
+  display: block;
+  padding: 1em;
+  width: 100%;
+  font-size: 1.3em;
 }
