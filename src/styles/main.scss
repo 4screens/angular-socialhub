@@ -432,9 +432,12 @@ $branding-height: 40px;
 
   .engagehub-stream {
     position: relative;
-    // The branding's space.
-    padding-top: $branding-height;
   }
+}
+
+.branding-box + .engagehub-stream-wrapper .engagehub-stream {
+  // The branding's space.
+  padding-top: $branding-height;
 }
 
 .engagehub-iframe {

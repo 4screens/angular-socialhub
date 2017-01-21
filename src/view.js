@@ -267,7 +267,7 @@ angular
         } else {
           return inputText;
         }
-      }
+      };
     }
   )
   .directive('infiniteScroll',
