@@ -626,4 +626,8 @@ $branding-height: 40px;
   padding: 1em;
   width: 100%;
   font-size: 1.3em;
+
+  &:focus {
+    outline: none;
+  }
 }
