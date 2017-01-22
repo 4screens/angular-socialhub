@@ -12,7 +12,7 @@ angular
     'ngLoad'
   ])
   .controller('EngagehubVievController',
-    function($rootScope, $scope, $sce, engagehub, $timeout, CONFIG, EngagehubInfinityService) {
+    function($rootScope, $scope, $sce, engagehub, $timeout, CONFIG, EngagehubInfinityService, embedSettings) {
       'use strict';
 
 		/**
@@ -267,6 +267,11 @@ angular
         } else {
           return inputText;
         }
+      };
+
+      // Decides if the "Load more" button should be displayed.
+      $scope.shouldShowLoadMoreButton = function() {
+        return !embedSettings.allowScrolling;
       };
     }
   )
