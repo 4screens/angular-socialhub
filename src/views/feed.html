@@ -140,13 +140,17 @@
       </div>
     </article>
   </div>
-  <button ng-if="shouldShowLoadMoreButton()" ng-click="engagehub.renderVisibled(10)"
-          class="engagehub-commerce engagehub-button-background-color engagehub-button-color engagehub-load-posts"
-          ng-style="{
-            'color': sh.config.theme.buttonColor,
-            'background-color': sh.config.theme.buttonBackgroundColor,
-            'font-family': sh.config.theme.descriptionFont,
-          }">Load more</button>
+  <div class="load-more-wrapper" ng-style="{
+  'background-color': sh.config.theme.backgroundColor,
+  'font-family': sh.config.theme.descriptionFont
+}">
+    <button ng-if="shouldShowLoadMoreButton()" ng-click="engagehub.renderVisibled(10)"
+            class="engagehub-commerce engagehub-button-background-color engagehub-button-color engagehub-load-posts"
+            ng-style="{
+              'color': sh.config.theme.buttonColor,
+              'background-color': sh.config.theme.buttonBackgroundColor,
+            }">Load more</button>
+  </div>
   <p class="feed-end-info" ng-style="{
     'font-family': sh.config.theme.descriptionFont,
     'background-color': sh.config.theme.cardBackgroundColor,
