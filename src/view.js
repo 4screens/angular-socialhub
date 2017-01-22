@@ -271,7 +271,7 @@ angular
 
       // Decides if the "Load more" button should be displayed.
       $scope.shouldShowLoadMoreButton = function() {
-        return !embedSettings.allowScrolling;
+        return engagehub.complete.value && !embedSettings.allowScrolling;
       };
     }
   )

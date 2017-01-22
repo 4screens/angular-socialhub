@@ -429,6 +429,7 @@ $branding-height: 40px;
 .engagehub-stream-wrapper {
   width: 100%;
   position: relative;
+  overflow: hidden;
 }
 
 .engagehub-iframe {
@@ -577,12 +578,12 @@ $branding-height: 40px;
   margin: 0;
   text-align: center;
   padding: 1em;
+}
 
-  .engagehub-load-posts {
-    text-align: center;
-    padding: .5em;
-    border: none;
-  }
+.engagehub-load-posts {
+  text-align: center;
+  padding: .5em;
+  border: none;
 }
 
 // Hide optional elements
@@ -618,16 +619,4 @@ $branding-height: 40px;
 
 .engagehub-admin .branding-box {
   height: 0;
-}
-
-.load-more-button {
-  margin: 1em auto 0;
-  display: block;
-  padding: 1em;
-  width: 100%;
-  font-size: 1.3em;
-
-  &:focus {
-    outline: none;
-  }
 }

@@ -140,13 +140,15 @@
       </div>
     </article>
   </div>
+  <button ng-if="shouldShowLoadMoreButton()" ng-click="engagehub.renderVisibled(10)"
+          class="engagehub-commerce engagehub-button-background-color engagehub-button-color engagehub-load-posts"
+          ng-style="{
+            'color': sh.config.theme.buttonColor,
+            'background-color': sh.config.theme.buttonBackgroundColor,
+            'font-family': sh.config.theme.descriptionFont
+          }">Load more</button>
   <div class="engagehub-preloader text-center engagehub-background-color" data-ng-if="!engagehub.complete.value"
        ng-style="{ 'background-color': sh.config.theme.backgroundColor }">
     <i class="fa fa-spinner fa-spin"></i>
   </div>
-  <button ng-if="shouldShowLoadMoreButton()" ng-click="engagehub.renderVisibled(10)" class="load-more-button" ng-style="{
-    'color': sh.config.theme.buttonColor,
-    'background-color': sh.config.theme.buttonBackgroundColor,
-    'font-family': sh.config.theme.descriptionFont
-  }">Load more</button>
 </div>
