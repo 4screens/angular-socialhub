@@ -145,8 +145,13 @@
           ng-style="{
             'color': sh.config.theme.buttonColor,
             'background-color': sh.config.theme.buttonBackgroundColor,
-            'font-family': sh.config.theme.descriptionFont
+            'font-family': sh.config.theme.descriptionFont,
           }">Load more</button>
+  <p class="feed-end-info" ng-style="{
+    'font-family': sh.config.theme.descriptionFont,
+    'background-color': sh.config.theme.cardBackgroundColor,
+    color: sh.config.theme.descriptionColor
+  }" ng-if="!moreItemsExist()">No more posts</p>
   <div class="engagehub-preloader text-center engagehub-background-color" data-ng-if="!engagehub.complete.value"
        ng-style="{ 'background-color': sh.config.theme.backgroundColor }">
     <i class="fa fa-spinner fa-spin"></i>

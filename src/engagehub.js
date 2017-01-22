@@ -8,6 +8,8 @@ angular
       var complete = {value: true, newest: true}; // Spinner
       var queue = [];  // Array of id's
 
+      var feedEnded = {value: false};
+
       var newest = {
         hidden: 0,
         approved: 0
@@ -279,8 +281,10 @@ angular
             });
 
             if (queue.length > visibled) {
+              feedEnded.value = false;
               renderVisibled(Math.min(step, queue.length - visibled));
             } else {
+              feedEnded.value = true;
               EngagehubEventsService.triggerEvent('arrangePosts');
             }
           }).catch(function() {
@@ -514,6 +518,7 @@ angular
         newest: newest,
         currentNewestCount: getCurrentNewestCount,
         complete: complete,
+        feedEnded: feedEnded,
         results: {
           posts: results
         },

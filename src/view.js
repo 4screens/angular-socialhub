@@ -269,9 +269,13 @@ angular
         }
       };
 
+      $scope.moreItemsExist = function() {
+        return !engagehub.feedEnded.value;
+      };
+
       // Decides if the "Load more" button should be displayed.
       $scope.shouldShowLoadMoreButton = function() {
-        return engagehub.complete.value && !embedSettings.allowScrolling;
+        return $scope.moreItemsExist() && engagehub.complete.value && !embedSettings.allowScrolling;
       };
     }
   )
