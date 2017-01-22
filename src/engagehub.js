@@ -17,17 +17,15 @@ angular
       // FIXME: Normalization - change it to array ?
       var archived = {}; // Contains posts objects, after render are copied to results
       var results = []; // Collection of posts
-      var currentSocket, URL = '', mode = 'embed';
+      var currentSocket;
+      var URL = CONFIG.backend.answers.domain;
+      var mode = 'embed';
 
       // Used by console, to get posts with specific status
       // 1 - new
       // 2 - approved
       // 3 - declined
       var currentPostsStatus = 2;
-
-      function setDomain(domain) {
-        URL = domain;
-      }
 
       function getHubs() {
         console.debug('[ Engagehub Service ] GetHubs');
@@ -480,7 +478,6 @@ angular
 
       return {
         data: _data,
-        setDomain: setDomain,
         clearData: clearData,
         getHubs: getHubs,
         getHub: getHub,
