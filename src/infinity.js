@@ -19,7 +19,7 @@ angular
       }
 
       renderVisibled = function() {
-        engagehub.renderVisibled(10);
+        engagehub.renderVisibled();
       };
 
       scrollHandler = _.throttle(function(s, e, w) {
@@ -28,7 +28,7 @@ angular
             if (available) {
               console.debug('[ InfinityService ] Scroll handler (disabled)');
               available = false;
-              engagehub.renderVisibled(10);
+              engagehub.renderVisibled();
 
               delayedEnable();
             }

@@ -1,7 +1,8 @@
 angular
   .module('4screen.engagehub.service', [])
+  .value('renderingAmount', 20)
   .factory('engagehub',
-    function(CONFIG, $rootScope, $http, $q, $timeout, CommonSocketService, $document, $window, EngagehubEventsService) {
+    function(CONFIG, $rootScope, $http, $q, $timeout, CommonSocketService, $document, $window, EngagehubEventsService, renderingAmount) {
       'use strict';
 
       var _data = {}, streamId = null, visibled = 0, pack = 50;
@@ -260,7 +261,7 @@ angular
 
       function renderVisibled(step, reload, page) {
         reload = reload || false;
-        step = step || 0;
+        step = step || renderingAmount;
 
         console.debug('[ Engagehub Service ] Render visibled - step: ' + (step || 0));
         page = typeof page === 'number' ? page : Math.floor(_.size(archived) / pack);
