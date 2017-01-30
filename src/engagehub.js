@@ -9,7 +9,8 @@ angular
       var complete = {value: true, newest: true}; // Spinner
       var queue = [];  // Array of id's
 
-      var feedEnded = {value: false};
+      var feedEnded = false;
+      var noMorePostsInQueue = {value: false};
 
       var newest = {
         hidden: 0,
@@ -267,10 +268,14 @@ angular
         page = typeof page === 'number' ? page : Math.floor(_.size(archived) / pack);
 
         // Should i request next posts ?
-        if (visibled + step > _.size(archived) && complete.value) {
+        if (visibled + step > _.size(archived) && complete.value && !feedEnded) {
           complete.value = false;
 
           return getPosts({page: page, status: currentPostsStatus}).then(function(posts) {
+            // When backend sends less than N * renderingAmount posts treat it as if there's no more posts available.
+            // This is by design. There's no real guarantee that backend actually sends full packages every time.
+            feedEnded = posts.length % renderingAmount > 0;
+
             complete.value = true;
             _.forEach(posts, function(post) {
 
@@ -282,10 +287,8 @@ angular
             });
 
             if (queue.length > visibled) {
-              feedEnded.value = false;
               renderVisibled(Math.min(step, queue.length - visibled));
             } else {
-              feedEnded.value = true;
               EngagehubEventsService.triggerEvent('arrangePosts');
             }
           }).catch(function() {
@@ -303,6 +306,8 @@ angular
           _.remove(results, function(postId, postIndex) {
             return postIndex >= visibled;
           });
+
+          noMorePostsInQueue.value = queue.length === visibled;
 
           EngagehubEventsService.triggerEvent('newPostsReady');
         }
@@ -520,6 +525,7 @@ angular
         currentNewestCount: getCurrentNewestCount,
         complete: complete,
         feedEnded: feedEnded,
+        noMorePostsInQueue: noMorePostsInQueue,
         results: {
           posts: results
         },

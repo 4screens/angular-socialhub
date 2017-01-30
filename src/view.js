@@ -270,7 +270,7 @@ angular
       };
 
       $scope.moreItemsExist = function() {
-        return !engagehub.feedEnded.value;
+        return !engagehub.noMorePostsInQueue.value;
       };
 
       // Decides if the "Load more" button should be displayed.
