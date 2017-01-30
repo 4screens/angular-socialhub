@@ -272,9 +272,11 @@ angular
           complete.value = false;
 
           return getPosts({page: page, status: currentPostsStatus}).then(function(posts) {
-            // When backend sends less than N * renderingAmount posts treat it as if there's no more posts available.
+            // When backend sends less than 50 posts treat it as if there's no more posts available.
             // This is by design. There's no real guarantee that backend actually sends full packages every time.
-            feedEnded = posts.length % renderingAmount > 0;
+            // 50 comes from the Lurid's setting. No obvious way to set this value dynamically. Leaving the issue for
+            // future generations.
+            feedEnded = posts.length < 50;
 
             complete.value = true;
             _.forEach(posts, function(post) {
