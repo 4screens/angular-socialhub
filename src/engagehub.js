@@ -268,7 +268,7 @@ angular
         page = typeof page === 'number' ? page : Math.floor(_.size(archived) / pack);
 
         // Should i request next posts ?
-        if (visibled + step > _.size(archived) && complete.value && !feedEnded) {
+        if (visibled + step >= _.size(archived) && !feedEnded) {
           complete.value = false;
 
           return getPosts({page: page, status: currentPostsStatus}).then(function(posts) {
@@ -526,7 +526,6 @@ angular
         newest: newest,
         currentNewestCount: getCurrentNewestCount,
         complete: complete,
-        feedEnded: feedEnded,
         noMorePostsInQueue: noMorePostsInQueue,
         results: {
           posts: results
