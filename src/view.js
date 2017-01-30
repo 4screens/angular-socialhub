@@ -304,7 +304,7 @@ angular
             }, 500)
           );
         }
-      }
+      };
     })
   .filter('excerpt', function() {
     return function(txt) {
