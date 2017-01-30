@@ -149,7 +149,7 @@
             ng-style="{
               'color': sh.config.theme.buttonColor,
               'background-color': sh.config.theme.buttonBackgroundColor,
-            }">Load more</button>
+            }">{{loadMoreButtonText || 'Load more'}}</button>
     <div class="engagehub-preloader text-center engagehub-background-color" data-ng-if="!engagehub.complete.value"
          ng-style="{ 'background-color': sh.config.theme.backgroundColor }">
       <i class="fa fa-spinner fa-spin"></i>
