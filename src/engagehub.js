@@ -22,8 +22,12 @@ angular
       var archived = {}; // Contains posts objects, after render are copied to results
       var results = []; // Collection of posts
       var currentSocket;
-      var URL = CONFIG.backend.answers.domain;
+      var URL = '';
       var mode = 'embed';
+
+      function setDomain(domain) {
+        URL = domain;
+      }
 
       // Used by console, to get posts with specific status
       // 1 - new
@@ -490,6 +494,7 @@ angular
 
       return {
         data: _data,
+        setDomain: setDomain,
         clearData: clearData,
         getHubs: getHubs,
         getHub: getHub,
