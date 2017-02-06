@@ -297,7 +297,11 @@ angular
               var elementsListHeight = $el[0].offsetHeight;
               var availableHeight = $window.innerHeight;
               if (elementsListHeight < availableHeight) {
-                EngagehubInfinityService.renderVisible(10);
+                EngagehubInfinityService.renderVisible().then(function(sizes) {
+                  if (!sizes.queueSize) {
+                    resizeListener();
+                  }
+                });
               } else {
                 resizeListener();
               }
