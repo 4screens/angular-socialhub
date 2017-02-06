@@ -5,7 +5,7 @@ angular
 
       var delay = 1000;
 
-      var scrollHandler, available = true, offset = 0, scrollTimeout, renderVisibled;
+      var scrollHandler, available = true, offset = 0, scrollTimeout, renderPosts;
 
       function enable() {
         $timeout.cancel(scrollTimeout);
@@ -18,8 +18,8 @@ angular
         }, delay);
       }
 
-      renderVisibled = function() {
-        return engagehub.renderVisibled();
+      renderPosts = function() {
+        return engagehub.renderPosts();
       };
 
       scrollHandler = _.throttle(function(s, e, w) {
@@ -28,7 +28,7 @@ angular
             if (available) {
               console.debug('[ InfinityService ] Scroll handler (disabled)');
               available = false;
-              engagehub.renderVisibled();
+              engagehub.renderPosts();
 
               delayedEnable();
             }
@@ -39,7 +39,7 @@ angular
       // public API
       return {
         scrollHandler: scrollHandler,
-        renderVisible: renderVisibled,
+        renderVisible: renderPosts,
         enable: enable
       };
     }

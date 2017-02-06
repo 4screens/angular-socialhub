@@ -39,8 +39,8 @@ describe('backend service', function() {
     SocialhubBackendService = _SocialhubBackendService_;
   }));
 
-  it( 'should have renderVisibled method', function() {
-    expect( SocialhubBackendService.renderVisibled ).not.toBeUndefined();
+  it( 'should have renderPosts method', function() {
+    expect( SocialhubBackendService.renderPosts ).not.toBeUndefined();
   });
 
   it( 'should have renderNewest method', function() {

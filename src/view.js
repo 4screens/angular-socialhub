@@ -120,7 +120,7 @@ angular
           }
 
           engagehub.select($scope.sh);
-          engagehub.renderVisibled(null, true);
+          engagehub.renderPosts(null, true);
 
           return $scope.sh;
         });

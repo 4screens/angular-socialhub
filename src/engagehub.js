@@ -16,7 +16,7 @@ angular
         hidden: 0,
         approved: 0
       }; // Number of new posts
-      //var throttler = 500; // Time (msc) used to throttle renderVisibled posts in public service api
+      //var throttler = 500; // Time (msc) used to throttle renderPosts posts in public service api
 
       // FIXME: Normalization - change it to array ?
       var archived = {}; // Contains posts objects, after render are copied to results
@@ -264,7 +264,7 @@ angular
           });
       }
 
-      function renderVisibled(step, reload, page) {
+      function renderPosts(step, reload, page) {
         reload = reload || false;
         step = step || renderingAmount;
 
@@ -293,7 +293,7 @@ angular
             });
 
             if (queue.length > visibled) {
-              return renderVisibled(Math.min(step, queue.length - visibled));
+              return renderPosts(Math.min(step, queue.length - visibled));
             } else {
               EngagehubEventsService.triggerEvent('arrangePosts');
               return {queueSize: queue.length, visibleSize: visibled};
@@ -322,7 +322,7 @@ angular
         return $q.resolve({queueSize: queue.length, visibleCount: visibled});
       }
 
-      // TODO: This is overkill, improve it to use renderVisibled here
+      // TODO: This is overkill, improve it to use renderPosts here
       function renderNewest() {
         console.debug('[ Engagehub Service ] Render newest');
 
@@ -527,7 +527,7 @@ angular
         update: update,
 
         setStreamId: setStreamId,
-        renderVisibled: renderVisibled,
+        renderPosts: renderPosts,
         renderNewest: _.throttle(renderNewest, 500),
         removeLocalPost: removeLocalPost,
         newest: newest,
