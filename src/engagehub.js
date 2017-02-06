@@ -474,6 +474,7 @@ angular
       function changeCurrentPostsStatus(status) {
         console.debug('[ Engagehub Service ] Change current posts status');
         currentPostsStatus = status || 1;
+        feedEnded = false;
 
         resetPostsCounter();
 
