@@ -19,7 +19,7 @@ angular
       }
 
       renderVisibled = function() {
-        engagehub.renderVisibled();
+        return engagehub.renderVisibled();
       };
 
       scrollHandler = _.throttle(function(s, e, w) {

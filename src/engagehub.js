@@ -293,9 +293,10 @@ angular
             });
 
             if (queue.length > visibled) {
-              renderVisibled(Math.min(step, queue.length - visibled));
+              return renderVisibled(Math.min(step, queue.length - visibled));
             } else {
               EngagehubEventsService.triggerEvent('arrangePosts');
+              return {queueSize: queue.length, visibleSize: visibled};
             }
           }).catch(function() {
             complete.value = true;
@@ -318,7 +319,7 @@ angular
           EngagehubEventsService.triggerEvent('newPostsReady');
         }
 
-        return $q.resolve();
+        return $q.resolve({queueSize: queue.length, visibleCount: visibled});
       }
 
       // TODO: This is overkill, improve it to use renderVisibled here
