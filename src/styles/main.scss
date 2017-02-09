@@ -331,11 +331,18 @@ $branding-height: 40px;
           &, & span { @include transition(opacity .3s ease); }
 
           // Dirty FA fonts overwrite
-          &.icon-approve, &.icon-decline {
+          &--approve, &--decline {
             font-size: $actionIconSize * 1.111;
+            position: relative;
+            top: -7px;
+            // Properly position texts.
+            span {
+              position: relative;
+              top: 5px;
+            }
           }
-          &.icon-approve { color: $color-approve; }
-          &.icon-decline { color: $color-decline; }
+          &--approve { color: $color-approve; }
+          &--decline { color: $color-decline; }
 
           span {
             display: block;
